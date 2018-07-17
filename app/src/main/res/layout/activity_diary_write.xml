@@ -108,6 +108,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="사진추가" />
+        <Button
+            android:id="@+id/diary_write_button_take_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진찍기"/>
 
     </LinearLayout>
 
@@ -123,7 +128,6 @@
 
         <EditText
             android:id="@+id/diary_write_contents"
-            android
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"

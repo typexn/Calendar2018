@@ -10,6 +10,10 @@
         <!--android:id="@+id/imgv_Diary_Picture"-->
         <!--android:layout_width="80dp"-->
         <!--android:layout_height="match_parent" />-->
+        <ImageView
+            android:id="@+id/diary_imageview_photo"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
         <TextView
             android:id="@+id/diary_textview_child"
             android:layout_width="wrap_content"
@@ -26,7 +30,7 @@
             android:id="@+id/diary_Button_child_delete"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="10dp"
             android:text="삭제"/>
 
     </LinearLayout>

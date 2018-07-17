@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.io.Serializable;
 
@@ -38,18 +39,22 @@ public class diary_Mainactivity extends AppCompatActivity {
 class diary_Content implements Serializable {
 
 
-    //    ImageView imgv_Picture; //사진
+    ImageView diaryMainPicture; //사진
     String diaryDate; //날짜
     String diaryTitle; //일기 제목
     String diaryContent; //일기 내용
 
     //생성자
-    public diary_Content(String _Date, String _Title, String _Content) {
+    public diary_Content(ImageView _diaryMainPicture, String _Date, String _Title, String _Content) {
+        this.diaryMainPicture = _diaryMainPicture;
         this.diaryDate = _Date;
         this.diaryTitle = _Title;
         this.diaryContent = _Content;
     }
 
+    public ImageView getDiaryMainPicture(){
+        return diaryMainPicture;
+    }
     //날짜 호출
     public String getDiaryDate() {
         return diaryDate;
