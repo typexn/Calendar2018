@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/day_cell_ll_background"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="45dp"
+    android:layout_height="53dp">
+
+    <!-- 날짜 -->
+
+    <TextView
+
+        android:id="@+id/day_cell_tv_day"
+
+        android:layout_width="fill_parent"
+
+        android:layout_height="fill_parent"
+
+        android:paddingLeft="3dp"
+
+        android:paddingTop="2dp"
+
+        android:gravity="left"
+
+        android:textSize="15sp"/>
+
+    <!-- /날짜 -->
+
+
+
+</LinearLayout>
