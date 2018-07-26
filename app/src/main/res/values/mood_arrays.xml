@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="mood">
+        <item>기쁨</item>
+        <item>슬픔</item>
+        <item>화남</item>
+        <item>외로움</item>
+        <item>행복</item>
+        <item>신남</item>
+        <item>황홀함</item>
+        <item>짜증</item>
+
+    </string-array>
+</resources>
