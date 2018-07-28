@@ -20,11 +20,16 @@
             android:layout_height="match_parent"
             android:layout_weight="1"/>
         <Button
+            android:id="@+id/diary_button_child_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="보기"/>
+        <Button
             android:id="@+id/diary_button_child_change"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:text="수정"/>
         <Button
             android:id="@+id/diary_Button_child_delete"

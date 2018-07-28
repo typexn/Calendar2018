@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="weather">
+        <item>맑음</item>
+        <item>흐림</item>
+        <item>비</item>
+        <item>안개</item>
+        <item>눈</item>
+        <item>천둥</item>
+        <item>요즘진짜 너무 더움</item>
+    </string-array>
+</resources>

@@ -33,7 +33,8 @@ import java.util.zip.Inflater;
 
 public class diary_Mainactivity extends AppCompatActivity {
     Button buttonGoTotal;
-
+    Button buttonGoWrite;
+    static boolean isDirectToWrite = false;
 
 
 
@@ -52,6 +53,15 @@ public class diary_Mainactivity extends AppCompatActivity {
             }
         });
 
+        buttonGoWrite = (Button)findViewById(R.id.diary_main_button_gowrite);
+        buttonGoWrite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isDirectToWrite = true;
+                Intent goToDiaryWrite = new Intent(diary_Mainactivity.this,diary_Write.class);
+                startActivity(goToDiaryWrite);
+            }
+        });
 
         //달력 만들기
 

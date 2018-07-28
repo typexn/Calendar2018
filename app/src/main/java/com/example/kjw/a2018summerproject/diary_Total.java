@@ -40,10 +40,6 @@ public class diary_Total extends AppCompatActivity {
 
     Bitmap tempImage = null;
 
-    //수정버튼 태그로 호출
-    LinearLayout child;
-
-
     //확장 리스트뷰에 필요한 어레이, 해시맵 선언
     ArrayList<String> list_Date;
     HashMap<String, ArrayList<diary_Content>> list_Diary;
@@ -58,6 +54,7 @@ public class diary_Total extends AppCompatActivity {
     //일기를 수정하려고 했는가 boolean값 -> 수정 버튼을 누르면 그 child의 item을 갖고 diary_write 페이지로 넘어가기
     static Boolean isButtonChangeClick = false;
 
+    //온크리에이트 시작
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_total);
@@ -65,18 +62,28 @@ public class diary_Total extends AppCompatActivity {
         list_Date = new ArrayList<String>();
         list_Diary = new HashMap<String, ArrayList<diary_Content>>();
 
-        //차일드에 tag설정
-
-        child = new LinearLayout(this);
-
-        child.findViewWithTag(1_2);
-
 
         //확장리스트뷰 선언, 어댑터 할당
         expandableListViewDiaryTotal = (ExpandableListView) findViewById(R.id.diary_total_expandablelistview_total);
         expandableListAdapterDiaryTotal = new diary_ExpandableListAdapter(this, list_Date, list_Diary);
         expandableListViewDiaryTotal.setAdapter(expandableListAdapterDiaryTotal);
 
+
+        //write를 먼저 실행했을 경우 데이터를 받아 오기
+        if(diary_Mainactivity.isDirectToWrite == true){
+            Intent getDiary = getIntent();
+            String uri = getDiary.getStringExtra("Uri_");
+            String date = getDiary.getStringExtra("Date_");
+            String title =  getDiary.getStringExtra("Title_");
+            String content =  getDiary.getStringExtra("Content_");
+            ArrayList<Bitmap> BitmapArrayList = new ArrayList<Bitmap>();
+            addBitmapImage(Uri.parse(uri));
+            BitmapArrayList.add(tempImage);
+            diary_Content diary =new diary_Content(BitmapArrayList,date,title,content);
+            expandableListAdapterDiaryTotal.ExpandableListViewAddItem(diary);
+            diary_Mainactivity.isDirectToWrite = false;
+
+        }
 
         //일기 작성 페이지로 가기
         Button buttonGoWrite = (Button) findViewById(R.id.diary_total_button_gowrite);
@@ -102,21 +109,12 @@ public class diary_Total extends AppCompatActivity {
                     String getContent = data.getStringExtra("Content");
 
                     ArrayList<Bitmap> BitmapArrayList = new ArrayList<Bitmap>();
-//                    for(int i = 0; i < getArrayListUri.size();i++){
-//                        Uri Temp = Uri.parse(getArrayListUri.get(i));
-//                        addBitmapImage(Temp);
-//                        BitmapArrayList.add(tempImage);
-//                        tempImage = null;
-//                    }
-
                     addBitmapImage(Uri.parse(getPicutreUri));
                     BitmapArrayList.add(tempImage);
-
                     diary_Content Temp_Content = new diary_Content(BitmapArrayList, getDate, getTitle, getContent);
-
+                    Log.d("준성", getTitle="");
                     expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp_Content);
                     expandableListAdapterDiaryTotal.notifyDataSetChanged();
-
             }
         }
     }
@@ -136,10 +134,6 @@ public class diary_Total extends AppCompatActivity {
 
     }
 
-//    private void setButtonTag(int groupPosition, int childPosition){
-//        child.findViewWithTag(groupPosition + "_" + childPosition);
-//
-//    }
 }
 
 //확장 리스트뷰 어댑터
@@ -213,28 +207,29 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
         if (childdata.get(groupdata.get(groupPosition)).get(childPosition).getDiaryMainPicture(0) != null) {
             Bitmap kim = childdata.get(groupdata.get(groupPosition)).get(childPosition).getDiaryMainPicture(0);
             imgview.setImageBitmap(kim);
-//        }
-            //일기 제목 들어갈 텍스트뷰
-            TextView txtView = (TextView) convertView.findViewById(R.id.diary_textview_child);
-            txtView.setText(childdata.get(groupdata.get(groupPosition)).get(childPosition).getDiaryTitle() + "");
-
-            //일기 수정 버튼
-            final Button buttonChange = (Button) convertView.findViewById(R.id.diary_button_child_change);
-            buttonChange.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    diary_Total.isButtonChangeClick = true;
-//                buttonChange.setTag(groupPosition + "_" + childPosition);
-//                diary_Content diary = childdata.get(groupdata.get(groupPosition)).get(childPosition); //차일드의 일기 내용 가져오기
-//
-//                Intent intentToWriteDairy = new Intent(context, diary_Write.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                intentToWriteDairy.putExtra("diaryChange", diary);
-//                context.startActivity(intentToWriteDairy);
-                    ExpandableListViewChangeItem(groupPosition, childPosition);
-                }
-            });
-
         }
+        //일기 제목 들어갈 텍스트뷰
+        TextView txtView = (TextView) convertView.findViewById(R.id.diary_textview_child);
+        txtView.setText(childdata.get(groupdata.get(groupPosition)).get(childPosition).getDiaryTitle() + "");
+
+        //일기 수정 버튼
+        final Button buttonChange = (Button) convertView.findViewById(R.id.diary_button_child_change);
+        buttonChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                diary_Total.isButtonChangeClick = true;
+                ExpandableListViewChangeItem(groupPosition, childPosition);
+            }
+        });
+
+        //일기 보기 버튼
+        Button buttonView = (Button) convertView.findViewById(R.id.diary_button_child_view);
+        buttonView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ExpandableListViewGetView(groupPosition, childPosition);
+            }
+        });
 
         //일기 삭제버튼
         Button buttonDelete = (Button) convertView.findViewById(R.id.diary_Button_child_delete);
@@ -258,16 +253,12 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
     //확장 리스트뷰에 데이터 추가 함수
     public void ExpandableListViewAddItem(diary_Content diary_content) {
         String Temp_Date = diary_content.getDiaryDate();
-//        Log.d("김준성", Temp_Date + "");
         boolean hasSamegroup = false;
-//        int groupsize = 0;
-
         //확장리스트뷰 그룹에 날짜가 같은게 있으면 그곳에 데이터 추가 아니면 새로운 그룹을 만들어 데이터 추가
         for (int i = 0; i < groupdata.size(); i++) {
             if (groupdata.get(i).equals(Temp_Date)) {
                 childdata.get(groupdata.get(i)).add(diary_content);
                 hasSamegroup = true;
-
             }
         }
         if (hasSamegroup == false) {
@@ -276,10 +267,8 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
             Temp_child.add(diary_content);
             childdata.put(groupdata.get(diary_Total.elstv_group_num), Temp_child);
             diary_Total.elstv_group_num = diary_Total.elstv_group_num + 1;
-
         }
-        hasSamegroup = false;
-//        Log.d("날짜", Temp_Date+"");
+       notifyDataSetChanged();
     }
 
     //확장리스트뷰의 데이터 삭제 함수   -> 차일드의 사이즈가 1이면 차일드를 포함하는 그룹 삭제 아니면 차일드만 삭제
@@ -295,13 +284,24 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    //확장 리스트뷰의 데이터 수정 함수 -> 인텐트를 사용해서 일기 작성 페이지로 넘어가야 할듯
+    //확장 리스트뷰의 데이터 수정 함수
     public void ExpandableListViewChangeItem(int groupDataNum, int childDataNum) {
-//        int childDataSize = childdata.get(this.groupdata.get(groupDataNum)).size();
         diary_Content sendToDiaryWrite = childdata.get(this.groupdata.get(groupDataNum)).get(childDataNum);
-        Intent intentToWriteDairy = new Intent(context, diary_Write.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intentToWriteDairy.putExtra("diaryChange", sendToDiaryWrite);
+        Intent intentToWriteDairy = new Intent(context, diary_Write.class);
+        intentToWriteDairy.putExtra("diaryDate", sendToDiaryWrite.getDiaryDate());
+        intentToWriteDairy.putExtra("diaryTitle", sendToDiaryWrite.getDiaryTitle());
+        intentToWriteDairy.putExtra("diaryContent", sendToDiaryWrite.getDiaryContent());
         context.startActivity(intentToWriteDairy);
+    }
+
+    //확장 리스트뷰의 데이터 보기 함수
+    public void ExpandableListViewGetView(int groupDataNum, int childDataNum) {
+        diary_Content sendToDiaryView = childdata.get(this.groupdata.get(groupDataNum)).get(childDataNum);
+        Intent intentToViewDairy = new Intent(context, diary_View.class);
+        intentToViewDairy.putExtra("view_Day", sendToDiaryView.getDiaryDate());
+        intentToViewDairy.putExtra("view_Title", sendToDiaryView.getDiaryTitle());
+        intentToViewDairy.putExtra("view_Content", sendToDiaryView.getDiaryContent());
+        context.startActivity(intentToViewDairy);
     }
 
     //확장 리스트뷰의 이미지 뷰에 이미지를 추가하기
