@@ -14,19 +14,19 @@
 
 
             <Button
-                android:id="@+id/diary_main_button_menu"
+                android:id="@+id/diary_main_button_gototal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="메뉴보기"/>
+                android:text="일기 요약"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>
             <Button
-                android:id="@+id/diary_main_btn_setting"
+                android:id="@+id/diary_main_button_gowrite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="설정"/>
+                android:text="일기 작성"/>
         </LinearLayout>
 
         <LinearLayout
@@ -42,10 +42,9 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/diary_main_button_gototal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="다이어리 보기"/>
+                android:text=""/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

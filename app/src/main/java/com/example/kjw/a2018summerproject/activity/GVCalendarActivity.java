@@ -1,6 +1,7 @@
 package com.example.kjw.a2018summerproject.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.example.kjw.a2018summerproject.CalendarAdapter;
 import com.example.kjw.a2018summerproject.DayInfo;
 import com.example.kjw.a2018summerproject.R;
+import com.example.kjw.a2018summerproject.diary_Mainactivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,6 +68,15 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
         setContentView(R.layout.gv_calendar_activity);
 
 
+        //다이어리꺼 버튼 넘어가는거 임시
+        Button button = (Button)findViewById(R.id.btn_diary);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent temp = new Intent(GVCalendarActivity.this,diary_Mainactivity.class);
+                startActivity(temp);
+            }
+        });
 
         Button bLastMonth = (Button)findViewById(R.id.gv_calendar_activity_b_last);
 

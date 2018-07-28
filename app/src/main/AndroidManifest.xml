@@ -19,6 +19,7 @@
         <activity android:name=".diary_Mainactivity"></activity>
         <activity android:name=".diary_Total"></activity>
         <activity android:name=".diary_Write"></activity>
+        <activity android:name=".diary_View"></activity>
     </application>
 
 </manifest>
