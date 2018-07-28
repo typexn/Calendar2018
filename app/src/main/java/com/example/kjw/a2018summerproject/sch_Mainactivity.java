@@ -11,7 +11,7 @@ public class sch_Mainactivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sch__mainactivity);
+        setContentView(R.layout.activity_sch_main);
 
         //다이어리 메인으로 넘어가는 임시 버튼
         Button btn_diary = (Button) findViewById(R.id.btn_diary);

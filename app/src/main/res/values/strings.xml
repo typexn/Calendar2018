@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">My Application</string>
+
+    <string name="sch_search_item">
+        <item>날짜</item>
+        <item>제목</item>
+        <item>필터3</item>
+    </string>
 </resources>
