@@ -37,14 +37,13 @@ public class diary_Mainactivity extends AppCompatActivity {
     static boolean isDirectToWrite = false;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_mainactivity);
 
         //DiaryTotal로 가는 버튼
-        buttonGoTotal = (Button)findViewById(R.id.diary_main_button_gototal);
+        buttonGoTotal = (Button) findViewById(R.id.diary_main_button_gototal);
         buttonGoTotal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,12 +52,12 @@ public class diary_Mainactivity extends AppCompatActivity {
             }
         });
 
-        buttonGoWrite = (Button)findViewById(R.id.diary_main_button_gowrite);
+        buttonGoWrite = (Button) findViewById(R.id.diary_main_button_gowrite);
         buttonGoWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isDirectToWrite = true;
-                Intent goToDiaryWrite = new Intent(diary_Mainactivity.this,diary_Write.class);
+                Intent goToDiaryWrite = new Intent(diary_Mainactivity.this, diary_Write.class);
                 startActivity(goToDiaryWrite);
             }
         });
@@ -68,28 +67,58 @@ public class diary_Mainactivity extends AppCompatActivity {
     }
 
 }
+
 class diary_Content implements Serializable {
 
     ArrayList<Bitmap> diaryMainPicture; //사진을 담을 어레이 리스트
+    ArrayList<String> diaryPictureUri; //Uri를 담을 스트링
+    int diaryMood; //기분을 표현하는 스피너 값
+    int diaryWeather; //날씨를 표현하는 스피너 값
     String diaryDate; //날짜
     String diaryTitle; //일기 제목
     String diaryContent; //일기 내용
 
     //생성자
-    public diary_Content(ArrayList<Bitmap> _diaryMainPicture, String _Date, String _Title, String _Content) {
+    public diary_Content(ArrayList<Bitmap> _diaryMainPicture, ArrayList<String> _diaryMainUri, int _diaryMood, int _diaryWeather, String _Date, String _Title, String _Content) {
         this.diaryMainPicture = _diaryMainPicture;
+        this.diaryPictureUri = _diaryMainUri;
+        this.diaryMood = _diaryMood;
+        this.diaryWeather = _diaryWeather;
         this.diaryDate = _Date;
         this.diaryTitle = _Title;
         this.diaryContent = _Content;
     }
+
     //다이어리 총 비트맵 어레이 리스트 리턴
-    public ArrayList<Bitmap> getBitmapTotal(){
+    public ArrayList<Bitmap> getBitmapTotal() {
         return diaryMainPicture;
     }
+
+    //다이어리 총 uri 어레이 리스트 리턴
+    public ArrayList<String> getDiaryUriTotal() {
+        return diaryPictureUri;
+    }
+
     //position을 입력받으면 그 이미지 뷰 리턴
-    public Bitmap getDiaryMainPicture(int position){
+    public Bitmap getDiaryMainPicture(int position) {
         return diaryMainPicture.get(position);
     }
+
+    //position을 받으면 그 uri 리턴
+    public String getDIaryPictureUri(int position) {
+        return diaryPictureUri.get(position);
+    }
+
+    //날씨 값 리턴
+    public int getDiaryWeather() {
+        return diaryWeather;
+    }
+
+    //기분 값 리턴
+    public int getDiaryMood() {
+        return diaryMood;
+    }
+
     //날짜 호출
     public String getDiaryDate() {
         return diaryDate;

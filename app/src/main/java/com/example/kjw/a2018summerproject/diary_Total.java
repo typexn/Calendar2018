@@ -69,17 +69,22 @@ public class diary_Total extends AppCompatActivity {
         expandableListViewDiaryTotal.setAdapter(expandableListAdapterDiaryTotal);
 
 
-        //write를 먼저 실행했을 경우 데이터를 받아 오기
-        if(diary_Mainactivity.isDirectToWrite == true){
+        //write를 먼저 실행했을 경우 데이터를 받아 오기 -> 아닐경우 activityforresult의 값으로 받아줌
+        if (diary_Mainactivity.isDirectToWrite == true) {
             Intent getDiary = getIntent();
-            String uri = getDiary.getStringExtra("Uri_");
+            ArrayList<String> uri = (ArrayList<String>) getDiary.getSerializableExtra("Uri_");
+            int mood = getDiary.getIntExtra("Mood_", 0);
+            int weather = getDiary.getIntExtra("Weather_", 0);
             String date = getDiary.getStringExtra("Date_");
-            String title =  getDiary.getStringExtra("Title_");
-            String content =  getDiary.getStringExtra("Content_");
+            String title = getDiary.getStringExtra("Title_");
+            String content = getDiary.getStringExtra("Content_");
+
             ArrayList<Bitmap> BitmapArrayList = new ArrayList<Bitmap>();
-            addBitmapImage(Uri.parse(uri));
-            BitmapArrayList.add(tempImage);
-            diary_Content diary =new diary_Content(BitmapArrayList,date,title,content);
+            for (int i = 0; i < uri.size(); i++) {
+                addBitmapImage(Uri.parse(uri.get(i)));
+                BitmapArrayList.add(tempImage);
+            }
+            diary_Content diary = new diary_Content(BitmapArrayList, uri, mood, weather, date, title, content);
             expandableListAdapterDiaryTotal.ExpandableListViewAddItem(diary);
             diary_Mainactivity.isDirectToWrite = false;
 
@@ -103,16 +108,19 @@ public class diary_Total extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 3000:
-                    String getPicutreUri = data.getStringExtra("Uri");
+                    ArrayList<String> getPicutreUri = (ArrayList<String>) data.getStringArrayListExtra("Uri");
+                    int getMood = data.getIntExtra("Mood", 0);
+                    int getWeather = data.getIntExtra("Weather", 0);
                     String getDate = data.getStringExtra("Date");
                     String getTitle = data.getStringExtra("Title");
                     String getContent = data.getStringExtra("Content");
 
                     ArrayList<Bitmap> BitmapArrayList = new ArrayList<Bitmap>();
-                    addBitmapImage(Uri.parse(getPicutreUri));
-                    BitmapArrayList.add(tempImage);
-                    diary_Content Temp_Content = new diary_Content(BitmapArrayList, getDate, getTitle, getContent);
-                    Log.d("준성", getTitle="");
+                    for (int i = 0; i < getPicutreUri.size(); i++) {
+                        addBitmapImage(Uri.parse(getPicutreUri.get(i)));
+                        BitmapArrayList.add(tempImage);
+                    }
+                    diary_Content Temp_Content = new diary_Content(BitmapArrayList, getPicutreUri, getMood, getWeather, getDate, getTitle, getContent);
                     expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp_Content);
                     expandableListAdapterDiaryTotal.notifyDataSetChanged();
             }
@@ -190,7 +198,7 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.diary_group_view, null);
         }
         TextView txtv_diarygroup = (TextView) convertView.findViewById(R.id.diary_textview_group);
-        txtv_diarygroup.setText(getGroup(groupPosition));  //임시로
+        txtv_diarygroup.setText(childdata.get(groupdata.get(groupPosition)).get(0).getDiaryDate());  //임시로
 
         return convertView;
     }
@@ -268,7 +276,7 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
             childdata.put(groupdata.get(diary_Total.elstv_group_num), Temp_child);
             diary_Total.elstv_group_num = diary_Total.elstv_group_num + 1;
         }
-       notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     //확장리스트뷰의 데이터 삭제 함수   -> 차일드의 사이즈가 1이면 차일드를 포함하는 그룹 삭제 아니면 차일드만 삭제
@@ -288,6 +296,9 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
     public void ExpandableListViewChangeItem(int groupDataNum, int childDataNum) {
         diary_Content sendToDiaryWrite = childdata.get(this.groupdata.get(groupDataNum)).get(childDataNum);
         Intent intentToWriteDairy = new Intent(context, diary_Write.class);
+        intentToWriteDairy.putStringArrayListExtra("diaryUri", sendToDiaryWrite.getDiaryUriTotal());
+        intentToWriteDairy.putExtra("diaryMood", sendToDiaryWrite.getDiaryMood());
+        intentToWriteDairy.putExtra("diaryWeather", sendToDiaryWrite.getDiaryWeather());
         intentToWriteDairy.putExtra("diaryDate", sendToDiaryWrite.getDiaryDate());
         intentToWriteDairy.putExtra("diaryTitle", sendToDiaryWrite.getDiaryTitle());
         intentToWriteDairy.putExtra("diaryContent", sendToDiaryWrite.getDiaryContent());
@@ -298,6 +309,9 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
     public void ExpandableListViewGetView(int groupDataNum, int childDataNum) {
         diary_Content sendToDiaryView = childdata.get(this.groupdata.get(groupDataNum)).get(childDataNum);
         Intent intentToViewDairy = new Intent(context, diary_View.class);
+        intentToViewDairy.putStringArrayListExtra("view_Uri", sendToDiaryView.getDiaryUriTotal());
+        intentToViewDairy.putExtra("view_Mood", sendToDiaryView.getDiaryMood());
+        intentToViewDairy.putExtra("view_Weather", sendToDiaryView.getDiaryWeather());
         intentToViewDairy.putExtra("view_Day", sendToDiaryView.getDiaryDate());
         intentToViewDairy.putExtra("view_Title", sendToDiaryView.getDiaryTitle());
         intentToViewDairy.putExtra("view_Content", sendToDiaryView.getDiaryContent());
