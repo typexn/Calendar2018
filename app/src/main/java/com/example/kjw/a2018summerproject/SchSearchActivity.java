@@ -1,4 +1,4 @@
-﻿package com.example.kjw.a2018summerproject;
+package com.example.kjw.a2018summerproject;
 
 import android.app.Activity;
 import android.content.Context;
