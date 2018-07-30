@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#33e2e2e2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:id="@+id/acc_main_imagebutton_menu"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/ic_launcher_background" />
+
+        <Button
+            android:id="@+id/acc_main_button_beforemonth"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff"
+            android:text="◀" />
+
+        <TextView
+
+            android:id="@+id/acc_main_textview_yearmonth"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:text="2011년 몇월"
+            android:textSize="15sp"
+            android:textColor="#000"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/acc_main_button_nextmonth"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff"
+            android:text="▶" />
+
+        <ImageButton
+            android:id="@+id/acc_main_imagebutton_search"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:background="@drawable/ic_launcher_background" />
+
+        <ImageButton
+            android:id="@+id/acc_main_imagebutton_add"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_launcher_foreground" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+
+        <Button
+            android:id="@+id/acc_main_button_today"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="오늘" />
+
+        <Button
+            android:id="@+id/acc_main_button_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="월간" />
+
+        <Button
+            android:id="@+id/acc_main_button_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="주간" />
+
+        <Button
+            android:id="@+id/acc_main_button_oneday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="일간" />
+
+        <Button
+            android:id="@+id/acc_main_button_chart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="차트" />
+
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/acc_main_gridview_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:numColumns="7"
+        android:stretchMode="columnWidth"
+        android:listSelector="@drawable/gridview_selector"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/acc_main_textview_income"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="수입"
+                android:textSize="30sp"
+                android:background="#221abaff"/>
+
+            <TextView
+                android:id="@+id/acc_main_textview_output"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="지출"
+                android:textSize="30sp"
+                android:background="#22ff1e1e"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <TextView
+                android:id="@+id/acc_main_textview_totalmoney"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="합계"
+                android:textSize="30sp"
+                android:background="#22000000"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageButton
+            android:id="@+id/acc_main_imagebutton_gototal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/acc_main_imagebutton_gocalendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/acc_main_imagebutton_godiary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/acc_main_imagebutton_goexercise"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/acc_main_imagebutton_goaccount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</LinearLayout>
