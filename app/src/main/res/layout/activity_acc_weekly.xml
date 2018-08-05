@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <ImageButton
+                android:id="@+id/acc_weekly_imagebutton_menu"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/ic_launcher_background" />
+
+            <Button
+                android:id="@+id/acc_weekly_button_beforemonth"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:background="#00ffffff"
+                android:text="◀" />
+
+            <TextView
+                android:id="@+id/acc_weekly_textview_yearmonth"
+                android:text="2011년 몇월"
+                android:textSize="15sp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:textColor="#000"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/acc_weekly_button_nextmonth"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:background="#00ffffff"
+                android:text="▶" />
+
+            <ImageButton
+                android:id="@+id/acc_weekly_imagebutton_search"
+                android:layout_gravity="right"
+                android:layout_marginLeft="25dp"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_launcher_background" />
+
+            <ImageButton
+                android:id="@+id/acc_weekly_imagebutton_add"
+                android:layout_gravity="right"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_launcher_foreground" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+
+            <Button
+                android:id="@+id/acc_weekly_button_today"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="오늘" />
+
+            <Button
+                android:id="@+id/acc_weekly_button_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="월간" />
+
+            <Button
+                android:id="@+id/acc_weekly_button_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="주간" />
+
+            <Button
+                android:id="@+id/acc_weekly_button_oneday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="일간" />
+
+            <Button
+                android:id="@+id/acc_weekly_button_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="차트" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="날짜"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_firstweek"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_secondweek"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_thirdweek"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_fourthweek"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_fifthweek"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="수입"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_firstincome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_secondincome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_thirdincome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_fourthincome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_fifthincome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="지출"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_firstout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_secondout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_thirdout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_fourthout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/acc_weekly_textview_fifthout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
