@@ -1,4 +1,4 @@
-package com.example.sangeons.myapplication;
+package com.example.kjw.a2018summerproject;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
