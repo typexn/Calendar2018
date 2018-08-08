@@ -1,6 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <CheckBox
+                android:layout_weight="4"
+                android:id="@+id/ex_cyclemenu_checkbox_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="무게"/>
+
+            <EditText
+                android:layout_weight="1"
+                android:id="@+id/ex_cyclemenu_edittext_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--<EditText-->
+    <!--android:id="@+id/editText4"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="35dp"-->
+    <!--android:ems="10"-->
+    <!--android:inputType="textPersonName"-->
+    <!--android:text="Name"-->
+    <!--tools:layout_editor_absoluteX="130dp"-->
+    <!--tools:layout_editor_absoluteY="161dp" />-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/editText5"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="35dp"-->
+    <!--android:ems="10"-->
+    <!--android:inputType="textPersonName"-->
+    <!--android:text="Name"-->
+    <!--tools:layout_editor_absoluteX="130dp"-->
+    <!--tools:layout_editor_absoluteY="161dp" />-->
+
+    <!--<CheckBox-->
+    <!--android:id="@+id/checkBox2"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="개수"-->
+    <!--tools:layout_editor_absoluteX="16dp"-->
+    <!--tools:layout_editor_absoluteY="205dp" />-->
+
+    <!--<CheckBox-->
+    <!--android:id="@+id/checkBox3"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="시간"-->
+    <!--tools:layout_editor_absoluteX="16dp"-->
+    <!--tools:layout_editor_absoluteY="248dp" />-->
+    <!---->
+
+    <!--<TextView-->
+    <!--android:id="@+id/textView"-->
+    <!--android:layout_width="105dp"-->
+    <!--android:layout_height="34dp"-->
+    <!--android:text="운동명"-->
+    <!--tools:layout_editor_absoluteX="16dp"-->
+    <!--tools:layout_editor_absoluteY="39dp" />-->
+
+    <!--<Spinner-->
+    <!--android:id="@+id/spinner"-->
+    <!--android:layout_width="224dp"-->
+    <!--android:layout_height="35dp"-->
+    <!--tools:layout_editor_absoluteX="130dp"-->
+    <!--tools:layout_editor_absoluteY="90dp" />-->
+
+    <!--<Spinner-->
+    <!--android:id="@+id/spinner2"-->
+    <!--android:layout_width="224dp"-->
+    <!--android:layout_height="27dp"-->
+    <!--tools:layout_editor_absoluteX="130dp"-->
+    <!--tools:layout_editor_absoluteY="318dp" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/textView2"-->
+    <!--android:layout_width="109dp"-->
+    <!--android:layout_height="33dp"-->
+    <!--android:text="부위"-->
+    <!--tools:layout_editor_absoluteX="16dp"-->
+    <!--tools:layout_editor_absoluteY="90dp" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/textView3"-->
+    <!--android:layout_width="91dp"-->
+    <!--android:layout_height="31dp"-->
+    <!--android:text="쉬는시간"-->
+    <!--tools:layout_editor_absoluteX="16dp"-->
+    <!--tools:layout_editor_absoluteY="318dp" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/textView4"-->
+    <!--android:layout_width="86dp"-->
+    <!--android:layout_height="31dp"-->
+    <!--android:text="사진"-->
+    <!--tools:layout_editor_absoluteX="16dp"-->
+    <!--tools:layout_editor_absoluteY="375dp" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/button"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Button"-->
+    <!--tools:layout_editor_absoluteX="266dp"-->
+    <!--tools:layout_editor_absoluteY="447dp" />-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/editText"-->
+    <!--android:layout_width="221dp"-->
+    <!--android:layout_height="31dp"-->
+    <!--android:ems="10"-->
+    <!--android:inputType="textPersonName"-->
+    <!--android:text="Name"-->
+    <!--tools:layout_editor_absoluteX="130dp"-->
+    <!--tools:layout_editor_absoluteY="39dp" />-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/editText2"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="35dp"-->
+    <!--android:ems="10"-->
+    <!--android:inputType="textPersonName"-->
+    <!--android:text="Name"-->
+    <!--tools:layout_editor_absoluteX="130dp"-->
+    <!--tools:layout_editor_absoluteY="161dp" />-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/editText6"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="38dp"-->
+    <!--android:ems="10"-->
+    <!--android:inputType="textPersonName"-->
+    <!--android:text="Name"-->
+    <!--tools:layout_editor_absoluteX="130dp"-->
+    <!--tools:layout_editor_absoluteY="205dp" />-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/editText7"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="37dp"-->
+    <!--android:ems="10"-->
+    <!--android:inputType="textPersonName"-->
+    <!--android:text="Name"-->
+    <!--tools:layout_editor_absoluteX="130dp"-->
+    <!--tools:layout_editor_absoluteY="248dp" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/button2"-->
+    <!--android:layout_width="172dp"-->
+    <!--android:layout_height="66dp"-->
+    <!--android:text="Button"-->
+    <!--tools:layout_editor_absoluteX="130dp"-->
+    <!--tools:layout_editor_absoluteY="375dp" />-->
 </android.support.constraint.ConstraintLayout>

@@ -32,10 +32,12 @@
 
             <ImageButton
                 android:layout_weight="1"
+                android:id="@+id/ex_cycle_image_plus"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
             <ImageButton
+                android:id="@+id/ex_cycle_image_start"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

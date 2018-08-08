@@ -1,11 +1,13 @@
 package com.example.kjw.a2018summerproject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +38,11 @@ public class ex_cycle extends Activity {
         //부모 뷰에 추가
         container.addView(view1);
 
+    }
+
+    public void nextBtnClicked(View v) {
+        Intent intent = new Intent(ex_cycle.this, ex_ExerciseStart.class);
+        startActivity(intent);
     }
 }
 
