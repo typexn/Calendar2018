@@ -220,6 +220,7 @@ public class diary_Write extends AppCompatActivity {
         //수정 버튼에서 왔는가
         if (diary_Total.isButtonChangeClick == true) {
             isComeFromChange();
+
         }
 
 
