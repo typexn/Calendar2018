@@ -24,6 +24,9 @@
         <activity android:name=".diary_Total"></activity>
         <activity android:name=".diary_Write"></activity>
         <activity android:name=".diary_View"></activity>
+        <activity android:name=".ex_Cycle"></activity>
+        <activity android:name=".ex_ExerciseStart"></activity>
+        <activity android:name=".ex_Routine"></activity>
     </application>
 
 </manifest>
