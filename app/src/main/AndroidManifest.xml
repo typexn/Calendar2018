@@ -32,6 +32,7 @@
         <activity android:name=".acc_MainActivity"></activity>
         <activity android:name=".acc_EditActivity"></activity>
         <activity android:name=".acc_Weeklyactivity"></activity>
+        <activity android:name=".acc_DailyActivity"></activity>
     </application>
 
 </manifest>
