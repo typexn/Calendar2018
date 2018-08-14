@@ -16,7 +16,7 @@ public class acc_DailyActivity extends AppCompatActivity {
 
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_acc_weekly);
+        setContentView(R.layout.activity_acc_daily);
 
         // 버튼 객체 생성
 
