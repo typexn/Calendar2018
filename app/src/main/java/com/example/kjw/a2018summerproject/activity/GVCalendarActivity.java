@@ -28,11 +28,11 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
     public static int THURSDAY = 5;
     public static int FRIDAY = 6;
     public static int SATURDAY = 7;
+
     private TextView mTvCalendarTitle;
     private GridView mGvCalendar;
     private ArrayList<DayInfo> mDayList;
     private CalendarAdapter mCalendarAdapter;
-
     Calendar mLastMonthCalendar;
     Calendar mThisMonthCalendar;
     Calendar mNextMonthCalendar;
@@ -64,12 +64,15 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
 
         Button bLastMonth = (Button) findViewById(R.id.gv_calendar_activity_b_last);
         Button bNextMonth = (Button) findViewById(R.id.gv_calendar_activity_b_next);
+        mTvCalendarTitle = (TextView) findViewById(R.id.gv_calendar_activity_tv_title);
+        mGvCalendar = (GridView) findViewById(R.id.gv_calendar_activity_gv_calendar);
 
         mTvCalendarTitle = (TextView) findViewById(R.id.gv_calendar_activity_tv_title);
         mGvCalendar = (GridView) findViewById(R.id.gv_calendar_activity_gv_calendar);
         bLastMonth.setOnClickListener(this);
         bNextMonth.setOnClickListener(this);
         mGvCalendar.setOnItemClickListener(this);
+
         mDayList = new ArrayList<DayInfo>();
     }
 
@@ -92,51 +95,62 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
         int lastMonthStartDay;
         int dayOfMonth;
         int thisMonthLastDay;
+
         mDayList.clear();
 
         // 이번달 시작일의 요일을 구한다. 시작일이 일요일인 경우 인덱스를 1(일요일)에서 8(다음주 일요일)로 바꾼다.)
         dayOfMonth = calendar.get(Calendar.DAY_OF_WEEK);
         thisMonthLastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+
         calendar.add(Calendar.MONTH, -1);
 
         Log.e("지난달 마지막일", calendar.get(Calendar.DAY_OF_MONTH) + "");
+
         // 지난달의 마지막 일자를 구한다.
         lastMonthStartDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
         calendar.add(Calendar.MONTH, 1);
 
         Log.e("이번달 시작일", calendar.get(Calendar.DAY_OF_MONTH) + "");
         if (dayOfMonth == SUNDAY) {
             dayOfMonth += 7;
         }
+
         lastMonthStartDay -= (dayOfMonth - 1) - 1;
-
         // 캘린더 타이틀(년월 표시)을 세팅한다.
-        mTvCalendarTitle.setText(mThisMonthCalendar.get(Calendar.YEAR) + "년 " + (mThisMonthCalendar.get(Calendar.MONTH) + 1) + "월");
-
+        mTvCalendarTitle.setText(mThisMonthCalendar.get(Calendar.YEAR) + "년 "
+                + (mThisMonthCalendar.get(Calendar.MONTH) + 1) + "월");
         DayInfo day;
-
         Log.e("DayOfMOnth", dayOfMonth + "");
         for (int i = 0; i < dayOfMonth - 1; i++) {
             int date = lastMonthStartDay + i;
+
             day = new DayInfo();
             day.setDay(Integer.toString(date));
             day.setInMonth(false);
             mDayList.add(day);
         }
 
-        for (int i = 1; i <= thisMonthLastDay; i++) {
+        for (int i = 1; i <= thisMonthLastDay; i++)
+
+        {
+
             day = new DayInfo();
             day.setDay(Integer.toString(i));
             day.setInMonth(true);
+
             mDayList.add(day);
         }
 
         for (int i = 1; i < 42 - (thisMonthLastDay + dayOfMonth - 1) + 1; i++) {
+
             day = new DayInfo();
             day.setDay(Integer.toString(i));
             day.setInMonth(false);
             mDayList.add(day);
         }
+
 
         initCalendarAdapter();
     }
@@ -177,7 +191,9 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
 
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View v, int position, long arg3) {
+
+    public void onItemClick(AdapterView<?> parent, View v, int position,
+                            long arg3) {
 
     }
 
@@ -186,6 +202,7 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
     public void onClick(View v) {
 
         switch (v.getId()) {
+
             case R.id.gv_calendar_activity_b_last:
                 mThisMonthCalendar = getLastMonth(mThisMonthCalendar);
                 getCalendar(mThisMonthCalendar);
@@ -198,8 +215,8 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
         }
     }
 
-
     private void initCalendarAdapter() {
+
         mCalendarAdapter = new CalendarAdapter(this, R.layout.day, mDayList);
         mGvCalendar.setAdapter(mCalendarAdapter);
     }

@@ -52,45 +52,46 @@
         android:numColumns="7"
         android:stretchMode="columnWidth"
         android:listSelector="@drawable/gridview_selector"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_weight="1"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="종합"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="종합" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="운동"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="운동" />
 
         <Button
             android:id="@+id/btn_diary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="다이어리"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="다이어리" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="일정"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="일정" />
 
         <Button
             android:id="@+id/btn_acc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="가계부"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="가계부" />
 
     </LinearLayout>
 

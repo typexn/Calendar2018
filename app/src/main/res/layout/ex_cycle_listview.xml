@@ -12,14 +12,15 @@
             android:layout_marginLeft="20sp"
             android:layout_weight="3"
             android:layout_width="match_parent"
-            android:layout_height="20sp"/>
+            android:layout_height="20sp"
+            android:id="@+id/ex_cycle_image_representimage"/>
 
-        <Spinner
+        <TextView
             android:layout_marginRight="20sp"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="20sp"
-            android:id="@+id/ex_cycle_spinnerlist"/>
+            android:id="@+id/ex_cycle_text_title"/>
 
     </LinearLayout>
 
