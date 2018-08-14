@@ -128,7 +128,8 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
         buttononeday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent godaily = new Intent ( acc_MainActivity.this, acc_DailyActivity.class);
+                startActivity(godaily);
             }
         });
 

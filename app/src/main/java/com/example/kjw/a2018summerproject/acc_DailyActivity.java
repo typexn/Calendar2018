@@ -16,7 +16,7 @@ public class acc_DailyActivity extends AppCompatActivity {
 
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_acc_weekly);
+        setContentView(R.layout.activity_acc_daily);
 
         // 버튼 객체 생성
 
@@ -25,6 +25,13 @@ public class acc_DailyActivity extends AppCompatActivity {
         ImageButton imageButtonGosearch = (ImageButton) findViewById(R.id.acc_daily_imagebutton_search);
 
         ImageButton imageButtonGoadd = (ImageButton) findViewById(R.id.acc_daily_imagebutton_add);
+        imageButtonGoadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccadd = new Intent(acc_DailyActivity.this, acc_EditActivity.class);
+                startActivity(goaccadd);
+            }
+        });
 
         Button buttonGobefroemonth = (Button) findViewById(R.id.acc_daily_button_beforemonth);
 
@@ -35,8 +42,22 @@ public class acc_DailyActivity extends AppCompatActivity {
         Button buttonGotoday = (Button) findViewById(R.id.acc_daily_button_today);
 
         Button buttonGomonth = (Button) findViewById(R.id.acc_daily_button_month);
+        buttonGomonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccmonth = new Intent(acc_DailyActivity.this, acc_MainActivity.class);
+                startActivity(goaccmonth);
+            }
+        });
 
         Button buttonGoweek = (Button) findViewById(R.id.acc_daily_button_week);
+        buttonGoweek.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccweek = new Intent(acc_DailyActivity.this, acc_Weeklyactivity.class);
+                startActivity(goaccweek);
+            }
+        });
 
         Button buttonGoday = (Button) findViewById(R.id.acc_daily_button_oneday);
 
@@ -52,27 +73,5 @@ public class acc_DailyActivity extends AppCompatActivity {
 
         TextView textViewdailytotal = (TextView) findViewById(R.id.acc_daily_textview_totalmoney);
 
-        buttonGomonth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent goaccmonth = new Intent(acc_DailyActivity.this, acc_MainActivity.class);
-                startActivity(goaccmonth);
-                }
-            });
-
-        imageButtonGoadd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent goaccadd = new Intent(acc_DailyActivity.this, acc_EditActivity.class);
-                startActivity(goaccadd);
-                }
-             });
-        buttonGoweek.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent goaccweek = new Intent(acc_DailyActivity.this, acc_Weeklyactivity.class);
-                startActivity(goaccweek);
-                }
-        });
         }
     }
