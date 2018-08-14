@@ -180,7 +180,7 @@
             android:layout_weight="1"/>
 
         <ImageButton
-            android:id="@+id/acc_main_imagebutton_gocalendar"
+            android:id="@+id/acc_main_imagebutton_goscheldule"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"/>

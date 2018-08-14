@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.kjw.a2018summerproject.CalendarAdapter;
 import com.example.kjw.a2018summerproject.DayInfo;
 import com.example.kjw.a2018summerproject.R;
+import com.example.kjw.a2018summerproject.acc_MainActivity;
 import com.example.kjw.a2018summerproject.diary_Mainactivity;
 import com.example.kjw.a2018summerproject.sch_Mainactivity;
 
@@ -52,6 +53,7 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
             }
         });
 
+
         Button btnToSch = (Button) findViewById(R.id.btn_schedule);
         btnToSch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +64,15 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
         });
 
 
+        //가계부 버튼 넘어가는거
+        Button goacc = (Button) findViewById(R.id.btn_acc);
+        goacc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccactivity = new Intent ( GVCalendarActivity.this, acc_MainActivity.class);
+                startActivity(goaccactivity);
+            }
+        });
 
         Button bLastMonth = (Button) findViewById(R.id.gv_calendar_activity_b_last);
         Button bNextMonth = (Button) findViewById(R.id.gv_calendar_activity_b_next);

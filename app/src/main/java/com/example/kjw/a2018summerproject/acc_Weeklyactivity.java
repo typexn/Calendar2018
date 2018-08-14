@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.kjw.a2018summerproject.activity.GVCalendarActivity;
+
 import org.w3c.dom.Text;
 
 public class acc_Weeklyactivity extends AppCompatActivity {
@@ -28,6 +30,13 @@ public class acc_Weeklyactivity extends AppCompatActivity {
         ImageButton imageButtonGosearch = (ImageButton) findViewById(R.id.acc_weekly_imagebutton_search);
 
         ImageButton imageButtonGoadd = (ImageButton) findViewById(R.id.acc_weekly_imagebutton_add);
+        imageButtonGoadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccadd = new Intent(acc_Weeklyactivity.this, acc_EditActivity.class);
+                startActivity(goaccadd);
+            }
+        });
 
         Button buttonGobefroemonth = (Button) findViewById(R.id.acc_weekly_button_beforemonth);
 
@@ -38,10 +47,22 @@ public class acc_Weeklyactivity extends AppCompatActivity {
         Button buttonGotoday = (Button) findViewById(R.id.acc_weekly_button_today);
 
         Button buttonGomonth = (Button) findViewById(R.id.acc_weekly_button_month);
-
-        Button buttonGoweek = (Button) findViewById(R.id.acc_weekly_button_week);
+        buttonGomonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccmonth = new Intent ( acc_Weeklyactivity.this, acc_MainActivity.class);
+                startActivity(goaccmonth);
+            }
+        });
 
         Button buttonGoday = (Button) findViewById(R.id.acc_weekly_button_oneday);
+        buttonGoday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccday = new Intent(acc_Weeklyactivity.this, acc_DailyActivity.class);
+                startActivity(goaccday);
+            }
+        });
 
         Button buttonGochart = (Button) findViewById(R.id.acc_weekly_button_chart);
 
@@ -74,7 +95,5 @@ public class acc_Weeklyactivity extends AppCompatActivity {
         TextView textViewfourthout = (TextView) findViewById(R.id.acc_weekly_textview_fourthout);
 
         TextView textViewfifthout = (TextView) findViewById(R.id.acc_weekly_textview_fifthout);
-
-
     }
 }
