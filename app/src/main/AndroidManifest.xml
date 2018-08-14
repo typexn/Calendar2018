@@ -27,6 +27,11 @@
         <activity android:name=".ex_Cycle"></activity>
         <activity android:name=".ex_ExerciseStart"></activity>
         <activity android:name=".ex_Routine"></activity>
+
+//가계부팀 화면 추가//
+        <activity android:name=".acc_MainActivity"></activity>
+        <activity android:name=".acc_EditActivity"></activity>
+        <activity android:name=".acc_Weeklyactivity"></activity>
     </application>
 
 </manifest>
