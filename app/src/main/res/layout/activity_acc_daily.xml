@@ -113,7 +113,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="수익"
+                android:text="수입"
                 android:textSize="30sp"/>
 
             <ListView
@@ -219,10 +219,7 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
-
-
 
     </LinearLayout>
 
