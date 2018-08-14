@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.kjw.a2018summerproject.CalendarAdapter;
 import com.example.kjw.a2018summerproject.DayInfo;
 import com.example.kjw.a2018summerproject.R;
+import com.example.kjw.a2018summerproject.acc_MainActivity;
 import com.example.kjw.a2018summerproject.diary_Mainactivity;
 
 import java.util.ArrayList;
@@ -48,6 +49,16 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
             public void onClick(View view) {
                 Intent temp = new Intent(GVCalendarActivity.this, diary_Mainactivity.class);
                 startActivity(temp);
+            }
+        });
+
+        //가계부 버튼 넘어가는거
+        Button goacc = (Button) findViewById(R.id.btn_acc);
+        goacc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccactivity = new Intent ( GVCalendarActivity.this, acc_MainActivity.class);
+                startActivity(goaccactivity);
             }
         });
 
