@@ -24,6 +24,9 @@
         <activity android:name=".diary_Total"></activity>
         <activity android:name=".diary_Write"></activity>
         <activity android:name=".diary_View"></activity>
+
+        <activity android:name=".sch_Mainactivity"></activity>
+        <activity android:name=".SchAddActivity"></activity>
     </application>
 
 </manifest>

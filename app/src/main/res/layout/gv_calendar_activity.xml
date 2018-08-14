@@ -81,6 +81,7 @@
             android:text="다이어리" />
 
         <Button
+            android:id="@+id/btn_schedule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
