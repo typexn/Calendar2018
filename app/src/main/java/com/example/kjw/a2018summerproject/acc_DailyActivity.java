@@ -1,7 +1,9 @@
 package com.example.kjw.a2018summerproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -49,5 +51,28 @@ public class acc_DailyActivity extends AppCompatActivity {
         TextView textViewdailyout = (TextView) findViewById(R.id.acc_daily_textview_output);
 
         TextView textViewdailytotal = (TextView) findViewById(R.id.acc_daily_textview_totalmoney);
+
+        buttonGomonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccmonth = new Intent(acc_DailyActivity.this, acc_MainActivity.class);
+                startActivity(goaccmonth);
+                }
+            });
+
+        imageButtonGoadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccadd = new Intent(acc_DailyActivity.this, acc_EditActivity.class);
+                startActivity(goaccadd);
+                }
+             });
+        buttonGoweek.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccweek = new Intent(acc_DailyActivity.this, acc_Weeklyactivity.class);
+                startActivity(goaccweek);
+                }
+        });
         }
     }
