@@ -121,6 +121,11 @@
             android:text="15:00"
             android:textSize="22sp" />
 
+        <DatePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:datePickerMode="spinner"></DatePicker>
+
     </LinearLayout>
 
     <LinearLayout
