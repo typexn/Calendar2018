@@ -28,7 +28,7 @@ public class SchAddActivity extends AppCompatActivity {
                 String location = editLocation.getText().toString();
                 String memo = editLocation.getText().toString();
 
-                Schedule newSchedule = new Schedule(title, location, null, null, null, null, memo);
+                Schedule newSchedule = new Schedule(title, location, 15, 1, null, null, memo);
                 sch_Mainactivity.schList.add(newSchedule);
 
                 finish();

@@ -59,11 +59,17 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
 
         Button bLastMonth = (Button) findViewById(R.id.sch_main_button_last);
         Button bNextMonth = (Button) findViewById(R.id.sch_main_button_next);
+        Button bSearch = findViewById(R.id.sch_main_button_search);
+        Button bAdd = findViewById(R.id.sch_main_button_add);
+
         mTvCalendarTitle = (TextView) findViewById(R.id.sch_main_text_title);
         mGvCalendar = (GridView) findViewById(R.id.sch_main_gridview_calendar);
 
         bLastMonth.setOnClickListener(this);
         bNextMonth.setOnClickListener(this);
+        bSearch.setOnClickListener(this);
+        bAdd.setOnClickListener(this);
+
         mGvCalendar.setOnItemClickListener(this);
 
         mDayList = new ArrayList<DayInfo>();
@@ -77,11 +83,32 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
         mThisMonthCalendar = Calendar.getInstance();
         mThisMonthCalendar.set(Calendar.DAY_OF_MONTH, 1);
         getCalendar(mThisMonthCalendar);
-
-        Log.d("minyoung", schList.size()+"");
-        for(int i = 0; i < schList.size(); i++) {
+        //Log.d("minyoung", schList.size() + "");
+        View v;
+        for (int i = 0; i < schList.size(); i++) {
             Toast.makeText(this, schList.get(0).title, Toast.LENGTH_LONG).show();
+
+            LayoutInflater layoutInFlater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View rootView = layoutInFlater.inflate(R.layout.day, null);
+
+            v = mCalendarAdapter.getView(schList.get(i).startDay, null, mGvCalendar);
+
+            TextView tvExist = v.findViewById(R.id.day_cell_tv_isExist);
+            TextView tvtest = v.findViewById(R.id.day_cell_tv_day);
+            tvtest.setText("test");
+            tvExist.setText("●");
+            Log.d("minyoungcheck", tvExist.getText().toString());
+            Log.d("minyoung",  schList.get(i).startDay + "/" + v.toString()+ "/" + tvExist.toString());
         }
+
+        //
+
+        //View rootView = layoutInFlater.inflate(R.layout.fragment_A, null);
+
+        //if(rootView != null)
+            //mTextViewSummary = (TextView)rootView.findViewById(R.id.settings_a_summary);
+
+
     }
 
     private void getCalendar(Calendar calendar) {
@@ -140,11 +167,8 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
         }
         initCalendarAdapter();
     }
-
-
     /**
      * 지난달의 Calendar 객체를 반환합니다.
-     *
      * @param calendar
      * @return LastMonthCalendar
      */
@@ -179,18 +203,21 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
     @Override
 
     public void onItemClick(AdapterView<?> parent, View v, int position, long arg3) {
-        View convertView = ((CalendarAdapter)parent.getAdapter()).getView(position, null, null);
+        View convertView = ((CalendarAdapter) parent.getAdapter()).getView(position, null, null);
         CalendarAdapter.DayViewHolde dayViewHolder = (CalendarAdapter.DayViewHolde) convertView.getTag();
 
+         String day = ((TextView)v.findViewById(R.id.day_cell_tv_day)).getText().toString();
+         //Integer.parseInt(day)
         if (previousDayView != v) {
-            if(previousDayView == null){
+            if (previousDayView == null) {
+                v.setBackgroundColor(Color.GRAY);
                 previousDayView = v;
                 return;
             }
             previousDayView.setBackgroundColor(Color.TRANSPARENT);
             previousDayView = v;
             v.setBackgroundColor(Color.GRAY);
-        }else{
+        } else {
             Intent intent = new Intent(sch_Mainactivity.this, SchAddActivity.class);
             startActivity(intent); //또는 *forResult
         }
@@ -201,7 +228,6 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
     public void onClick(View v) {
 
         switch (v.getId()) {
-
             case R.id.sch_main_button_last:
                 mThisMonthCalendar = getLastMonth(mThisMonthCalendar);
                 getCalendar(mThisMonthCalendar);
@@ -210,6 +236,16 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
             case R.id.sch_main_button_next:
                 mThisMonthCalendar = getNextMonth(mThisMonthCalendar);
                 getCalendar(mThisMonthCalendar);
+                break;
+
+            case R.id.sch_main_button_search:
+                Intent toSearchActivity = new Intent(sch_Mainactivity.this, SchSearchActivity.class);
+                startActivity(toSearchActivity);
+                break;
+
+            case R.id.sch_main_button_add:
+                Intent toAddActivity = new Intent(sch_Mainactivity.this, SchAddActivity.class);
+                startActivity(toAddActivity);
                 break;
         }
     }
@@ -221,18 +257,23 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
     }
 }
 
-class Schedule{
-        public String title;
-        public String location;
-        public String startDay;
-        public String endDay;
-        public String startTime;
-        public String endTime;
-        public String memo;
+class Schedule {
+    public String title;
+    public String location;
+    public int startDay;
+    public int startMonth;
+    public int startYear;
+    public int endDay;
+    public int endMonth;
+    public int endYear;
+    public String startTime;
+    public String endTime;
+    public String memo;
 
-    public Schedule(){}
+    public Schedule() {
+    }
 
-    public Schedule(String title, String location, String startDay, String endDay, String startTime, String endTime, String memo){
+    public Schedule(String title, String location, int startDay, int endDay, String startTime, String endTime, String memo) {
         this.title = title;
         this.location = location;
         this.startDay = startDay;
@@ -244,10 +285,8 @@ class Schedule{
 }
 
 
-
-
 //쓰레기통
-class SchCalendarAdapter extends CalendarAdapter{
+class SchCalendarAdapter extends CalendarAdapter {
 
     public SchCalendarAdapter(Context context, int textResource, ArrayList<DayInfo> dayList) {
         super(context, textResource, dayList);

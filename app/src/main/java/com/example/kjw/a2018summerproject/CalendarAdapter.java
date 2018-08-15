@@ -93,7 +93,9 @@ public class CalendarAdapter extends BaseAdapter {
             }
             dayViewHolder = new DayViewHolde();
             dayViewHolder.llBackground = (LinearLayout)convertView.findViewById(R.id.day_cell_ll_background);
+
             dayViewHolder.tvDay = (TextView) convertView.findViewById(R.id.day_cell_tv_day);
+            dayViewHolder.tvExist = convertView.findViewById(R.id.day_cell_tv_isExist);
             convertView.setTag(dayViewHolder);
         }
         else {
@@ -126,6 +128,7 @@ public class CalendarAdapter extends BaseAdapter {
     public class DayViewHolde {
         public LinearLayout llBackground;
         public TextView tvDay;
+        public TextView tvExist; //add minyoung
     }
 
 
