@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kjw.a2018summerproject.activity.GVCalendarActivity;
 
@@ -28,6 +29,8 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
     public static int THURSDAY = 5;
     public static int FRIDAY = 6;
     public static int SATURDAY = 7;
+
+    static ArrayList<Schedule> schList = new ArrayList<Schedule>(); // 일정 정보
 
     private TextView mTvCalendarTitle;
     private GridView mGvCalendar;
@@ -74,6 +77,11 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
         mThisMonthCalendar = Calendar.getInstance();
         mThisMonthCalendar.set(Calendar.DAY_OF_MONTH, 1);
         getCalendar(mThisMonthCalendar);
+
+        Log.d("minyoung", schList.size()+"");
+        for(int i = 0; i < schList.size(); i++) {
+            Toast.makeText(this, schList.get(0).title, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void getCalendar(Calendar calendar) {
@@ -174,17 +182,14 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
         View convertView = ((CalendarAdapter)parent.getAdapter()).getView(position, null, null);
         CalendarAdapter.DayViewHolde dayViewHolder = (CalendarAdapter.DayViewHolde) convertView.getTag();
 
-        convertView.setBackgroundColor(Color.GRAY);
-
-
-        if(previousDayView == null){ return; }
-        else if (previousDayView != convertView) {
-            previousDayView.findViewById(R.id.day_cell_ll_background).setBackgroundColor(Color.WHITE);
-            previousDayView.setBackgroundColor(Color.WHITE);
-            previousDayView = convertView;
-            convertView.setBackgroundColor(Color.GRAY);
-            convertView.findViewById(R.id.day_cell_ll_background).setBackgroundColor(Color.GRAY); //왜 안될까
-
+        if (previousDayView != v) {
+            if(previousDayView == null){
+                previousDayView = v;
+                return;
+            }
+            previousDayView.setBackgroundColor(Color.TRANSPARENT);
+            previousDayView = v;
+            v.setBackgroundColor(Color.GRAY);
         }else{
             Intent intent = new Intent(sch_Mainactivity.this, SchAddActivity.class);
             startActivity(intent); //또는 *forResult
@@ -217,23 +222,31 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
 }
 
 class Schedule{
-    public String title;
-    public String location;
-    public String day;
-    public String time;
-    public String memo;
+        public String title;
+        public String location;
+        public String startDay;
+        public String endDay;
+        public String startTime;
+        public String endTime;
+        public String memo;
 
     public Schedule(){}
 
-    public Schedule(String title, String location, String day, String time, String memo){
+    public Schedule(String title, String location, String startDay, String endDay, String startTime, String endTime, String memo){
         this.title = title;
         this.location = location;
-        this.day = day;
-        this.time = time;
+        this.startDay = startDay;
+        this.endDay = endDay;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.memo = memo;
     }
 }
 
+
+
+
+//쓰레기통
 class SchCalendarAdapter extends CalendarAdapter{
 
     public SchCalendarAdapter(Context context, int textResource, ArrayList<DayInfo> dayList) {

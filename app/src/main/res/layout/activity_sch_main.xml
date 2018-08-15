@@ -13,6 +13,13 @@
         android:layout_gravity="center">
 
         <Button
+            android:id="@+id/sch_main_button_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="검색"
+            />
+
+        <Button
             android:id="@+id/sch_main_button_last"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,6 +44,13 @@
             android:layout_weight="1"
             android:background="#00ffffff"
             android:text="▶"  />
+
+        <Button
+            android:id="@+id/sch_main_button_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="추가"
+            />
 
     </LinearLayout>
 
