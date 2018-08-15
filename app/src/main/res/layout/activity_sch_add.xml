@@ -55,7 +55,8 @@
             android:layout_height="wrap_content"
             android:editable="true"
             android:hint="ex)토익 스터디"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:maxLength="30"/>
 
 
     </LinearLayout>
@@ -84,7 +85,8 @@
             android:layout_height="wrap_content"
             android:editable="true"
             android:hint="ex)종로"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:maxLength="30"/>
 
 
     </LinearLayout>
@@ -172,7 +174,8 @@
             android:layout_height="wrap_content"
             android:editable="true"
             android:hint="ex)        p.46   단어외워가기"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:maxLength="255"/>
 
     </LinearLayout>
 
