@@ -13,14 +13,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class CalendarAdapter extends BaseAdapter
-{
+public class CalendarAdapter extends BaseAdapter {
+    // 상속받느라 private -> protected로 바꿈!!
     private ArrayList<DayInfo> mDayList;
-    private Context mContext;
+    protected Context mContext;
 
     private int mResource;
 
-    private LayoutInflater mLiInflater;
+    protected LayoutInflater mLiInflater;
 
 
     /**
@@ -73,7 +73,7 @@ public class CalendarAdapter extends BaseAdapter
     @Override
     public long getItemId(int position) {
 
-        return 0;
+        return position;
     }
 
 

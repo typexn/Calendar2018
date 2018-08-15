@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.example.kjw.a2018summerproject.CalendarAdapter;
 import com.example.kjw.a2018summerproject.DayInfo;
 import com.example.kjw.a2018summerproject.R;
+import com.example.kjw.a2018summerproject.acc_MainActivity;
 import com.example.kjw.a2018summerproject.diary_Mainactivity;
+import com.example.kjw.a2018summerproject.sch_Mainactivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +39,7 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
     Calendar mNextMonthCalendar;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gv_calendar_activity);
 
@@ -48,6 +50,27 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
             public void onClick(View view) {
                 Intent temp = new Intent(GVCalendarActivity.this, diary_Mainactivity.class);
                 startActivity(temp);
+            }
+        });
+
+
+        Button btnToSch = (Button) findViewById(R.id.btn_schedule);
+        btnToSch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent temp = new Intent(GVCalendarActivity.this, sch_Mainactivity.class);
+                startActivity(temp);
+            }
+        });
+
+
+        //가계부 버튼 넘어가는거
+        Button goacc = (Button) findViewById(R.id.btn_acc);
+        goacc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goaccactivity = new Intent ( GVCalendarActivity.this, acc_MainActivity.class);
+                startActivity(goaccactivity);
             }
         });
 

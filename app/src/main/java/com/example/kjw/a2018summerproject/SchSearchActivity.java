@@ -168,23 +168,6 @@ public class SchSearchActivity extends Activity{
     }
 }
 
-class Schedule{
-    public String title;
-    public String location;
-    public String day;
-    public String time;
-    public String memo;
-
-    public Schedule(){}
-
-    public Schedule(String title, String location, String day, String time, String memo){
-        this.title = title;
-        this.location = location;
-        this.day = day;
-        this.time = time;
-        this.memo = memo;
-    }
-}
 
 class SchSearchAdapter extends BaseAdapter {
 

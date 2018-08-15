@@ -4,14 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -125,3 +120,14 @@ class ex_CycleBaseAdapter extends BaseAdapter {
         return view;
     }
 }
+
+class ex_ExerciseCycle{
+            String exerciseTitle;
+            String exercisePart;
+            double exerciseWeight;
+            int exerciseCount;
+            int exerciseTimeMinute;
+            int exerciseTimeSecond;
+            int exerciseBreakTime;
+
+        }

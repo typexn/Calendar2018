@@ -24,9 +24,19 @@
         <activity android:name=".diary_Total"></activity>
         <activity android:name=".diary_Write"></activity>
         <activity android:name=".diary_View"></activity>
+
+        <activity android:name=".sch_Mainactivity"></activity>
+        <activity android:name=".SchAddActivity"></activity>
+
         <activity android:name=".ex_Cycle"></activity>
         <activity android:name=".ex_ExerciseStart"></activity>
         <activity android:name=".ex_Routine"></activity>
+
+//가계부팀 화면 추가//
+        <activity android:name=".acc_MainActivity"></activity>
+        <activity android:name=".acc_EditActivity"></activity>
+        <activity android:name=".acc_Weeklyactivity"></activity>
+        <activity android:name=".acc_DailyActivity"></activity>
     </application>
 
 </manifest>

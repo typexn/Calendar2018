@@ -25,6 +25,7 @@
             android:layout_centerInParent="true"/>
 
         <Button
+            android:id="@+id/sch_add_button_complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="완료"
@@ -52,7 +53,7 @@
 
 
         <EditText
-            android:id="@+id/EditText1"
+            android:id="@+id/sch_add_edit_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:editable="true"
@@ -85,7 +86,7 @@
             android:lines="2" />
 
         <EditText
-            android:id="@+id/EditText2"
+            android:id="@+id/sch_add_edit_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:editable="true"
@@ -166,7 +167,7 @@
             android:layout_marginLeft="5sp"/>/>
 
         <EditText
-            android:id="@+id/EditText3"
+            android:id="@+id/sch_add_edit_memo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:editable="true"

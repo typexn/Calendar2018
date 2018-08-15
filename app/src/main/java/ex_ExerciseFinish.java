@@ -11,7 +11,7 @@ import com.example.kjw.a2018summerproject.R;
  * Created by KJW on 2018-08-15.
  */
 
-public class ex_ExerciseFinish extends AppCompatActivity implements RatingBar.OnRatingBarChangeListener{
+public class ex_ExerciseFinish extends AppCompatActivity {
 
     RatingBar ratingBar;
     private TextView txtRatingValue;
@@ -22,24 +22,16 @@ public class ex_ExerciseFinish extends AppCompatActivity implements RatingBar.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_ex_exercisefinish);
 
         addListenerOnRatingBar();
         addListenerOnButton();
-
     }
 
     public void addListenerOnRatingBar() {
 
         ratingBar = (RatingBar) findViewById(R.id.ex_exercisefinish_rating);
-        ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
-            public void onRatingChanged(RatingBar ratingBar, float rating,
-                                        boolean fromUser) {
 
-                txtRatingValue.setText(String.valueOf(rating));
-
-            }
-        });
     }
 
     public void addListenerOnButton() {
@@ -58,5 +50,4 @@ public class ex_ExerciseFinish extends AppCompatActivity implements RatingBar.On
         });
 
     }
-
 }
