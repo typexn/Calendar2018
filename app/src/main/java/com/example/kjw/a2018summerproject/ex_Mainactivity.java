@@ -14,7 +14,6 @@ public class ex_Mainactivity extends AppCompatActivity {
 
     Button buttonReport;
     Button buttonHelp;
-    static boolean isDirectToWrite = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +24,8 @@ public class ex_Mainactivity extends AppCompatActivity {
         buttonHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent goToExerciseReport = new Intent(ex_Mainactivity.this, ex_ExerciseReport.class);
+                startActivity(goToExerciseReport);
             }
         });
 
@@ -33,13 +33,11 @@ public class ex_Mainactivity extends AppCompatActivity {
         buttonHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isDirectToWrite = true;
-                Intent goToDiaryWrite = new Intent(ex_Mainactivity.this, diary_Write.class);
-                startActivity(goToDiaryWrite);
+                Intent goToExerciseHelp = new Intent(ex_Mainactivity.this, ex_Help.class);
+                startActivity(goToExerciseHelp);
             }
         });
 
-        //달력 만들기
     }
 
 }
