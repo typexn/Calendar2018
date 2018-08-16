@@ -36,7 +36,10 @@ public class ex_Mainactivity extends AppCompatActivity {
         buttonHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goToExerciseHelp = new Intent(ex_Mainactivity.this, ex_Help.class);
+                Intent goToExerciseHelp = new Intent(ex_Mainactivity.this, ex_Cycle.class);
+                /*
+                    잠시 Cycle로 넘어가게 설정
+                 */
                 startActivity(goToExerciseHelp);
             }
         });
