@@ -126,8 +126,27 @@ class ex_ExerciseCycle{
             String exercisePart;
             double exerciseWeight;
             int exerciseCount;
-            int exerciseTimeMinute;
             int exerciseTimeSecond;
             int exerciseBreakTime;
+            int exerciseSequence;
+            /*
+                exerciseTitle : 운동 제목
+                exercisePart : 운동 부위
+                exerciseWeight : 무게 설정
+                exerciseCount : 개수
+                exerciseTimeSecond : 운동시간
+                exerciseBreakTime : 쉬는시간
+                exerciseSequence : n번째 운동
+             */
 
+            ex_ExerciseCycle(String exerciseTitle, String exercisePart, double exerciseWeight, int exerciseCount, int exerciseTimeSecond, int exerciseBreakTime)
+            {
+                this.exerciseTitle = exerciseTitle;
+                this.exercisePart = exercisePart;
+                this.exerciseWeight = exerciseWeight;
+                this.exerciseCount = exerciseCount;
+                this.exerciseTimeSecond = exerciseTimeSecond;
+                this.exerciseBreakTime = exerciseBreakTime;
+                this.exerciseSequence = 0;
+            }
         }
