@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import java.sql.Time;
+import java.util.Date;
+
 /**
  * Created by KJW on 2018-08-15.
  */
@@ -38,6 +41,14 @@ public class ex_Mainactivity extends AppCompatActivity {
             }
         });
 
+
     }
+
+    /*
+        현재 날짜와 같으면 ex_Routine 실행
+        이전이면 ex_lastresult 실행
+     */
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
 
 }
