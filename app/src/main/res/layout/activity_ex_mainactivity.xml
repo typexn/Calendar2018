@@ -29,30 +29,57 @@
                 android:text="도움말"/>
         </LinearLayout>
 
-        <LinearLayout
+        <GridView
+            android:id="@+id/ex_main_gridview_calendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_marginTop="30dp"
+            android:numColumns="7"
+            android:stretchMode="columnWidth"
+            android:listSelector="@drawable/gridview_selector"
+            android:layout_gravity="center"
+            android:layout_weight="1"/>
 
-
-
-        </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""/>
-            <TextView
+                android:layout_weight="1"
+                android:text="종합" />
+
+            <Button
+                android:id="@+id/btn_exercise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:text="운동" />
 
+            <Button
+                android:id="@+id/btn_diary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="다이어리" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="일정" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="가계부" />
 
         </LinearLayout>
 
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

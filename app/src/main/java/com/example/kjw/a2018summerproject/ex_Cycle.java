@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class ex_Cycle extends AppCompatActivity {
     Button dial;
     ex_CycleMenu cd;
+    int ex_CycleCount = 0;
 
     private LinearLayout container;
 
@@ -43,6 +44,7 @@ public class ex_Cycle extends AppCompatActivity {
         dial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ex_CycleCount++;
                 cd.show();  //다이얼로그
             }
         });
@@ -161,13 +163,13 @@ public class ex_Cycle extends AppCompatActivity {
                 exerciseSequence : n번째 운동
              */
 
-        ex_ExerciseCycle(String exerciseTitle, String exercisePart, double exerciseWeight, int exerciseCount, int exerciseTimeSecond, int exerciseBreakTime) {
+        ex_ExerciseCycle(String exerciseTitle, String exercisePart, double exerciseWeight, int exerciseCount, int exerciseTimeSecond, int exerciseBreakTime, int cycleCount) {
             this.exerciseTitle = exerciseTitle;
             this.exercisePart = exercisePart;
             this.exerciseWeight = exerciseWeight;
             this.exerciseCount = exerciseCount;
             this.exerciseTimeSecond = exerciseTimeSecond;
             this.exerciseBreakTime = exerciseBreakTime;
-            this.exerciseSequence = 0;
+            this.exerciseSequence = cycleCount;
         }
     }

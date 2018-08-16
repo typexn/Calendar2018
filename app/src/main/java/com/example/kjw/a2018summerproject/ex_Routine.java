@@ -110,3 +110,8 @@ class ex_RoutineBaseAdapter extends BaseAdapter {
         return view;
     }
 }
+class ex_ExerciseRoutine {
+
+    ex_ExerciseCycle tmpCycleOne = new ex_ExerciseCycle("ad","ad",3.0,5,50,20, 0);
+    ex_ExerciseCycle tmpCycletwo = new ex_ExerciseCycle("ad","ad",3.5,5,55,25, 1);
+}
