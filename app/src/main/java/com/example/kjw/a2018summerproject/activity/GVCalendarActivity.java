@@ -16,6 +16,7 @@ import com.example.kjw.a2018summerproject.DayInfo;
 import com.example.kjw.a2018summerproject.R;
 import com.example.kjw.a2018summerproject.acc_MainActivity;
 import com.example.kjw.a2018summerproject.diary_Mainactivity;
+import com.example.kjw.a2018summerproject.ex_Mainactivity;
 import com.example.kjw.a2018summerproject.sch_Mainactivity;
 
 import java.util.ArrayList;
@@ -60,6 +61,16 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
             public void onClick(View view) {
                 Intent temp = new Intent(GVCalendarActivity.this, sch_Mainactivity.class);
                 startActivity(temp);
+            }
+        });
+
+        //운동 버튼 넘어가는거
+        Button exerciseButton = (Button) findViewById(R.id.btn_exercise);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent exerciseTmp = new Intent (GVCalendarActivity.this, ex_Mainactivity.class);
+                startActivity(exerciseTmp);
             }
         });
 
