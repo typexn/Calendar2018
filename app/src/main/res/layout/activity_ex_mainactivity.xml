@@ -18,10 +18,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="운동 보고서"/>
-            <TextView
+            <Button
+                android:id="@+id/ex_main_button_lastmonth"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00ffffff"
+                android:text="◀"  />
+
+            <TextView
+                android:text="2011년 몇월"
+                android:textSize="20sp"
+                android:id="@+id/ex_main_text_monthtitle"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:textColor="#000"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/ex_main_button_nextmonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00ffffff"
+                android:text="▶"  />
             <Button
                 android:id="@+id/ex_main_button_help"
                 android:layout_width="wrap_content"

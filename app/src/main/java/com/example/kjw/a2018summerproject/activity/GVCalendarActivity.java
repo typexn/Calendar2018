@@ -66,7 +66,7 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
 
         //운동 버튼 넘어가는거
         Button exerciseButton = (Button) findViewById(R.id.btn_exercise);
-        button.setOnClickListener(new View.OnClickListener() {
+        exerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent exerciseTmp = new Intent (GVCalendarActivity.this, ex_Mainactivity.class);
