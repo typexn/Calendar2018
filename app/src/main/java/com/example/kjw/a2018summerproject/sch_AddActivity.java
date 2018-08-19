@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.kjw.a2018summerproject.R;
 
@@ -58,6 +59,13 @@ public class sch_AddActivity extends AppCompatActivity {
                 String title = editTitle.getText().toString();
                 String location = editLocation.getText().toString();
                 String memo = editLocation.getText().toString();
+
+                if(editTitle.getText().toString()=="")
+                {
+                    Toast.makeText(sch_AddActivity.this,"제목을 입력해주세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
 
                 Schedule newSchedule = new Schedule(title, location, 15, 1, null, null, memo);
                 sch_Mainactivity.schList.add(newSchedule);
