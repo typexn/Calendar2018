@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,12 @@ public class ex_Routine extends Activity {
         setContentView(R.layout.activity_ex_routine);
         listView = (ListView)findViewById(R.id.ex_routine_listview);
 
+
         final ArrayList<ex_RoutineAdapter> list_ItemArrayList = new ArrayList<ex_RoutineAdapter>();
+        final ArrayAdapter exerciseRoutineAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice,list_ItemArrayList);
+
+        listView.setAdapter(exerciseRoutineAdapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         /*  "내용에 따른 목록 추가"
         list_ItemArrayList.add()
@@ -40,7 +46,7 @@ public class ex_Routine extends Activity {
         routinePlus.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v)
             {
-                EditText routineTitle = (EditText) findViewById(R.id.ex_routine_edittext_routinetitle);
+                final EditText routineTitle = (EditText) findViewById(R.id.ex_routine_edittext_routinetitle);
                 String value = routineTitle.getText().toString();
                 ex_ExerciseRoutine newRoutine = new ex_ExerciseRoutine(value);
 
@@ -48,19 +54,26 @@ public class ex_Routine extends Activity {
                 System.arraycopy(routineArray,0,tmpRoutine,0,routineArray.length);
                 routineArray = tmpRoutine;
                 routineArray[routineCount] = newRoutine;
-                routineCount++;
 
-                ex_RoutineAdapter newAdapter = new ex_RoutineAdapter(R.drawable.calendar, routineArray[routineCount].routineTitle, R.drawable.calendar);
+                Log.d("Uk", "routineArray.length : " + routineArray.length + "");
+
+                ex_RoutineAdapter newAdapter = new ex_RoutineAdapter(R.drawable.ic_launcher_foreground, routineArray[routineCount].routineTitle, R.drawable.ic_launcher_foreground);
                 list_ItemArrayList.add(newAdapter);
+//                int count;
+//                count = adapter.getCount();
+//                list_ItemArrayList.add("LIST" + Integer.toString(count + 1));
+                exerciseRoutineAdapter.notifyDataSetChanged();
+
+                routineCount++;
             }
         });
-        Button routineToCycle = (Button) findViewById(R.id.ex_routine_listview_text_exercisetitle);
+/*        Button routineToCycle = (Button) findViewById(R.id.ex_routine_listview_text_exercisetitle);
         routineToCycle.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 Intent routineTmp = new Intent(ex_Routine.this,ex_Cycle.class);
                 startActivity(routineTmp);
             }
-        });
+        });*/
     }
 
 }
