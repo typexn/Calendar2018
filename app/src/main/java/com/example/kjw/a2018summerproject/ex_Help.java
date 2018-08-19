@@ -19,7 +19,7 @@ public class ex_Help extends Dialog {
 
 
     public ex_Help(@NonNull View.OnClickListener context) {
-        super(context);
+        super((Context) context);
     }
 
     protected void onCreate(Bundle savedInstanceState) {

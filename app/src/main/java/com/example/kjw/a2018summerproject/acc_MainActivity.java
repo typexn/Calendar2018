@@ -19,32 +19,27 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class acc_MainActivity extends Activity implements AdapterView.OnItemClickListener, View.OnClickListener
-{
-    public static int SUNDAY        = 1;
-    public static int MONDAY        = 2;
-    public static int TUESDAY       = 3;
-    public static int WEDNSESDAY    = 4;
-    public static int THURSDAY      = 5;
-    public static int FRIDAY        = 6;
-    public static int SATURDAY      = 7;
-
+public class acc_MainActivity extends Activity implements AdapterView.OnItemClickListener, View.OnClickListener {
+    public static int SUNDAY = 1;
+    public static int MONDAY = 2;
+    public static int TUESDAY = 3;
+    public static int WEDNSESDAY = 4;
+    public static int THURSDAY = 5;
+    public static int FRIDAY = 6;
+    public static int SATURDAY = 7;
 
 
     private TextView textViewTitle;
     private GridView gridViewCalendar;
 
 
-
     private ArrayList<DayInfo> mDayList;
     private CalendarAdapter mCalendarAdapter;
-
 
 
     Calendar mLastMonthCalendar;
     Calendar mThisMonthCalendar;
     Calendar mNextMonthCalendar;
-
 
 
     @Override
@@ -53,19 +48,15 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acc_main);
 
-        //인텐트 받아오기
-        Intent mainGetintent = getIntent();
-
-
         // (이미지)버튼, 텍스트뷰 객체 생성
-        ImageButton imageButtonGoMenu = (ImageButton) findViewById (R.id.acc_main_imagebutton_menu);
-        ImageButton imageButtonSearch = (ImageButton) findViewById (R.id.acc_main_imagebutton_search);
+        ImageButton imageButtonGoMenu = (ImageButton) findViewById(R.id.acc_main_imagebutton_menu);
+        ImageButton imageButtonSearch = (ImageButton) findViewById(R.id.acc_main_imagebutton_search);
         ImageButton imageButtonAdd = (ImageButton) findViewById(R.id.acc_main_imagebutton_add);
 
         imageButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goEdit = new Intent (acc_MainActivity.this, acc_EditActivity.class);
+                Intent goEdit = new Intent(acc_MainActivity.this, acc_EditActivity.class);
                 startActivity(goEdit);
             }
         });
@@ -75,7 +66,7 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
         imageButtonGoTotal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goTotal = new Intent (acc_MainActivity.this, GVCalendarActivity.class);
+                Intent goTotal = new Intent(acc_MainActivity.this, GVCalendarActivity.class);
                 startActivity(goTotal);
             }
         });
@@ -84,7 +75,7 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
         imageButtonGoScheldule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goSche = new Intent (acc_MainActivity.this, sch_Mainactivity.class);
+                Intent goSche = new Intent(acc_MainActivity.this, sch_Mainactivity.class);
                 startActivity(goSche);
             }
         });
@@ -93,7 +84,7 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
         imageButtonGoDiary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goDiary = new Intent (acc_MainActivity.this, diary_Mainactivity.class);
+                Intent goDiary = new Intent(acc_MainActivity.this, diary_Mainactivity.class);
                 startActivity(goDiary);
             }
         });
@@ -102,7 +93,7 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
         imageButtonGoExercise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goExer = new Intent (acc_MainActivity.this, ex_ExerciseStart.class);
+                Intent goExer = new Intent(acc_MainActivity.this, ex_ExerciseStart.class);
                 startActivity(goExer);
             }
         });
@@ -119,7 +110,7 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
         buttonweek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goweek = new Intent ( acc_MainActivity.this, acc_Weeklyactivity.class);
+                Intent goweek = new Intent(acc_MainActivity.this, acc_Weeklyactivity.class);
                 startActivity(goweek);
             }
         });
@@ -128,7 +119,7 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
         buttononeday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent godaily = new Intent ( acc_MainActivity.this, acc_DailyActivity.class);
+                Intent godaily = new Intent(acc_MainActivity.this, acc_DailyActivity.class);
                 startActivity(godaily);
             }
         });
@@ -141,19 +132,36 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
             }
         });
 
-        Button ButtonBeforeMonth = (Button)findViewById(R.id.acc_main_button_beforemonth);
-        Button ButtonNextMonth = (Button)findViewById(R.id.acc_main_button_nextmonth);
+        Button ButtonBeforeMonth = (Button) findViewById(R.id.acc_main_button_beforemonth);
+        Button ButtonNextMonth = (Button) findViewById(R.id.acc_main_button_nextmonth);
 
-        TextView textViewIncome = (TextView)findViewById(R.id.acc_main_textview_income);
-        textViewIncome.setText(mainGetintent.getStringExtra("Money"));
+        TextView textViewIncome = (TextView) findViewById(R.id.acc_main_textview_income);
+        TextView textViewOutput = (TextView) findViewById(R.id.acc_main_textview_output);
+        TextView textViewTotalMoney = (TextView) findViewById(R.id.acc_main_textview_totalmoney);
 
-        TextView textViewOutput = (TextView)findViewById(R.id.acc_main_textview_output);
-        TextView textViewTotalMoney = (TextView)findViewById(R.id.acc_main_textview_totalmoney);
+        //입금 출금 금액 변수
+        int setMoneyIn = 0 ;
+        int setMoneyOut = 0 ;
+        int setTotalMoney = 0 ;
 
+        //인텐트 받아오기
+        Intent mainGetIntent = getIntent();
+        int moneyIn = mainGetIntent.getIntExtra("MoneyIn", 0);
+        int moneyOut = mainGetIntent.getIntExtra("MoneyOut", 0);
+        int x = mainGetIntent.getIntExtra("in&out", 0);
 
+        if (x == 0) {
+            setMoneyIn =  setMoneyIn + moneyIn ;
+        }
+        if (x == 1) {
+            setMoneyOut = setMoneyOut + moneyOut;
+        }
+        textViewIncome.setText(setMoneyIn+ "원");
+        textViewOutput.setText(setMoneyOut + "원");
+        textViewTotalMoney.setText(setTotalMoney + "원");
 
-        textViewTitle = (TextView)findViewById(R.id.acc_main_textview_yearmonth);
-        gridViewCalendar= (GridView)findViewById(R.id.acc_main_gridview_calendar);
+        textViewTitle = (TextView) findViewById(R.id.acc_main_textview_yearmonth);
+        gridViewCalendar = (GridView) findViewById(R.id.acc_main_gridview_calendar);
 
         ButtonBeforeMonth.setOnClickListener(this);
         ButtonNextMonth.setOnClickListener(this);
@@ -163,17 +171,14 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
     }
 
 
-
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         // 이번달 의 캘린더 인스턴스를 생성한다.
         mThisMonthCalendar = Calendar.getInstance();
         mThisMonthCalendar.set(Calendar.DAY_OF_MONTH, 1);
         getCalendar(mThisMonthCalendar);
     }
-
 
 
     /**
@@ -194,20 +199,19 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
         dayOfMonth = calendar.get(Calendar.DAY_OF_WEEK);
         thisMonthLastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         calendar.add(Calendar.MONTH, -1);
-        Log.e("지난달 마지막일", calendar.get(Calendar.DAY_OF_MONTH)+"");
-
+        Log.e("지난달 마지막일", calendar.get(Calendar.DAY_OF_MONTH) + "");
 
 
         // 지난달의 마지막 일자를 구한다.
         lastMonthStartDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         calendar.add(Calendar.MONTH, 1);
-        Log.e("이번달 시작일", calendar.get(Calendar.DAY_OF_MONTH)+"");
+        Log.e("이번달 시작일", calendar.get(Calendar.DAY_OF_MONTH) + "");
 
-        if(dayOfMonth == SUNDAY) {
+        if (dayOfMonth == SUNDAY) {
             dayOfMonth += 7;
         }
 
-        lastMonthStartDay -= (dayOfMonth-1)-1;
+        lastMonthStartDay -= (dayOfMonth - 1) - 1;
 
 
         // 캘린더 타이틀(년월 표시)을 세팅한다.
@@ -216,11 +220,11 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
 
         DayInfo day;
 
-        Log.e("DayOfMOnth", dayOfMonth+"");
+        Log.e("DayOfMOnth", dayOfMonth + "");
 
-        for(int i=0; i<dayOfMonth-1; i++) {
+        for (int i = 0; i < dayOfMonth - 1; i++) {
 
-            int date = lastMonthStartDay+i;
+            int date = lastMonthStartDay + i;
             day = new DayInfo();
             day.setDay(Integer.toString(date));
             day.setInMonth(false);
@@ -228,7 +232,7 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
             mDayList.add(day);
         }
 
-        for(int i=1; i <= thisMonthLastDay; i++) {
+        for (int i = 1; i <= thisMonthLastDay; i++) {
 
             day = new DayInfo();
             day.setDay(Integer.toString(i));
@@ -237,7 +241,7 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
             mDayList.add(day);
         }
 
-        for(int i=1; i<42-(thisMonthLastDay+dayOfMonth-1)+1; i++) {
+        for (int i = 1; i < 42 - (thisMonthLastDay + dayOfMonth - 1) + 1; i++) {
 
             day = new DayInfo();
             day.setDay(Integer.toString(i));
@@ -248,7 +252,6 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
 
         initCalendarAdapter();
     }
-
 
 
     /**
@@ -286,17 +289,15 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
     }
 
 
-
     @Override
-    public void onItemClick(AdapterView<?> parent, View v, int position, long arg3)
-    {
+    public void onItemClick(AdapterView<?> parent, View v, int position, long arg3) {
 
     }
 
     @Override
     public void onClick(View v) {
 
-        switch(v.getId()) {
+        switch (v.getId()) {
 
             case R.id.acc_main_button_beforemonth:
                 mThisMonthCalendar = getLastMonth(mThisMonthCalendar);
