@@ -41,9 +41,6 @@ public class ex_Routine extends Activity {
 
         listView.setAdapter(ex_RoutineBase);
 
-        /*  "내용에 따른 목록 추가"
-        list_ItemArrayList.add()
-        */
         Button routinePlus = (Button) findViewById(R.id.ex_routine_button_routineplus);
         routinePlus.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v)
