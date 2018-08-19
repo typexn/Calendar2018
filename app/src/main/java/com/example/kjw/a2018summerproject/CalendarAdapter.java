@@ -13,14 +13,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class CalendarAdapter extends BaseAdapter
-{
+public class CalendarAdapter extends BaseAdapter {
+    // 상속받느라 private -> protected로 바꿈!!
     private ArrayList<DayInfo> mDayList;
-    private Context mContext;
+    protected Context mContext;
 
     private int mResource;
 
-    private LayoutInflater mLiInflater;
+    protected LayoutInflater mLiInflater;
 
 
     /**
@@ -73,7 +73,7 @@ public class CalendarAdapter extends BaseAdapter
     @Override
     public long getItemId(int position) {
 
-        return 0;
+        return position;
     }
 
 
@@ -93,7 +93,9 @@ public class CalendarAdapter extends BaseAdapter
             }
             dayViewHolder = new DayViewHolde();
             dayViewHolder.llBackground = (LinearLayout)convertView.findViewById(R.id.day_cell_ll_background);
+
             dayViewHolder.tvDay = (TextView) convertView.findViewById(R.id.day_cell_tv_day);
+            dayViewHolder.tvExist = (TextView) convertView.findViewById(R.id.day_cell_tv_isExist);
             convertView.setTag(dayViewHolder);
         }
         else {
@@ -116,9 +118,17 @@ public class CalendarAdapter extends BaseAdapter
             else {
                 dayViewHolder.tvDay.setTextColor(Color.GRAY);
             }
+
+            if(day.isExistSch()){
+                dayViewHolder.tvExist.setText("●");
+            }
         }
 
         return convertView;
+    }
+
+    public void changeDayInfo(int position, boolean isExist){
+        mDayList.get(position).setExistSch(isExist);
     }
 
 
@@ -126,6 +136,7 @@ public class CalendarAdapter extends BaseAdapter
     public class DayViewHolde {
         public LinearLayout llBackground;
         public TextView tvDay;
+        public TextView tvExist; //add minyoung
     }
 
 
@@ -134,7 +145,7 @@ public class CalendarAdapter extends BaseAdapter
 //      int width = mContext.getResources().getDisplayMetrics().widthPixels;
         int cellWidth = 480/7;
 
-        return cellWidth;
+        return cellWidth*2; // minyoung *2 했음 임시로
     }
 
 

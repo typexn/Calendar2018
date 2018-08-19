@@ -1,35 +1,31 @@
-package com.example.kjw.a2018summerproject.activity;
+package com.example.kjw.a2018summerproject;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
 
-import com.example.kjw.a2018summerproject.CalendarAdapter;
-import com.example.kjw.a2018summerproject.DayInfo;
-import com.example.kjw.a2018summerproject.R;
-import com.example.kjw.a2018summerproject.acc_MainActivity;
-import com.example.kjw.a2018summerproject.diary_Mainactivity;
-import com.example.kjw.a2018summerproject.ex_Mainactivity;
-import com.example.kjw.a2018summerproject.sch_Mainactivity;
-
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
-public class GVCalendarActivity extends Activity implements AdapterView.OnItemClickListener, View.OnClickListener {
-    public static int SUNDAY = 1;
-    public static int MONDAY = 2;
-    public static int TUESDAY = 3;
-    public static int WEDNSESDAY = 4;
-    public static int THURSDAY = 5;
-    public static int FRIDAY = 6;
-    public static int SATURDAY = 7;
+/**
+ * Created by KJW on 2018-08-15.
+ */
+
+public class ex_Mainactivity extends AppCompatActivity {
 
     private TextView mTvCalendarTitle;
     private GridView mGvCalendar;
@@ -39,92 +35,69 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
     Calendar mThisMonthCalendar;
     Calendar mNextMonthCalendar;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public static int SUNDAY = 1;
+    public static int MONDAY = 2;
+    public static int TUESDAY = 3;
+    public static int WEDNSESDAY = 4;
+    public static int THURSDAY = 5;
+    public static int FRIDAY = 6;
+    public static int SATURDAY = 7;
+
+    Button buttonReport;
+    Button buttonHelp;
+    Button buttonLastMonth;
+    Button buttonNextMonth;
+
+    View previousDayView;
+
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gv_calendar_activity);
+        setContentView(R.layout.activity_ex_mainactivity);
 
-        //다이어리꺼 버튼 넘어가는거 임시
-        Button button = (Button) findViewById(R.id.btn_diary);
-        button.setOnClickListener(new View.OnClickListener() {
+        //mainReport로 가는 버튼
+        buttonReport = (Button) findViewById(R.id.ex_main_button_report);
+        buttonReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent temp = new Intent(GVCalendarActivity.this, diary_Mainactivity.class);
-                startActivity(temp);
+                Intent goToExerciseReport = new Intent(ex_Mainactivity.this, ex_ExerciseReport.class);
+                startActivity(goToExerciseReport);
             }
         });
 
-
-        Button btnToSch = (Button) findViewById(R.id.btn_schedule);
-        btnToSch.setOnClickListener(new View.OnClickListener() {
+        buttonHelp = (Button) findViewById(R.id.ex_main_button_help);
+        buttonHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent temp = new Intent(GVCalendarActivity.this, sch_Mainactivity.class);
-                startActivity(temp);
+                Intent goToExerciseHelp = new Intent(ex_Mainactivity.this, ex_Routine.class);
+                /*
+                    잠시 Routine로 넘어가게 설정
+                 */
+                startActivity(goToExerciseHelp);
             }
         });
 
-        //운동 버튼 넘어가는거
-        Button exerciseButton = (Button) findViewById(R.id.btn_exercise);
-        exerciseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent exerciseTmp = new Intent (GVCalendarActivity.this, ex_Mainactivity.class);
-                startActivity(exerciseTmp);
-            }
-        });
+        buttonLastMonth = (Button) findViewById(R.id.ex_main_button_lastmonth);
+        buttonNextMonth = (Button) findViewById(R.id.ex_main_button_nextmonth);
 
 
-        //가계부 버튼 넘어가는거
-        Button goacc = (Button) findViewById(R.id.btn_acc);
-        goacc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent goaccactivity = new Intent ( GVCalendarActivity.this, acc_MainActivity.class);
-                startActivity(goaccactivity);
-            }
-        });
-
-        Button bLastMonth = (Button) findViewById(R.id.gv_calendar_activity_b_last);
-        Button bNextMonth = (Button) findViewById(R.id.gv_calendar_activity_b_next);
-        mTvCalendarTitle = (TextView) findViewById(R.id.gv_calendar_activity_tv_title);
-        mGvCalendar = (GridView) findViewById(R.id.gv_calendar_activity_gv_calendar);
-
-        mTvCalendarTitle = (TextView) findViewById(R.id.gv_calendar_activity_tv_title);
-        mGvCalendar = (GridView) findViewById(R.id.gv_calendar_activity_gv_calendar);
-        bLastMonth.setOnClickListener(this);
-        bNextMonth.setOnClickListener(this);
-        mGvCalendar.setOnItemClickListener(this);
-
-        mDayList = new ArrayList<DayInfo>();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // 이번달 의 캘린더 인스턴스를 생성한다.
-        mThisMonthCalendar = Calendar.getInstance();
-        mThisMonthCalendar.set(Calendar.DAY_OF_MONTH, 1);
-        getCalendar(mThisMonthCalendar);
-    }
-
-    /**
-     * 달력을 셋팅한다.
-     *
-     * @param calendar 달력에 보여지는 이번달의 Calendar 객체
+    /*
+        현재 날짜와 같으면 ex_Routine 실행
+        이전이면 ex_lastresult 실행
      */
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
+
     private void getCalendar(Calendar calendar) {
         int lastMonthStartDay;
         int dayOfMonth;
         int thisMonthLastDay;
 
         mDayList.clear();
-
         // 이번달 시작일의 요일을 구한다. 시작일이 일요일인 경우 인덱스를 1(일요일)에서 8(다음주 일요일)로 바꾼다.)
         dayOfMonth = calendar.get(Calendar.DAY_OF_WEEK);
         thisMonthLastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
 
         calendar.add(Calendar.MONTH, -1);
 
@@ -145,20 +118,17 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
         mTvCalendarTitle.setText(mThisMonthCalendar.get(Calendar.YEAR) + "년 "
                 + (mThisMonthCalendar.get(Calendar.MONTH) + 1) + "월");
         DayInfo day;
+
         Log.e("DayOfMOnth", dayOfMonth + "");
         for (int i = 0; i < dayOfMonth - 1; i++) {
             int date = lastMonthStartDay + i;
-
             day = new DayInfo();
             day.setDay(Integer.toString(date));
             day.setInMonth(false);
             mDayList.add(day);
         }
 
-        for (int i = 1; i <= thisMonthLastDay; i++)
-
-        {
-
+        for (int i = 1; i <= thisMonthLastDay; i++) {
             day = new DayInfo();
             day.setDay(Integer.toString(i));
             day.setInMonth(true);
@@ -173,11 +143,8 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
             day.setInMonth(false);
             mDayList.add(day);
         }
-
-
         initCalendarAdapter();
     }
-
 
     /**
      * 지난달의 Calendar 객체를 반환합니다.
@@ -211,32 +178,73 @@ public class GVCalendarActivity extends Activity implements AdapterView.OnItemCl
 
         return calendar;
     }
+    public void onItemClick(AdapterView<?> parent, View v, int position, long arg3) {
+        View convertView = ((CalendarAdapter) parent.getAdapter()).getView(position, null, null);
+        CalendarAdapter.DayViewHolde dayViewHolder = (CalendarAdapter.DayViewHolde) convertView.getTag();
 
-
-    @Override
-
-    public void onItemClick(AdapterView<?> parent, View v, int position,
-                            long arg3) {
-
+        String day = ((TextView) v.findViewById(R.id.day_cell_tv_day)).getText().toString();
+        //Integer.parseInt(day)
+        if (previousDayView != v) {
+            if (previousDayView == null) {
+                v.setBackgroundColor(Color.GRAY);
+                previousDayView = v;
+                return;
+            }
+            previousDayView.setBackgroundColor(Color.TRANSPARENT);
+            previousDayView = v;
+            v.setBackgroundColor(Color.GRAY);
+        } else {
+            if (true) { //일정이 없으면
+                Intent intent = new Intent(ex_Mainactivity.this, ex_LastResult.class);
+                startActivity(intent); //또는 *forResult
+            } else { //일정이 있으면
+                Intent toCheck = new Intent(ex_Mainactivity.this, ex_Routine.class);
+                startActivity(toCheck);
+            }
+        }
     }
 
 
-    @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
-
-            case R.id.gv_calendar_activity_b_last:
+            case R.id.ex_main_button_lastmonth:
                 mThisMonthCalendar = getLastMonth(mThisMonthCalendar);
                 getCalendar(mThisMonthCalendar);
                 break;
 
-            case R.id.gv_calendar_activity_b_next:
+            case R.id.ex_main_button_nextmonth:
                 mThisMonthCalendar = getNextMonth(mThisMonthCalendar);
                 getCalendar(mThisMonthCalendar);
                 break;
+
+            case R.id.ex_main_button_report:
+                Intent toSearchActivity = new Intent(ex_Mainactivity.this, ex_ExerciseReport.class);
+                startActivity(toSearchActivity);
+                break;
+
+            case R.id.ex_main_button_help:
+                Intent toAddActivity = new Intent(ex_Mainactivity.this, ex_Help.class);
+                startActivity(toAddActivity);
+                break;
+
+            case R.id.ex_main_text_monthtitle:
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ex_Mainactivity.this, android.R.style.Theme_Holo_Dialog, mDateSetListener, 2012, 5, 2);
+                datePickerDialog.getDatePicker().setCalendarViewShown(false);
+                datePickerDialog.show();
+
+
+                break;
         }
     }
+
+    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+        }
+    };
+
 
     private void initCalendarAdapter() {
 

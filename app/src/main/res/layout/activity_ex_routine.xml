@@ -56,8 +56,19 @@
             android:layout_gravity="right">
 
             <Button
-                android:text="일정 추가"
+                android:id="@+id/ex_routine_button_routineplus"
+                android:text="루틴 추가"
                 android:layout_width="40sp"
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:id="@+id/ex_routine_imagebutton_routineimage"
+                android:layout_width="40sp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/ex_routine_edittext_routinetitle"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
         </LinearLayout>

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kjw.a2018summerproject">
-    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL"/>
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:hardwareAccelerated="false"
-        android:largeHeap="true">
+        android:theme="@style/AppTheme">
         <activity android:name=".activity.GVCalendarActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,19 +22,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".diary_Mainactivity"></activity>
-        <activity android:name=".diary_Total"></activity>
-        <activity android:name=".diary_Write"></activity>
-        <activity android:name=".diary_View"></activity>
-        <activity android:name=".ex_Cycle"></activity>
-        <activity android:name=".ex_ExerciseStart"></activity>
-        <activity android:name=".ex_Routine"></activity>
-
-//가계부팀 화면 추가//
-        <activity android:name=".acc_MainActivity"></activity>
-        <activity android:name=".acc_EditActivity"></activity>
-        <activity android:name=".acc_Weeklyactivity"></activity>
-        <activity android:name=".acc_DailyActivity"></activity>
+        <activity android:name=".diary_Mainactivity" />
+        <activity android:name=".diary_Total" />
+        <activity android:name=".diary_Write" />
+        <activity android:name=".diary_View" />
+        <activity android:name=".sch_Mainactivity" />
+        <activity android:name=".SchAddActivity" />
+        <activity android:name=".SchSearchActivity" />
+        <activity android:name=".ex_Cycle" />
+        <activity android:name=".ex_ExerciseStart" />
+        <activity android:name=".ex_Routine" />
+        <activity android:name=".ex_Mainactivity"/>
+        <activity android:name=".ex_Help"/>
+        <activity android:name=".ex_ExerciseFinish"/>
+        <activity android:name=".ex_ExerciseReport"/>
+        //가계부팀 화면 추가//
+        <activity android:name=".acc_MainActivity" />
+        <activity android:name=".acc_EditActivity" />
+        <activity android:name=".acc_Weeklyactivity" />
+        <activity android:name=".acc_DailyActivity" />
+        <activity android:name=".sch_Verify"></activity>
     </application>
 
 </manifest>
