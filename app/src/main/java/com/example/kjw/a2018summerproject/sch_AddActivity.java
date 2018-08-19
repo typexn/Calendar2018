@@ -137,10 +137,16 @@ public class sch_AddActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             startDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
             startDayInfo.setYear(year);
-            startDayInfo.setMonth(month);
+            startDayInfo.setMonth(monthOfYear);
             startDayInfo.setDay(String.valueOf(dayOfMonth));
 
-            endDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
+            if(!checkDay()) {
+                android.util.Log.d("minyoung", "되냐start");
+                endDayInfo.setYear(year);
+                endDayInfo.setMonth(monthOfYear);
+                endDayInfo.setDay(String.valueOf(dayOfMonth));
+                endDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
+            }
         }
     };
 
@@ -149,10 +155,16 @@ public class sch_AddActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             endDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
             endDayInfo.setYear(year);
-            endDayInfo.setMonth(month);
+            endDayInfo.setMonth(monthOfYear);
             endDayInfo.setDay(String.valueOf(dayOfMonth));
 
-            startDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
+            if(!checkDay()) {
+                android.util.Log.d("minyoung", "되냐end");
+                startDayInfo.setYear(year);
+                startDayInfo.setMonth(monthOfYear);
+                startDayInfo.setDay(String.valueOf(dayOfMonth));
+                startDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
+            }
         }
     };
 
@@ -162,6 +174,12 @@ public class sch_AddActivity extends AppCompatActivity {
             startTimeInfo.setHour(hour);
             startTimeInfo.setMinute(minute);
             startTime.setText(startTimeInfo.getHourString() + ":" + startTimeInfo.getMinuteString());
+
+            if(!checkTime()){
+                endTimeInfo.setHour(hour);
+                endTimeInfo.setMinute(minute);
+                endTime.setText(startTimeInfo.getHourString() + ":" + startTimeInfo.getMinuteString());
+            }
         }
     };
 
@@ -171,14 +189,47 @@ public class sch_AddActivity extends AppCompatActivity {
             endTimeInfo.setHour(hour);
             endTimeInfo.setMinute(minute);
             endTime.setText(endTimeInfo.getHourString() + ":" + endTimeInfo.getMinuteString());
+
+            if(!checkTime()){
+                startTimeInfo.setHour(hour);
+                startTimeInfo.setMinute(minute);
+                startTime.setText(endTimeInfo.getHourString() + ":" + endTimeInfo.getMinuteString());
+            }
         }
     };
 
     private boolean checkTime(){
         boolean ret = false;
-        String start = startDayInfo.getYear() + startDayInfo.getMonth() + startDayInfo.getDay() + startTimeInfo.getHourString() + startTimeInfo.getMinuteString();
-        String end = endDayInfo.getYear() + endDayInfo.getMonth() + endDayInfo.getDay() + endTimeInfo.getHourString() + endTimeInfo.getMinuteString();
+        long startSpot = 0;
+        long endSpot = 0;
 
+        String start = startDayInfo.getYear() + "" + startDayInfo.getMonth() + startDayInfo.getDay() + startTimeInfo.getHourString() + startTimeInfo.getMinuteString();
+        String end = endDayInfo.getYear() + "" + endDayInfo.getMonth() + endDayInfo.getDay() + endTimeInfo.getHourString() + endTimeInfo.getMinuteString();
+
+        android.util.Log.d("minyoung", startDayInfo.getYear() + "/" + startDayInfo.getMonth() + "/" + startDayInfo.getDay());
+        android.util.Log.d("minyoung", endDayInfo.getYear() + "/" + endDayInfo.getMonth() + "/" + endDayInfo.getDay());
+        android.util.Log.d("minyoung", start + "/" + end);
+        startSpot = Integer.parseInt(start);
+        endSpot = Integer.parseInt(end);
+
+        ret = startSpot > endSpot ? false : true;
+
+        return ret;
+    }
+
+    private boolean checkDay(){
+        boolean ret = false;
+        long startSpot = 0;
+        long endSpot = 0;
+
+        String start = startDayInfo.getYear() + "" + startDayInfo.getMonth() + startDayInfo.getDay();
+        String end = endDayInfo.getYear() + "" + endDayInfo.getMonth() + endDayInfo.getDay();
+        android.util.Log.d("minyoung", start + "/" + end);
+
+        startSpot = Integer.parseInt(start);
+        endSpot = Integer.parseInt(end);
+
+        ret = startSpot > endSpot ? false : true;
 
         return ret;
     }
