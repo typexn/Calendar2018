@@ -5,10 +5,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -16,8 +14,6 @@ import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.kjw.a2018summerproject.activity.GVCalendarActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -239,7 +235,11 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
             v.setBackgroundColor(Color.GRAY);
         } else {
             if (!selectedDay.isExistSch()) { //일정이 없으면
-                Intent intent = new Intent(sch_Mainactivity.this, SchAddActivity.class);
+                Intent intent = new Intent(sch_Mainactivity.this, sch_AddActivity.class);
+                intent.putExtra("year", mThisMonthCalendar.get(Calendar.YEAR));
+                intent.putExtra("month", mThisMonthCalendar.get(Calendar.MONTH)+1);
+                intent.putExtra("day", selectedDay.getDay());
+                Log.d("minyoung", selectedDay.getDay());
                 startActivity(intent); //또는 *forResult
             } else { //일정이 있으면
                 Intent toCheck = new Intent(sch_Mainactivity.this, sch_Verify.class);
@@ -269,7 +269,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
                 break;
 
             case R.id.sch_main_button_add:
-                Intent toAddActivity = new Intent(sch_Mainactivity.this, SchAddActivity.class);
+                Intent toAddActivity = new Intent(sch_Mainactivity.this, sch_AddActivity.class);
                 startActivity(toAddActivity);
                 break;
 

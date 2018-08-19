@@ -27,7 +27,7 @@
         <activity android:name=".diary_Write" />
         <activity android:name=".diary_View" />
         <activity android:name=".sch_Mainactivity" />
-        <activity android:name=".SchAddActivity" />
+        <activity android:name=".sch_AddActivity" />
         <activity android:name=".SchSearchActivity" />
         <activity android:name=".ex_Cycle" />
         <activity android:name=".ex_ExerciseStart" />
