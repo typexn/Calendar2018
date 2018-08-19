@@ -65,8 +65,9 @@ public class sch_AddActivity extends AppCompatActivity {
                     return;
                 }
 
-
-                Schedule newSchedule = new Schedule(title, location, 15, 1, null, null, memo);
+                Schedule newSchedule = new Schedule(title, location, startDayInfo.getYear(), startDayInfo.getMonth(), Integer.parseInt(startDayInfo.getDay()),
+                        endDayInfo.getYear(), endDayInfo.getMonth(), Integer.parseInt(endDayInfo.getDay()),
+                        startTimeInfo.getHour(), startTimeInfo.getMinute(), endTimeInfo.getHour(), endTimeInfo.getMinute(), memo);
                 sch_Mainactivity.schList.add(newSchedule);
 
                 finish();
