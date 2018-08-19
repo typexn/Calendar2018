@@ -20,6 +20,7 @@ public class ex_Help extends Dialog {
 
     public ex_Help(@NonNull View.OnClickListener context) {
         super((Context) context);
+        setContentView(R.layout.activity_ex_help);
     }
 
     protected void onCreate(Bundle savedInstanceState) {
