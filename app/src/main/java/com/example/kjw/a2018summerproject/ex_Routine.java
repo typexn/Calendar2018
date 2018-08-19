@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -35,7 +36,6 @@ public class ex_Routine extends Activity {
 
 
         final ArrayList<ex_RoutineAdapter> list_ItemArrayList = new ArrayList<ex_RoutineAdapter>();
-        //final ArrayAdapter exerciseRoutineAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice,list_ItemArrayList);
 
         ex_RoutineBase = new ex_RoutineBaseAdapter(this, list_ItemArrayList);
 
@@ -63,23 +63,13 @@ public class ex_Routine extends Activity {
 
                 Log.d("Uk", "list_itemArrayList.size : " + list_ItemArrayList.size() + "");
 
-//                int count;
-//                count = adapter.getCount();
-//                list_ItemArrayList.add("LIST" + Integer.toString(count + 1));
                 ex_RoutineBase.notifyDataSetChanged();
 
                 routineCount++;
             }
         });
-/*        Button routineToCycle = (Button) findViewById(R.id.ex_routine_listview_text_exercisetitle);
-        routineToCycle.setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
-                Intent routineTmp = new Intent(ex_Routine.this,ex_Cycle.class);
-                startActivity(routineTmp);
-            }
-        });*/
-    }
 
+    }
 }
 
 /*
