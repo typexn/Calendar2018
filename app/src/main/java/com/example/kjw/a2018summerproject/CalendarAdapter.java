@@ -95,7 +95,7 @@ public class CalendarAdapter extends BaseAdapter {
             dayViewHolder.llBackground = (LinearLayout)convertView.findViewById(R.id.day_cell_ll_background);
 
             dayViewHolder.tvDay = (TextView) convertView.findViewById(R.id.day_cell_tv_day);
-            dayViewHolder.tvExist = convertView.findViewById(R.id.day_cell_tv_isExist);
+            dayViewHolder.tvExist = (TextView) convertView.findViewById(R.id.day_cell_tv_isExist);
             convertView.setTag(dayViewHolder);
         }
         else {
@@ -118,9 +118,17 @@ public class CalendarAdapter extends BaseAdapter {
             else {
                 dayViewHolder.tvDay.setTextColor(Color.GRAY);
             }
+
+            if(day.isExistSch()){
+                dayViewHolder.tvExist.setText("●");
+            }
         }
 
         return convertView;
+    }
+
+    public void changeDayInfo(int position, boolean isExist){
+        mDayList.get(position).setExistSch(isExist);
     }
 
 
@@ -137,7 +145,7 @@ public class CalendarAdapter extends BaseAdapter {
 //      int width = mContext.getResources().getDisplayMetrics().widthPixels;
         int cellWidth = 480/7;
 
-        return cellWidth;
+        return cellWidth*2; // minyoung *2 했음 임시로
     }
 
 

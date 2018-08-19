@@ -98,30 +98,26 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
         mThisMonthCalendar = Calendar.getInstance();
         mThisMonthCalendar.set(Calendar.DAY_OF_MONTH, 1);
         getCalendar(mThisMonthCalendar);
+
+
         //Log.d("minyoung", schList.size() + "");
         View v;
         for (int i = 0; i < schList.size(); i++) {
-            Toast.makeText(this, schList.get(0).title, Toast.LENGTH_LONG).show();
-
-            LayoutInflater layoutInFlater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rootView = layoutInFlater.inflate(R.layout.day, null);
-
-            v = mCalendarAdapter.getView(schList.get(i).startDay, null, mGvCalendar);
-
-            TextView tvExist = v.findViewById(R.id.day_cell_tv_isExist);
-            TextView tvtest = v.findViewById(R.id.day_cell_tv_day);
-            tvtest.setText("test");
-            tvExist.setText("●");
-            Log.d("minyoungcheck", tvExist.getText().toString());
-            Log.d("minyoung", schList.get(i).startDay + "/" + v.toString() + "/" + tvExist.toString());
+            Toast.makeText(this, schList.get(i).title, Toast.LENGTH_LONG).show();
+            //LayoutInflater layoutInFlater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            //View rootView = layoutInFlater.inflate(R.layout.day, null);
+            //v = mCalendarAdapter.getView(schList.get(i).startDay, null, mGvCalendar);
+//            TextView tvExist = v.findViewById(R.id.day_cell_tv_isExist);
+//            TextView tvtest = v.findViewById(R.id.day_cell_tv_day);
+//            tvtest.setText("test");
+//            tvExist.setText("●");
+//            Log.d("minyoungcheck", tvExist.getText().toString());
+//            Log.d("minyoung", schList.get(i).startDay + "/" + v.toString() + "/" + tvExist.toString());
+            mCalendarAdapter.changeDayInfo(schList.get(i).startDay + mThisMonthCalendar.get(Calendar.DAY_OF_WEEK) - 1, true);
         }
+        mCalendarAdapter.notifyDataSetChanged(); // 월 이동하면 reset됨
 
-        //
 
-        //View rootView = layoutInFlater.inflate(R.layout.fragment_A, null);
-
-        //if(rootView != null)
-        //mTextViewSummary = (TextView)rootView.findViewById(R.id.settings_a_summary);
 
 
     }
@@ -152,8 +148,8 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
 
         lastMonthStartDay -= (dayOfMonth - 1) - 1;
         // 캘린더 타이틀(년월 표시)을 세팅한다.
-        mTvCalendarTitle.setText(mThisMonthCalendar.get(Calendar.YEAR) + "년 "
-                + (mThisMonthCalendar.get(Calendar.MONTH) + 1) + "월");
+        mTvCalendarTitle.setText(calendar.get(Calendar.YEAR) + "년 "
+                + (calendar.get(Calendar.MONTH) + 1) + "월");
         DayInfo day;
 
         Log.e("DayOfMOnth", dayOfMonth + "");
@@ -162,6 +158,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
             day = new DayInfo();
             day.setDay(Integer.toString(date));
             day.setInMonth(false);
+            day.setExistSch(false); //minyoung
             mDayList.add(day);
         }
 
@@ -169,6 +166,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
             day = new DayInfo();
             day.setDay(Integer.toString(i));
             day.setInMonth(true);
+            day.setExistSch(false); //minyoung
 
             mDayList.add(day);
         }
@@ -178,6 +176,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
             day = new DayInfo();
             day.setDay(Integer.toString(i));
             day.setInMonth(false);
+            day.setExistSch(false);//minyoung
             mDayList.add(day);
         }
         initCalendarAdapter();
@@ -225,6 +224,10 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
 
         String day = ((TextView) v.findViewById(R.id.day_cell_tv_day)).getText().toString();
         //Integer.parseInt(day)
+        //if(!(((DayInfo)mCalendarAdapter.getItem(position)).isInMonth())){}
+
+        DayInfo selectedDay = ((DayInfo)((CalendarAdapter) parent.getAdapter()).getItem(position));
+
         if (previousDayView != v) {
             if (previousDayView == null) {
                 v.setBackgroundColor(Color.GRAY);
@@ -235,7 +238,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
             previousDayView = v;
             v.setBackgroundColor(Color.GRAY);
         } else {
-            if (true) { //일정이 없으면
+            if (!selectedDay.isExistSch()) { //일정이 없으면
                 Intent intent = new Intent(sch_Mainactivity.this, SchAddActivity.class);
                 startActivity(intent); //또는 *forResult
             } else { //일정이 있으면
@@ -270,11 +273,10 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
                 startActivity(toAddActivity);
                 break;
 
-            case R.id.sch_main_text_title:
-                DatePickerDialog datePickerDialog = new DatePickerDialog(sch_Mainactivity.this, android.R.style.Theme_Holo_Dialog, mDateSetListener, 2012, 5, 2);
+            case R.id.sch_main_text_title: //날짜가 안떠야함.
+                MyDatePickerDialog datePickerDialog = new MyDatePickerDialog(sch_Mainactivity.this, mDateSetListener, mThisMonthCalendar.get(Calendar.YEAR), (mThisMonthCalendar.get(Calendar.MONTH)), mThisMonthCalendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.getDatePicker().setCalendarViewShown(false);
                 datePickerDialog.show();
-
 
                 break;
         }
@@ -283,7 +285,9 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
     private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
+            Calendar newCal = Calendar.getInstance();
+            newCal.set(year, monthOfYear, dayOfMonth);
+            getCalendar(newCal);
         }
     };
 
@@ -326,8 +330,9 @@ class Schedule {
 class MyDatePickerDialog extends DatePickerDialog {
 
     public MyDatePickerDialog(Context context, OnDateSetListener callBack, int year, int monthOfYear, int dayOfMonth) {
-        super(context, callBack, year, monthOfYear, dayOfMonth);
+        super(context, android.R.style.Theme_Holo_Dialog, callBack, year, monthOfYear, dayOfMonth);
 
+        Log.d("minyoung", "year:" + year + "month" + monthOfYear + "day" + dayOfMonth);
         try {
             Field[] f = DatePickerDialog.class.getDeclaredFields();
             for (Field dateField : f) {
@@ -339,8 +344,8 @@ class MyDatePickerDialog extends DatePickerDialog {
                     Field datePickerFields[] = dateField.getType().getDeclaredFields();
 
                     for (Field datePickerField : datePickerFields) {
-                        if ("mDayPicker".equals(datePickerField.getName()) ||
-                                "mDaySpinner".equals(datePickerField.getName())) {
+                        if (datePickerField.getName().equals("mDayPicker") ||
+                                datePickerField.getName().equals("mDaySpinner")) {
                             datePickerField.setAccessible(true);
                             Object dayPicker = new Object();
                             dayPicker = datePickerField.get(datePicker);
@@ -349,7 +354,7 @@ class MyDatePickerDialog extends DatePickerDialog {
                     }
                 }
             }
-            setTitle(year + "년 " + monthOfYear + "월");
+            setTitle(year + "년 " + (monthOfYear+1) + "월");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
