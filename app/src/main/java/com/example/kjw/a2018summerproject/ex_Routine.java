@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -65,7 +66,13 @@ public class ex_Routine extends Activity {
                 routineCount++;
             }
         });
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent Cycleto
+                Intent
+            }
+        });
     }
 }
 
@@ -130,6 +137,8 @@ class ex_RoutineBaseAdapter extends BaseAdapter {
     public int getCount() {
         return this.list_ex_RoutineAdapter.size();
     }
+
+    public int getPosition() { return this.getPosition(); }
 
     @Override
     public Object getItem(int i) {
