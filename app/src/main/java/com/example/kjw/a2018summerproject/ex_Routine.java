@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -69,10 +70,12 @@ public class ex_Routine extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent goToCycle = new Intent(ex_Routine.this, ex_Cycle.class);
-//                startActivity(goToCycle);
+                Intent goToCycle = new Intent(ex_Routine.this, ex_Cycle.class);
+//                goToCycle.putExtra("CycleTitle", String)
+                startActivity(goToCycle);
             }
         });
+
     }
 }
 
