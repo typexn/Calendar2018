@@ -65,10 +65,11 @@ public class ex_Mainactivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_mainactivity);
-
         DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
         final int width = dm.widthPixels; //디바이스 화면 너비
         final int height = dm.heightPixels; //디바이스 화면 높이
+
+
         //mainReport로 가는 버튼
         buttonReport = (Button) findViewById(R.id.ex_main_button_report);
         buttonReport.setOnClickListener(new View.OnClickListener() {

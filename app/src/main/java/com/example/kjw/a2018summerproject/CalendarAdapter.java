@@ -14,13 +14,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class CalendarAdapter extends BaseAdapter {
-    // 상속받느라 private -> protected로 바꿈!!
-    private ArrayList<DayInfo> mDayList;
-    protected Context mContext;
 
+    private ArrayList<DayInfo> mDayList;
+    private Context mContext;
+
+    private ArrayList<Object> mData;
     private int mResource;
 
-    protected LayoutInflater mLiInflater;
+    private LayoutInflater mLiInflater;
 
 
     /**
@@ -121,15 +122,21 @@ public class CalendarAdapter extends BaseAdapter {
 
             if(day.isExistSch()){
                 dayViewHolder.tvExist.setText("●");
+            }else{
+                dayViewHolder.tvExist.setText("");
             }
         }
 
         return convertView;
     }
 
-    public void changeDayInfo(int position, boolean isExist){
+    public void changeDayInfo(int position, boolean isExist){ //minyoung
         mDayList.get(position).setExistSch(isExist);
     }
+
+//    public void add(int position){
+//        DayViewHolde dayViewHolder = (DayViewHolde) getView(position, null, null).getTag();
+//    }
 
 
 
@@ -137,6 +144,7 @@ public class CalendarAdapter extends BaseAdapter {
         public LinearLayout llBackground;
         public TextView tvDay;
         public TextView tvExist; //add minyoung
+//        public ArrayList<Object> mData;
     }
 
 

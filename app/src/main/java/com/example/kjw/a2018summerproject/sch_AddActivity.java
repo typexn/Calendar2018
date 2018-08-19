@@ -19,12 +19,14 @@ import java.util.Calendar;
 
 public class sch_AddActivity extends AppCompatActivity {
 
+    final int FROMVERIFY = 1;
+
     EditText editTitle;
     EditText editLocation;
     EditText editMemo;
-    TextView startDay;
+    TextView textStartDay;
     TextView startTime;
-    TextView endDay;
+    TextView textEndDay;
     TextView endTime;
     Button btnComplete;
 
@@ -32,6 +34,20 @@ public class sch_AddActivity extends AppCompatActivity {
     DayInfo endDayInfo;
     TimeInfo startTimeInfo;
     TimeInfo endTimeInfo;
+
+    String title;
+    String location;
+    int startYear;
+    int startMonth;
+    int startDay;
+    String startHour;
+    String startMinute;
+    int endYear;
+    int endMonth;
+    int endDay;
+    String endHour;
+    String endMinute;
+    String memo;
 
     int year;
     int month;
@@ -45,9 +61,9 @@ public class sch_AddActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.sch_add_edit_title);
         editLocation = findViewById(R.id.sch_add_edit_location);
         editMemo = findViewById(R.id.sch_add_edit_memo);
-        startDay = findViewById(R.id.sch_add_text_startDay);
+        textStartDay = findViewById(R.id.sch_add_text_startDay);
         startTime = findViewById(R.id.sch_add_text_startTime);
-        endDay = findViewById(R.id.sch_add_text_endDay);
+        textEndDay = findViewById(R.id.sch_add_text_endDay);
         endTime = findViewById(R.id.sch_add_text_endTime);
         btnComplete = findViewById(R.id.sch_add_button_complete);
 
@@ -67,14 +83,15 @@ public class sch_AddActivity extends AppCompatActivity {
 
                 Schedule newSchedule = new Schedule(title, location, startDayInfo.getYear(), startDayInfo.getMonth(), Integer.parseInt(startDayInfo.getDay()),
                         endDayInfo.getYear(), endDayInfo.getMonth(), Integer.parseInt(endDayInfo.getDay()),
-                        startTimeInfo.getHour(), startTimeInfo.getMinute(), endTimeInfo.getHour(), endTimeInfo.getMinute(), memo);
+                        startTimeInfo.getHourString(), startTimeInfo.getMinuteString(), endTimeInfo.getHourString(), endTimeInfo.getMinuteString(), memo);
                 sch_Mainactivity.schList.add(newSchedule);
+                android.util.Log.d("minyoung", startTimeInfo.getHourString() + "" + startTimeInfo.getMinuteString());
 
                 finish();
             }
         });
 
-        startDay.setOnClickListener(new View.OnClickListener(){
+        textStartDay.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mStartSetListener, startDayInfo.getYear(), startDayInfo.getMonth()-1, Integer.parseInt(startDayInfo.getDay()));
@@ -83,7 +100,7 @@ public class sch_AddActivity extends AppCompatActivity {
             }
         });
 
-        endDay.setOnClickListener(new View.OnClickListener(){
+        textEndDay.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mEndSetListener, endDayInfo.getYear(), endDayInfo.getMonth()-1, Integer.parseInt(endDayInfo.getDay()));
@@ -110,23 +127,54 @@ public class sch_AddActivity extends AppCompatActivity {
     }
 
     private void setData(){
-        Intent fromMain = getIntent();
-        year = fromMain.getIntExtra("year", 2018);
-        month = fromMain.getIntExtra("month", 1);
-        day = fromMain.getStringExtra("day");
+        Intent getIntent = getIntent();
+
+
+        int fromWhere = getIntent.getIntExtra("activity", 0);
+        if(fromWhere == FROMVERIFY) {
+            title = getIntent.getStringExtra("title");
+            editTitle.setText(title);
+            location = getIntent.getStringExtra("location");
+            editLocation.setText(location);
+
+            startYear = getIntent.getIntExtra("startYear", 2018);
+            startMonth = getIntent.getIntExtra("startMonth", 1);
+            startDay = getIntent.getIntExtra("startDay", 1);
+            startHour = getIntent.getStringExtra("startHour");
+            startMinute = getIntent.getStringExtra("startMinute");
+            endYear = getIntent.getIntExtra("endYear", 2018);
+            endMonth = getIntent.getIntExtra("endMonth", 1);
+            endDay = getIntent.getIntExtra("endDay", 1);
+            endHour = getIntent.getStringExtra("endHour");
+            endMinute = getIntent.getStringExtra("endMinute");
+
+            textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
+            textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
+            startTime.setText(startHour + ":" + startMinute);
+            endTime.setText(endHour + ":" + endMinute);
+
+            memo = getIntent.getStringExtra("memo");
+            editMemo.setText(memo);
+        }else{
+            startYear = getIntent.getIntExtra("year", 2018);
+            startMonth = getIntent.getIntExtra("month", 1);
+            startDay = getIntent.getIntExtra("day", 1);
+
+
+        }
 
         startDayInfo = new DayInfo();
-        startDayInfo.setYear(year);
-        startDayInfo.setMonth(month);
-        startDayInfo.setDay(day);
+        startDayInfo.setYear(startYear);
+        startDayInfo.setMonth(startMonth);
+        startDayInfo.setDay(String.valueOf(startDay));
 
         endDayInfo = new DayInfo();
-        endDayInfo.setYear(year);
-        endDayInfo.setMonth(month);
-        endDayInfo.setDay(day);
+        endDayInfo.setYear(endYear);
+        endDayInfo.setMonth(endMonth);
+        endDayInfo.setDay(String.valueOf(endDay));
 
-        startDay.setText(year + "년 " + month + "월 " + day + "일");
-        endDay.setText(year + "년 " + month + "월 " + day + "일");
+        textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
+        textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
 
         startTimeInfo = new TimeInfo();
         startTimeInfo.setHour(8);
@@ -138,12 +186,16 @@ public class sch_AddActivity extends AppCompatActivity {
 
         startTime.setText("08:00");
         endTime.setText("08:00");
+
+
+
+
     }
 
     private DatePickerDialog.OnDateSetListener mStartSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            startDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
+            textStartDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
             startDayInfo.setYear(year);
             startDayInfo.setMonth(monthOfYear+1);
             startDayInfo.setDay(String.valueOf(dayOfMonth));
@@ -153,7 +205,7 @@ public class sch_AddActivity extends AppCompatActivity {
                 endDayInfo.setYear(year);
                 endDayInfo.setMonth(monthOfYear+1);
                 endDayInfo.setDay(String.valueOf(dayOfMonth));
-                endDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
+                textEndDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
             }
         }
     };
@@ -161,7 +213,7 @@ public class sch_AddActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mEndSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            endDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
+            textEndDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
             endDayInfo.setYear(year);
             endDayInfo.setMonth(monthOfYear+1);
             endDayInfo.setDay(String.valueOf(dayOfMonth));
@@ -171,7 +223,7 @@ public class sch_AddActivity extends AppCompatActivity {
                 startDayInfo.setYear(year);
                 startDayInfo.setMonth(monthOfYear+1);
                 startDayInfo.setDay(String.valueOf(dayOfMonth));
-                startDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
+                textStartDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
             }
         }
     };
