@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,9 +24,12 @@ public class ex_Cycle extends AppCompatActivity {
     Button dial;
     ex_CycleMenu cd;
     int ex_CycleCount = 0;
+    ListView listView_Upside;
+    ListView listView_Downside;
+    ex_CycleBaseAdapter ex_CycleBaseUpside;
+    ex_CycleBaseAdapter ex_CycleBaseDownside;
 
     private LinearLayout container;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,16 @@ public class ex_Cycle extends AppCompatActivity {
         DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
         int width = dm.widthPixels; //디바이스 화면 너비
         int height = dm.heightPixels; //디바이스 화면 높이
+
+        final ArrayList<ex_CycleAdapter> list_ItemUpsideArrayList = new ArrayList<ex_CycleAdapter>();
+        final ArrayList<ex_CycleAdapter> list_ItemDownsideArrayList = new ArrayList<ex_CycleAdapter>();
+
+        listView_Upside = (ListView) findViewById(R.id.ex_cycle_listview_launch);
+        listView_Downside = (ListView) findViewById(R.id.ex_cycle_listview_savedlist);
+
+        ex_CycleBaseUpside = new ex_CycleBaseAdapter(this,list_ItemUpsideArrayList);
+        ex_CycleBaseDownside = new ex_CycleBaseAdapter(this,list_ItemDownsideArrayList);
+
 
         dial = (Button) findViewById(R.id.ex_cycle_image_plus);
         cd = new ex_CycleMenu(this);
@@ -59,20 +73,15 @@ public class ex_Cycle extends AppCompatActivity {
                     }
                 }
         );
-
-        ArrayList<ex_RoutineAdapter> list_ItemArrayList = new ArrayList<ex_RoutineAdapter>();
-
     }
 }
     class ex_CycleAdapter {
         private int profile_image;
         private String title;
-        private int delete_image;
 
-        public ex_CycleAdapter(int profile_image, String title, int delete_image) {
+        public ex_CycleAdapter(int profile_image, String title) {
             this.profile_image = profile_image;
             this.title = title;
-            this.delete_image = delete_image;
         }
 
         public int getProfile_image() {
@@ -92,13 +101,6 @@ public class ex_Cycle extends AppCompatActivity {
             this.title = title;
         }
 
-        public int getDelete_image() {
-            return delete_image;
-        }
-
-        public void setDelete_image(int delete_image) {
-            this.delete_image = delete_image;
-        }
     }
 
     class ex_CycleBaseAdapter extends BaseAdapter {
@@ -128,7 +130,6 @@ public class ex_Cycle extends AppCompatActivity {
 
         ImageView profile_imageView;
         TextView title_textView;
-        ImageView delete_imageView;
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
@@ -139,7 +140,6 @@ public class ex_Cycle extends AppCompatActivity {
             }
             profile_imageView.setImageResource(list_ex_CycleAdapter.get(i).getProfile_image());
             title_textView.setText(list_ex_CycleAdapter.get(i).getTitle());
-            delete_imageView.setImageResource(list_ex_CycleAdapter.get(i).getDelete_image());
             return view;
         }
     }
