@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ public class acc_EditActivity extends AppCompatActivity {
 
         TextView textViewYearMonth = (TextView) findViewById(R.id.acc_edit_textview_yearmonth);
 
-        ListView listViewlist = (ListView) findViewById(R.id.acc_edit_listview_list);
+        GridView gridViewlist = (GridView) findViewById(R.id.acc_edit_gridview_list);
 
         EditText editTextMoney = (EditText) findViewById(R.id.acc_edit_edittext_money);
         money = editTextMoney.toString();
