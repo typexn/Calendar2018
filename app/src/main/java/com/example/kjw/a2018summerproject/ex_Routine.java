@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -41,9 +42,6 @@ public class ex_Routine extends Activity {
 
         listView.setAdapter(ex_RoutineBase);
 
-        /*  "내용에 따른 목록 추가"
-        list_ItemArrayList.add()
-        */
         Button routinePlus = (Button) findViewById(R.id.ex_routine_button_routineplus);
         routinePlus.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v)
@@ -68,7 +66,13 @@ public class ex_Routine extends Activity {
                 routineCount++;
             }
         });
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent Cycleto
+                
+            }
+        });
     }
 }
 
@@ -133,6 +137,8 @@ class ex_RoutineBaseAdapter extends BaseAdapter {
     public int getCount() {
         return this.list_ex_RoutineAdapter.size();
     }
+
+    public int getPosition() { return this.getPosition(); }
 
     @Override
     public Object getItem(int i) {
