@@ -33,7 +33,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="금액을 임력하세요"/>
+            android:hint="금액을 임력하세요"
+            android:inputType="number"
+            android:singleLine="true"/>
 
     </LinearLayout>
 
@@ -66,8 +68,7 @@
         android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:numColumns="4"
-        android:stretchMode="columnWidth"
-        android:visibility="visible">
+        android:stretchMode="columnWidth">
 
     </GridView>
 
