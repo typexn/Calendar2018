@@ -70,7 +70,7 @@ public class ex_Routine extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 //                Intent Cycleto
-                Intent
+                
             }
         });
     }
