@@ -12,7 +12,7 @@ public class ex_ExerciseStart extends AppCompatActivity{
         setContentView(R.layout.activity_ex_exercisestart);
     }
     public void backBtnClicked(View v) {
-        Intent intent = new Intent(ex_ExerciseStart.this,ex_cycle.class);
-
+        Intent backToExerciseCycle = new Intent(ex_ExerciseStart.this,ex_Cycle.class);
+        startActivity(backToExerciseCycle);
     }
 }

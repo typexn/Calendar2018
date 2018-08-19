@@ -15,21 +15,21 @@
             android:layout_gravity="center">
 
             <ImageButton
-                android:id="@+id/acc_weekly_imagebutton_menu"
+                android:id="@+id/acc_daily_imagebutton_menu"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="25dp"
                 android:background="@drawable/ic_launcher_background" />
 
             <Button
-                android:id="@+id/acc_weekly_button_beforemonth"
+                android:id="@+id/acc_daily_button_beforemonth"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:background="#00ffffff"
                 android:text="◀" />
 
             <TextView
-                android:id="@+id/acc_weekly_textview_yearmonth"
+                android:id="@+id/acc_daily_textview_yearmonth"
                 android:text="2011년 몇월"
                 android:textSize="15sp"
                 android:layout_height="wrap_content"
@@ -39,14 +39,14 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/acc_weekly_button_nextmonth"
+                android:id="@+id/acc_daily_button_nextmonth"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:background="#00ffffff"
                 android:text="▶" />
 
             <ImageButton
-                android:id="@+id/acc_weekly_imagebutton_search"
+                android:id="@+id/acc_daily_imagebutton_search"
                 android:layout_gravity="right"
                 android:layout_marginLeft="25dp"
                 android:layout_width="40dp"
@@ -54,7 +54,7 @@
                 android:background="@drawable/ic_launcher_background" />
 
             <ImageButton
-                android:id="@+id/acc_weekly_imagebutton_add"
+                android:id="@+id/acc_daily_imagebutton_add"
                 android:layout_gravity="right"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
@@ -69,35 +69,35 @@
 
 
             <Button
-                android:id="@+id/acc_weekly_button_today"
+                android:id="@+id/acc_daily_button_today"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="오늘" />
 
             <Button
-                android:id="@+id/acc_weekly_button_month"
+                android:id="@+id/acc_daily_button_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="월간" />
 
             <Button
-                android:id="@+id/acc_weekly_button_week"
+                android:id="@+id/acc_daily_button_week"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="주간" />
 
             <Button
-                android:id="@+id/acc_weekly_button_oneday"
+                android:id="@+id/acc_daily_button_oneday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="일간" />
 
             <Button
-                android:id="@+id/acc_weekly_button_chart"
+                android:id="@+id/acc_daily_button_chart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -113,10 +113,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="수익"
+                android:text="수입"
                 android:textSize="30sp"/>
 
             <ListView
+                android:id="@+id/acc_daily_listview_income"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -136,6 +137,7 @@
                 android:textSize="30sp"/>
 
             <ListView
+                android:id="@+id/acc_daily_listview_out"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -217,10 +219,7 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
-
-
 
     </LinearLayout>
 

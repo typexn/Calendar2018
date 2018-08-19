@@ -14,16 +14,17 @@
 
 
             <Button
+                android:id="@+id/diary_total_button_total_to_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="다른곳 가기 아직 구현 X"/>
+                android:text="메인으로 가기"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
             <Button
-                android:id="@+id/diary_total_button_gowrite"
+                android:id="@+id/diary_total_button_total_to_write"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="일기 쓰기"/>

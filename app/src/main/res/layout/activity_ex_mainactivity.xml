@@ -8,20 +8,18 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_gravity="center">
+            android:background="@color/colorAccent">
+
 
             <Button
-            android:id="@+id/diary_main_button_gototal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="일기 요약"/>
-
+                android:id="@+id/ex_main_button_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="운동 보고서"/>
             <Button
-                android:id="@+id/diary_main_button_last"
+                android:id="@+id/ex_main_button_lastmonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -31,7 +29,7 @@
             <TextView
                 android:text="2011년 몇월"
                 android:textSize="20sp"
-                android:id="@+id/diary_main_text_title"
+                android:id="@+id/ex_main_text_monthtitle"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:gravity="center"
@@ -39,23 +37,21 @@
                 android:textStyle="bold"/>
 
             <Button
-                android:id="@+id/diary_main_button_next"
+                android:id="@+id/ex_main_button_nextmonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#00ffffff"
                 android:text="▶"  />
-
             <Button
-                android:id="@+id/diary_main_button_gowrite"
+                android:id="@+id/ex_main_button_help"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="일기 작성"/>
-
+                android:text="도움말"/>
         </LinearLayout>
 
         <GridView
-            android:id="@+id/diary_main_gridview_calendar"
+            android:id="@+id/ex_main_gridview_calendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -78,6 +74,7 @@
                 android:text="종합" />
 
             <Button
+                android:id="@+id/btn_exercise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -105,4 +102,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

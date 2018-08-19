@@ -57,7 +57,6 @@ import static android.os.Environment.getExternalStorageState;
 
 public class diary_Write extends AppCompatActivity {
 
-
     Bitmap tempImage = null; //임시
     int pictureCount;
 
@@ -87,6 +86,7 @@ public class diary_Write extends AppCompatActivity {
     TextView diaryWeatherText;
     TextView countPicutre;
     TextView diaryDatePickerTextView;
+
     int diaryDatePickerYear;
     int diaryDatePickerMonth;
     int diaryDatePickerDay;
@@ -138,12 +138,8 @@ public class diary_Write extends AppCompatActivity {
                     //다이어리 토탈을 거쳐서 바로왔을때 아닐때의 처리를 다르게 해줌
                     if (diary_Mainactivity.isDirectToWrite == false) {
                         Intent SendToDiaryTotal = new Intent();
-                        SendToDiaryTotal.putStringArrayListExtra("Uri", pictureUri);
-                        SendToDiaryTotal.putExtra("Mood", moodPosition);
-                        SendToDiaryTotal.putExtra("Weather", weatherPosition);
-                        SendToDiaryTotal.putExtra("Date", sendedDate);
-                        SendToDiaryTotal.putExtra("Title", title);
-                        SendToDiaryTotal.putExtra("Content", content);
+                        diary_Content kim = new diary_Content(pictureUri, moodPosition, weatherPosition, sendedDate, title, content);
+                        SendToDiaryTotal.putExtra("Diary", kim);
                         if (comFromChange == true) {
                             SendToDiaryTotal.putExtra("groupDataNum", groupDataNum);
                             SendToDiaryTotal.putExtra("childDataNum", childDataNum);
@@ -153,13 +149,8 @@ public class diary_Write extends AppCompatActivity {
                         finish();
                     } else {
                         Intent Temp = new Intent(diary_Write.this, diary_Total.class);
-                        Log.d("URI크기", pictureUri.size() + "");
-                        Temp.putStringArrayListExtra("Uri_", pictureUri);
-                        Temp.putExtra("Mood_", moodPosition);
-                        Temp.putExtra("Weather_", weatherPosition);
-                        Temp.putExtra("Date_", sendedDate);
-                        Temp.putExtra("Title_", title);
-                        Temp.putExtra("Content_", content);
+                        diary_Content kim = new diary_Content(pictureUri, moodPosition, weatherPosition, sendedDate, title, content);
+                        Temp.putExtra("Object", kim);
                         startActivity(Temp);
                     }
                 }
@@ -355,7 +346,6 @@ public class diary_Write extends AppCompatActivity {
                 if (resultCode != RESULT_OK) {
                     return;
                 }
-
                 ClipData clipData = data.getClipData();
                 if (clipData == null) {
                     Log.d("클립데이터 에러", "에러에러에러에러");

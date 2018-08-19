@@ -32,13 +32,15 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
+import static com.example.kjw.a2018summerproject.diary_Mainactivity.kim;
+
 //import static com.example.kjw.a2018summerproject.diary_Total.isButtonChangeClick;
 
 /**
  * Created by jwell on 2018-07-15.
  */
 
-public class diary_Total extends AppCompatActivity {
+public class diary_Total extends AppCompatActivity implements Button.OnClickListener {
 
     Bitmap tempImage = null;
 
@@ -49,13 +51,17 @@ public class diary_Total extends AppCompatActivity {
     ArrayList<String> list_Date;
     HashMap<String, ArrayList<diary_Content>> list_Diary;
 
+    ArrayList<diary_Content> main_Diary;
+
     //확장 리스트뷰 + 어댑터 선언
     ExpandableListView expandableListViewDiaryTotal;
     diary_ExpandableListAdapter expandableListAdapterDiaryTotal;
 
     //일기를 수정하려고 했는가 boolean값 -> 수정 버튼을 누르면 그 child의 item을 갖고 diary_write 페이지로 넘어가기
     static Boolean isButtonChangeClick = false;
-    static final int RETURN_TO_TOTAL = 3000;
+
+    static final int TOAL_TO_WRITE = 0;
+
     int GroupNum = -1;
     int ChildNum = -1;
 
@@ -67,7 +73,7 @@ public class diary_Total extends AppCompatActivity {
 
         list_Date = new ArrayList<String>();
         list_Diary = new HashMap<String, ArrayList<diary_Content>>();
-
+        main_Diary = new ArrayList<diary_Content>();
 
         //확장리스트뷰 선언, 어댑터 할당
         expandableListViewDiaryTotal = (ExpandableListView) findViewById(R.id.diary_total_expandablelistview_total);
@@ -78,34 +84,22 @@ public class diary_Total extends AppCompatActivity {
         //write를 먼저 실행했을 경우 데이터를 받아 오기 -> 아닐경우 activityforresult의 값으로 받아줌
         if (diary_Mainactivity.isDirectToWrite == true) {
             Intent getDiary = getIntent();
-            ArrayList<String> uri = getDiary.getStringArrayListExtra("Uri_");
-            int mood = getDiary.getIntExtra("Mood_", 0);
-            int weather = getDiary.getIntExtra("Weather_", 0);
-            String date = getDiary.getStringExtra("Date_");
-            String title = getDiary.getStringExtra("Title_");
-            String content = getDiary.getStringExtra("Content_");
-            ArrayList<Bitmap> BitmapArrayList = new ArrayList<Bitmap>();
-            Log.d("Uri개수", uri.size() + "");
-            for (int i = 0; i < uri.size(); i++) {
-                addBitmapImage(Uri.parse(uri.get(i)));
-                BitmapArrayList.add(tempImage);
-            }
-            diary_Content diary = new diary_Content(BitmapArrayList, uri, mood, weather, date, title, content);
-            expandableListAdapterDiaryTotal.ExpandableListViewAddItem(diary);
+
+            diary_Content Temp = (diary_Content) getDiary.getSerializableExtra("Object");
+            ArrayList<String> uri = Temp.getDiaryUriTotal();
+
+            expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp);
+            main_Diary.add(Temp);
             diary_Mainactivity.isDirectToWrite = false;
 
         }
 
         //일기 작성 페이지로 가기
-        Button buttonGoWrite = (Button) findViewById(R.id.diary_total_button_gowrite);
-        buttonGoWrite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        Button buttonGoWrite = (Button) findViewById(R.id.diary_total_button_total_to_write);
+        Button buttonGoMain = (Button) findViewById(R.id.diary_total_button_total_to_main);
 
-                Intent GoToWriteDiary = new Intent(diary_Total.this, diary_Write.class);
-                startActivityForResult(GoToWriteDiary, RETURN_TO_TOTAL);
-            }
-        });
+        buttonGoWrite.setOnClickListener(this);
+        buttonGoMain.setOnClickListener(this);
 
         //확장 리스트뷰 그룹 하나열리면 열려 있던거 닫히게 하는 기능
         expandableListViewDiaryTotal.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
@@ -126,20 +120,15 @@ public class diary_Total extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case RETURN_TO_TOTAL:
-                    ArrayList<String> getPicutreUri = data.getStringArrayListExtra("Uri");
-                    int getMood = data.getIntExtra("Mood", 0);
-                    int getWeather = data.getIntExtra("Weather", 0);
-                    String getDate = data.getStringExtra("Date");
-                    String getTitle = data.getStringExtra("Title");
-                    String getContent = data.getStringExtra("Content");
-
-                    ArrayList<Bitmap> BitmapArrayList = new ArrayList<Bitmap>();
-                    for (int i = 0; i < getPicutreUri.size(); i++) {
-                        addBitmapImage(Uri.parse(getPicutreUri.get(i)));
-                        BitmapArrayList.add(tempImage);
-                    }
-                    diary_Content Temp_Content = new diary_Content(BitmapArrayList, getPicutreUri, getMood, getWeather, getDate, getTitle, getContent);
+                case TOAL_TO_WRITE:
+//                    ArrayList<String> getPicutreUri = data.getStringArrayListExtra("Uri");
+//                    int getMood = data.getIntExtra("Mood", 0);
+//                    int getWeather = data.getIntExtra("Weather", 0);
+//                    String getDate = data.getStringExtra("Date");
+//                    String getTitle = data.getStringExtra("Title");
+//                    String getContent = data.getStringExtra("Content");
+                    diary_Content Temp_Content = (diary_Content) data.getSerializableExtra("Diary");
+                    main_Diary.add(Temp_Content);
                     if (isButtonChangeClick == true) {
                         int groupDataNum = data.getIntExtra("groupDataNum", -1);
                         int childDataNum = data.getIntExtra("childDataNum", -1);
@@ -151,6 +140,7 @@ public class diary_Total extends AppCompatActivity {
                     }
                     expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp_Content);
                     expandableListAdapterDiaryTotal.notifyDataSetChanged();
+                    break;
             }
         }
     }
@@ -168,6 +158,28 @@ public class diary_Total extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.diary_total_button_total_to_main:
+                Intent GoToMain = new Intent(diary_Total.this, diary_Mainactivity.class);
+                int Count = 0;
+                for(int i = 0; i < main_Diary.size(); i++) {
+                    GoToMain.putExtra("Data"+i, main_Diary.get(i));
+                    Count ++;
+                }
+                GoToMain.putExtra("Size", Count);
+                kim = true;
+                startActivity(GoToMain);
+                break;
+            case R.id.diary_total_button_total_to_write:
+                Intent GoToWriteDiary = new Intent(diary_Total.this, diary_Write.class);
+                startActivityForResult(GoToWriteDiary, TOAL_TO_WRITE);
+                break;
+
+        }
     }
 }
 
@@ -239,10 +251,12 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
 
         //일기 사진 들어갈 이미지 뷰
         ImageView imgview = (ImageView) convertView.findViewById(R.id.diary_imageview_photo);
-        if (childdata.get(groupdata.get(groupPosition)).get(childPosition).getDIaryPictureUri(0) != null) {
-            Bitmap kim = childdata.get(groupdata.get(groupPosition)).get(childPosition).getDiaryMainPicture(0);
-            imgview.setImageBitmap(kim);
-        }
+
+//        if (childdata.get(groupdata.get(groupPosition)).get(childPosition).getDIaryPictureUri(0) != null) {
+//            Bitmap kim = childdata.get(groupdata.get(groupPosition)).get(childPosition).getDiaryMainPicture(0);
+//            imgview.setImageBitmap(kim);
+//        }
+
         //일기 제목 들어갈 텍스트뷰
         TextView txtView = (TextView) convertView.findViewById(R.id.diary_textview_child);
         txtView.setText(childdata.get(groupdata.get(groupPosition)).get(childPosition).getDiaryTitle() + "");
@@ -287,6 +301,7 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
 
     //확장 리스트뷰에 데이터 추가 함수
     public void ExpandableListViewAddItem(diary_Content diary_content) {
+
         String Temp_Date = diary_content.getDiaryDate();
         boolean hasSamegroup = false;
 
