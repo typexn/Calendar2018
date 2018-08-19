@@ -74,7 +74,7 @@ public class ex_Mainactivity extends AppCompatActivity {
         buttonReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goToExerciseReport = new Intent(ex_Mainactivity.this, ex_ExerciseRoutine.class);
+                Intent goToExerciseReport = new Intent(ex_Mainactivity.this, ex_Routine.class);
                 startActivity(goToExerciseReport);
             }
         });
