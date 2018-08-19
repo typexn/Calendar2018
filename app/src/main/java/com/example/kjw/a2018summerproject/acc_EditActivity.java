@@ -16,6 +16,11 @@ public class acc_EditActivity extends AppCompatActivity {
     int x = 0 ;
     Integer moneyIn ;
     Integer moneyOut ;
+    Intent editGetIntent = getIntent();
+    int setMoneyIn = editGetIntent.getIntExtra("setMoneyIn", 0);
+    int setMoneyOut = editGetIntent.getIntExtra("setMoneyOut", 0);
+    int setTotalMoney = editGetIntent.getIntExtra("setTotalmoney", 0);
+
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -70,6 +75,9 @@ public class acc_EditActivity extends AppCompatActivity {
                 gomain.putExtra("in&out" , x);
                 gomain.putExtra("MoneyIn", moneyIn);
                 gomain.putExtra("MoneyOut", moneyOut);
+                gomain.putExtra("setMoneyIn", setMoneyIn);
+                gomain.putExtra("setMoneyOut", setMoneyOut);
+                gomain.putExtra("setTotalMoney", setTotalMoney);
                 startActivity(gomain);
             }
         });

@@ -41,6 +41,11 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
     Calendar mThisMonthCalendar;
     Calendar mNextMonthCalendar;
 
+    //입금 출금 금액 변수
+    int setMoneyIn = 0 ;
+    int setMoneyOut = 0 ;
+    int setTotalMoney = 0 ;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,9 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
             @Override
             public void onClick(View view) {
                 Intent goEdit = new Intent(acc_MainActivity.this, acc_EditActivity.class);
+                goEdit.putExtra("setMoneyIn",setMoneyIn);
+                goEdit.putExtra("setMoneyOut",setMoneyOut);
+                goEdit.putExtra("setTotalMoney",setTotalMoney);
                 startActivity(goEdit);
             }
         });
@@ -139,16 +147,15 @@ public class acc_MainActivity extends Activity implements AdapterView.OnItemClic
         TextView textViewOutput = (TextView) findViewById(R.id.acc_main_textview_output);
         TextView textViewTotalMoney = (TextView) findViewById(R.id.acc_main_textview_totalmoney);
 
-        //입금 출금 금액 변수
-        int setMoneyIn = 0 ;
-        int setMoneyOut = 0 ;
-        int setTotalMoney = 0 ;
-
         //인텐트 받아오기
         Intent mainGetIntent = getIntent();
         int moneyIn = mainGetIntent.getIntExtra("MoneyIn", 0);
         int moneyOut = mainGetIntent.getIntExtra("MoneyOut", 0);
         int x = mainGetIntent.getIntExtra("in&out", 0);
+
+        setMoneyIn = mainGetIntent.getIntExtra("setMoneyIn", 0);
+        setMoneyOut = mainGetIntent.getIntExtra("setMoneyOut",0);
+        setTotalMoney = mainGetIntent.getIntExtra("setTotalmoney",0);
 
         if (x == 0) {
             setMoneyIn =  setMoneyIn + moneyIn ;
