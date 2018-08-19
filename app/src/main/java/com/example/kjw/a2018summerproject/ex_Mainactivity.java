@@ -86,7 +86,8 @@ public class ex_Mainactivity extends AppCompatActivity {
         buttonHelp.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View view) {diall = (Button) findViewById(R.id.ex_cycle_image_plus);
+            public void onClick(View view) {
+                diall = (Button) findViewById(R.id.ex_main_button_help);
                 sd = new ex_Help(this);
                 WindowManager.LayoutParams wm = sd.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
                 wm.copyFrom(sd.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
@@ -98,8 +99,6 @@ public class ex_Mainactivity extends AppCompatActivity {
                         sd.show();  //다이얼로그
                     }
                 });
-                Intent goToExerciseHelp = new Intent(ex_Mainactivity.this, ex_Help.class);
-                startActivity(goToExerciseHelp);
 
             }
         });
