@@ -18,14 +18,18 @@ public class ex_Help extends Dialog {
     private LinearLayout container;
 
 
-    public ex_Help(@NonNull View.OnClickListener context) {
+    public ex_Help(@NonNull View.OnClickListener context)  {
         super((Context) context);
         setContentView(R.layout.activity_ex_help);
+<<<<<<< HEAD
 
+=======
+>>>>>>> e71540bab41106d83e2d15ef51b523e25981a685
     }
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_help);
     }
+
+    
 }
