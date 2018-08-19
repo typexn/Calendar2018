@@ -26,4 +26,6 @@ public class ex_Help extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_help);
     }
+
+    
 }
