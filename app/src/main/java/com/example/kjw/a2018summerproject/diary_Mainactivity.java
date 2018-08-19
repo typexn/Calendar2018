@@ -1,11 +1,16 @@
 package com.example.kjw.a2018summerproject;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +21,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -42,6 +48,7 @@ public class diary_Mainactivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_mainactivity);
 
+
         //DiaryTotal로 가는 버튼
         buttonGoTotal = (Button) findViewById(R.id.diary_main_button_gototal);
         buttonGoTotal.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +59,7 @@ public class diary_Mainactivity extends AppCompatActivity {
             }
         });
 
+        //DiaryWrite으로 가는 버튼
         buttonGoWrite = (Button) findViewById(R.id.diary_main_button_gowrite);
         buttonGoWrite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +70,8 @@ public class diary_Mainactivity extends AppCompatActivity {
             }
         });
 
-        //달력 만들기
 
-    }
+    }//온크리에이트의 끝
 
 }
 

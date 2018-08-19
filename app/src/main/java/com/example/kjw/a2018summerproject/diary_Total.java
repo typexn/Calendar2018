@@ -55,6 +55,9 @@ public class diary_Total extends AppCompatActivity {
 
     //일기를 수정하려고 했는가 boolean값 -> 수정 버튼을 누르면 그 child의 item을 갖고 diary_write 페이지로 넘어가기
     static Boolean isButtonChangeClick = false;
+    static final int RETURN_TO_TOTAL = 3000;
+    int GroupNum = -1;
+    int ChildNum = -1;
 
     //온크리에이트 시작
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +78,14 @@ public class diary_Total extends AppCompatActivity {
         //write를 먼저 실행했을 경우 데이터를 받아 오기 -> 아닐경우 activityforresult의 값으로 받아줌
         if (diary_Mainactivity.isDirectToWrite == true) {
             Intent getDiary = getIntent();
-            ArrayList<String> uri = (ArrayList<String>) getDiary.getSerializableExtra("Uri_");
-            Log.d("김준성URI",uri.get(0)+"");
+            ArrayList<String> uri = getDiary.getStringArrayListExtra("Uri_");
             int mood = getDiary.getIntExtra("Mood_", 0);
             int weather = getDiary.getIntExtra("Weather_", 0);
             String date = getDiary.getStringExtra("Date_");
             String title = getDiary.getStringExtra("Title_");
             String content = getDiary.getStringExtra("Content_");
             ArrayList<Bitmap> BitmapArrayList = new ArrayList<Bitmap>();
-
+            Log.d("Uri개수", uri.size() + "");
             for (int i = 0; i < uri.size(); i++) {
                 addBitmapImage(Uri.parse(uri.get(i)));
                 BitmapArrayList.add(tempImage);
@@ -101,7 +103,7 @@ public class diary_Total extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent GoToWriteDiary = new Intent(diary_Total.this, diary_Write.class);
-                startActivityForResult(GoToWriteDiary, 3000);
+                startActivityForResult(GoToWriteDiary, RETURN_TO_TOTAL);
             }
         });
 
@@ -124,8 +126,8 @@ public class diary_Total extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case 3000:
-                    ArrayList<String> getPicutreUri = (ArrayList<String>) data.getStringArrayListExtra("Uri");
+                case RETURN_TO_TOTAL:
+                    ArrayList<String> getPicutreUri = data.getStringArrayListExtra("Uri");
                     int getMood = data.getIntExtra("Mood", 0);
                     int getWeather = data.getIntExtra("Weather", 0);
                     String getDate = data.getStringExtra("Date");
@@ -133,16 +135,19 @@ public class diary_Total extends AppCompatActivity {
                     String getContent = data.getStringExtra("Content");
 
                     ArrayList<Bitmap> BitmapArrayList = new ArrayList<Bitmap>();
-                    for (int i = 0; i <getPicutreUri.size(); i++) {
+                    for (int i = 0; i < getPicutreUri.size(); i++) {
                         addBitmapImage(Uri.parse(getPicutreUri.get(i)));
                         BitmapArrayList.add(tempImage);
                     }
                     diary_Content Temp_Content = new diary_Content(BitmapArrayList, getPicutreUri, getMood, getWeather, getDate, getTitle, getContent);
-                    if(isButtonChangeClick == true){
-                        int groupDataNum = data.getIntExtra("groupDataNum",0);
-                        int childDataNum = data.getIntExtra("childDataNum",0);
-                        expandableListAdapterDiaryTotal.ExpandableListViewDeleteItem(groupDataNum,childDataNum);
-                        isButtonChangeClick = false;
+                    if (isButtonChangeClick == true) {
+                        int groupDataNum = data.getIntExtra("groupDataNum", -1);
+                        int childDataNum = data.getIntExtra("childDataNum", -1);
+
+                        if (groupDataNum == -1) {
+                        } else {
+                            expandableListAdapterDiaryTotal.ExpandableListViewDeleteItem(groupDataNum, childDataNum);
+                        }
                     }
                     expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp_Content);
                     expandableListAdapterDiaryTotal.notifyDataSetChanged();
@@ -284,6 +289,7 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
     public void ExpandableListViewAddItem(diary_Content diary_content) {
         String Temp_Date = diary_content.getDiaryDate();
         boolean hasSamegroup = false;
+
         //확장리스트뷰 그룹에 날짜가 같은게 있으면 그곳에 데이터 추가 아니면 새로운 그룹을 만들어 데이터 추가
         if (groupdata.size() < 1) {
             groupdata.add(Temp_Date);
@@ -304,11 +310,12 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
                 childdata.put(groupdata.get(groupdata.size() - 1), Temp_child);
 
             }
-        //그룹데이터를 정렬
-        if (groupdata.size() > 1) {
-            Collections.sort(groupdata);
-            Collections.reverse(groupdata);
-        }
+
+            //그룹데이터를 정렬
+            if (groupdata.size() > 0) {
+                Collections.sort(groupdata);
+                Collections.reverse(groupdata);
+            }
         }
         notifyDataSetChanged();
     }
@@ -325,7 +332,7 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    //확장 리스트뷰의 데이터 수정 함수
+    //확장 리스트뷰의 데이터 수정버튼 함수
     public void ExpandableListViewChangeItem(int groupDataNum, int childDataNum) {
         diary_Content sendToDiaryWrite = childdata.get(this.groupdata.get(groupDataNum)).get(childDataNum);
         Intent intentToWriteDairy = new Intent(context, diary_Write.class);
@@ -335,8 +342,8 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
         intentToWriteDairy.putExtra("diaryDate", sendToDiaryWrite.getDiaryDate());
         intentToWriteDairy.putExtra("diaryTitle", sendToDiaryWrite.getDiaryTitle());
         intentToWriteDairy.putExtra("diaryContent", sendToDiaryWrite.getDiaryContent());
-        intentToWriteDairy.putExtra("diaryGroupNum",groupDataNum);
-        intentToWriteDairy.putExtra("diaryChildNum",childDataNum);
+        intentToWriteDairy.putExtra("diaryGroupNum", groupDataNum);
+        intentToWriteDairy.putExtra("diaryChildNum", childDataNum);
         context.startActivity(intentToWriteDairy);
     }
 
