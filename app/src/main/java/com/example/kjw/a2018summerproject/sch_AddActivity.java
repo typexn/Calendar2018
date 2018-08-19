@@ -60,14 +60,14 @@ public class sch_AddActivity extends AppCompatActivity {
                 String location = editLocation.getText().toString();
                 String memo = editLocation.getText().toString();
 
-                if(editTitle.getText().toString()=="")
-                {
+                if(editTitle.getText() == null || editTitle.getText().toString().equals("")) {
                     Toast.makeText(sch_AddActivity.this,"제목을 입력해주세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-
-                Schedule newSchedule = new Schedule(title, location, 15, 1, null, null, memo);
+                Schedule newSchedule = new Schedule(title, location, startDayInfo.getYear(), startDayInfo.getMonth(), Integer.parseInt(startDayInfo.getDay()),
+                        endDayInfo.getYear(), endDayInfo.getMonth(), Integer.parseInt(endDayInfo.getDay()),
+                        startTimeInfo.getHour(), startTimeInfo.getMinute(), endTimeInfo.getHour(), endTimeInfo.getMinute(), memo);
                 sch_Mainactivity.schList.add(newSchedule);
 
                 finish();
@@ -130,11 +130,11 @@ public class sch_AddActivity extends AppCompatActivity {
 
         startTimeInfo = new TimeInfo();
         startTimeInfo.setHour(8);
-        startTimeInfo.setHour(0);
+        startTimeInfo.setMinute(0);
 
         endTimeInfo = new TimeInfo();
         endTimeInfo.setHour(8);
-        endTimeInfo.setHour(0);
+        endTimeInfo.setMinute(0);
 
         startTime.setText("08:00");
         endTime.setText("08:00");
@@ -145,13 +145,13 @@ public class sch_AddActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             startDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
             startDayInfo.setYear(year);
-            startDayInfo.setMonth(monthOfYear);
+            startDayInfo.setMonth(monthOfYear+1);
             startDayInfo.setDay(String.valueOf(dayOfMonth));
 
             if(!checkDay()) {
                 android.util.Log.d("minyoung", "되냐start");
                 endDayInfo.setYear(year);
-                endDayInfo.setMonth(monthOfYear);
+                endDayInfo.setMonth(monthOfYear+1);
                 endDayInfo.setDay(String.valueOf(dayOfMonth));
                 endDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
             }
@@ -163,13 +163,13 @@ public class sch_AddActivity extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             endDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
             endDayInfo.setYear(year);
-            endDayInfo.setMonth(monthOfYear);
+            endDayInfo.setMonth(monthOfYear+1);
             endDayInfo.setDay(String.valueOf(dayOfMonth));
 
             if(!checkDay()) {
                 android.util.Log.d("minyoung", "되냐end");
                 startDayInfo.setYear(year);
-                startDayInfo.setMonth(monthOfYear);
+                startDayInfo.setMonth(monthOfYear+1);
                 startDayInfo.setDay(String.valueOf(dayOfMonth));
                 startDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
             }
@@ -214,11 +214,9 @@ public class sch_AddActivity extends AppCompatActivity {
         String start = startDayInfo.getYear() + "" + startDayInfo.getMonth() + startDayInfo.getDay() + startTimeInfo.getHourString() + startTimeInfo.getMinuteString();
         String end = endDayInfo.getYear() + "" + endDayInfo.getMonth() + endDayInfo.getDay() + endTimeInfo.getHourString() + endTimeInfo.getMinuteString();
 
-        android.util.Log.d("minyoung", startDayInfo.getYear() + "/" + startDayInfo.getMonth() + "/" + startDayInfo.getDay());
-        android.util.Log.d("minyoung", endDayInfo.getYear() + "/" + endDayInfo.getMonth() + "/" + endDayInfo.getDay());
         android.util.Log.d("minyoung", start + "/" + end);
-        startSpot = Integer.parseInt(start);
-        endSpot = Integer.parseInt(end);
+        startSpot = Long.parseLong(start);
+        endSpot = Long.parseLong(end);
 
         ret = startSpot > endSpot ? false : true;
 
@@ -227,8 +225,8 @@ public class sch_AddActivity extends AppCompatActivity {
 
     private boolean checkDay(){
         boolean ret = false;
-        long startSpot = 0;
-        long endSpot = 0;
+        int startSpot = 0;
+        int endSpot = 0;
 
         String start = startDayInfo.getYear() + "" + startDayInfo.getMonth() + startDayInfo.getDay();
         String end = endDayInfo.getYear() + "" + endDayInfo.getMonth() + endDayInfo.getDay();

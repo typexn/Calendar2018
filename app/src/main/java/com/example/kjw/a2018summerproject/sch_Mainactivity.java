@@ -79,8 +79,8 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
 
     private void setData() {
 
-        for (int i = 0; i < 20; i++) {
-            Schedule sch = new Schedule("title" + i, "location" + i, i, i, "08:00", "09:00", "");
+        for (int i = 1; i < 21; i++) {
+            Schedule sch = new Schedule("title" + i, "location" + i, 2018,8,i,2018,8,i,8,0,8,0, "");
             schList.add(sch);
         }
 
@@ -109,7 +109,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
 //            tvExist.setText("●");
 //            Log.d("minyoungcheck", tvExist.getText().toString());
 //            Log.d("minyoung", schList.get(i).startDay + "/" + v.toString() + "/" + tvExist.toString());
-            mCalendarAdapter.changeDayInfo(schList.get(i).startDay + mThisMonthCalendar.get(Calendar.DAY_OF_WEEK) - 1, true);
+            mCalendarAdapter.changeDayInfo(schList.get(i).startDay + mThisMonthCalendar.get(Calendar.DAY_OF_WEEK) - 2, true);
         }
         mCalendarAdapter.notifyDataSetChanged(); // 월 이동하면 reset됨
 
@@ -308,20 +308,28 @@ class Schedule {
     public int endDay;
     public int endMonth;
     public int endYear;
-    public String startTime;
-    public String endTime;
+    public int startHour;
+    public int startMinute;
+    public int endHour;
+    public int endMinute;
     public String memo;
 
     public Schedule() {
     }
 
-    public Schedule(String title, String location, int startDay, int endDay, String startTime, String endTime, String memo) {
+    public Schedule(String title, String location, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay, int startHour, int startMinute, int endHour, int endMinute, String memo) {
         this.title = title;
         this.location = location;
         this.startDay = startDay;
+        this.startMonth = startMonth;
+        this.startYear = startYear;
         this.endDay = endDay;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.endMonth = endMonth;
+        this.endYear = endYear;
+        this.startHour = startHour;
+        this.startMinute = startMinute;
+        this.endHour = endHour;
+        this.endMinute = endMinute;
         this.memo = memo;
     }
 }
