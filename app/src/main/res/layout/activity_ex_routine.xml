@@ -30,24 +30,17 @@
                 android:layout_height="match_parent" />
 
         </LinearLayout>
-        <ScrollView
+        <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:orientation="vertical"
+            <ListView
+                android:id="@+id/ex_routine_listview_routine"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"></ListView>
 
-                <ListView
-                    android:id="@+id/ex_routine_listview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></ListView>
-
-            </LinearLayout>
-
-        </ScrollView>
+        </LinearLayout>
         <LinearLayout
             android:layout_weight="10"
             android:orientation="horizontal"

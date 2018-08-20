@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -26,6 +29,15 @@ import java.util.Date;
  */
 
 public class ex_Mainactivity extends AppCompatActivity {
+
+
+
+    Button diall;
+    ex_Help sd;
+    int ex_CycleCount = 0;
+
+    private LinearLayout container;
+
 
     private TextView mTvCalendarTitle;
     private GridView mGvCalendar;
@@ -53,6 +65,10 @@ public class ex_Mainactivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_mainactivity);
+        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
+        final int width = dm.widthPixels; //디바이스 화면 너비
+        final int height = dm.heightPixels; //디바이스 화면 높이
+
 
         //mainReport로 가는 버튼
         buttonReport = (Button) findViewById(R.id.ex_main_button_report);
@@ -64,15 +80,26 @@ public class ex_Mainactivity extends AppCompatActivity {
             }
         });
 
+
+
         buttonHelp = (Button) findViewById(R.id.ex_main_button_help);
         buttonHelp.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Intent goToExerciseHelp = new Intent(ex_Mainactivity.this, ex_Routine.class);
-                /*
-                    잠시 Routine로 넘어가게 설정
-                 */
-                startActivity(goToExerciseHelp);
+                diall = (Button) findViewById(R.id.ex_main_button_help);
+                sd = new ex_Help(this);
+                WindowManager.LayoutParams wm = sd.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
+                wm.copyFrom(sd.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
+                wm.width = width / 2;  //화면 너비의 절반
+                wm.height = height / 2;  //화면 높이의 절반
+                diall.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        sd.show();  //다이얼로그
+                    }
+                });
+
             }
         });
 

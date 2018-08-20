@@ -4,6 +4,8 @@ public class DayInfo {
 
 
     private String day;
+    private int year;
+    private int month;
     private boolean inMonth;
     private boolean isExistSch; //minyoung
 
@@ -49,5 +51,10 @@ public class DayInfo {
 
     public void setExistSch(boolean isExist){ this.isExistSch = isExist; } //minyoung
     public boolean isExistSch() { return isExistSch; } //minyoung
+    public void setYear(int year){ this.year = year; }
+    public int getYear(){ return this.year; }
+
+    public void setMonth(int month){ this.month = month; }
+    public int getMonth(){ return this.month; }
 }
 
