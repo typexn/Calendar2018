@@ -32,7 +32,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
-import static com.example.kjw.a2018summerproject.diary_Mainactivity.kim;
+import static com.example.kjw.a2018summerproject.diary_Mainactivity.intentFromTotal;
 
 //import static com.example.kjw.a2018summerproject.diary_Total.isButtonChangeClick;
 
@@ -82,17 +82,7 @@ public class diary_Total extends AppCompatActivity implements Button.OnClickList
 
 
         //write를 먼저 실행했을 경우 데이터를 받아 오기 -> 아닐경우 activityforresult의 값으로 받아줌
-        if (diary_Mainactivity.isDirectToWrite == true) {
-            Intent getDiary = getIntent();
-
-            diary_Content Temp = (diary_Content) getDiary.getSerializableExtra("Object");
-            ArrayList<String> uri = Temp.getDiaryUriTotal();
-
-            expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp);
-            main_Diary.add(Temp);
-            diary_Mainactivity.isDirectToWrite = false;
-
-        }
+        getData();
 
         //일기 작성 페이지로 가기
         Button buttonGoWrite = (Button) findViewById(R.id.diary_total_button_total_to_write);
@@ -118,15 +108,11 @@ public class diary_Total extends AppCompatActivity implements Button.OnClickList
     //일기 내용 받아오기
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+        if (resultCode != RESULT_OK) {
+            isButtonChangeClick = false;
+        } else {
             switch (requestCode) {
                 case TOAL_TO_WRITE:
-//                    ArrayList<String> getPicutreUri = data.getStringArrayListExtra("Uri");
-//                    int getMood = data.getIntExtra("Mood", 0);
-//                    int getWeather = data.getIntExtra("Weather", 0);
-//                    String getDate = data.getStringExtra("Date");
-//                    String getTitle = data.getStringExtra("Title");
-//                    String getContent = data.getStringExtra("Content");
                     diary_Content Temp_Content = (diary_Content) data.getSerializableExtra("Diary");
                     main_Diary.add(Temp_Content);
                     if (isButtonChangeClick == true) {
@@ -140,6 +126,7 @@ public class diary_Total extends AppCompatActivity implements Button.OnClickList
                     }
                     expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp_Content);
                     expandableListAdapterDiaryTotal.notifyDataSetChanged();
+                    isButtonChangeClick = false;
                     break;
             }
         }
@@ -166,18 +153,32 @@ public class diary_Total extends AppCompatActivity implements Button.OnClickList
             case R.id.diary_total_button_total_to_main:
                 Intent GoToMain = new Intent(diary_Total.this, diary_Mainactivity.class);
                 int Count = 0;
-                for(int i = 0; i < main_Diary.size(); i++) {
-                    GoToMain.putExtra("Data"+i, main_Diary.get(i));
-                    Count ++;
+                for (int i = 0; i < main_Diary.size(); i++) {
+                    GoToMain.putExtra("Data" + i, main_Diary.get(i));
+                    Count++;
                 }
                 GoToMain.putExtra("Size", Count);
-                kim = true;
+                intentFromTotal = true;
                 startActivity(GoToMain);
                 break;
             case R.id.diary_total_button_total_to_write:
                 Intent GoToWriteDiary = new Intent(diary_Total.this, diary_Write.class);
                 startActivityForResult(GoToWriteDiary, TOAL_TO_WRITE);
                 break;
+
+        }
+    }
+
+    public void getData() {
+        if (diary_Mainactivity.isDirectToWrite == true) {
+            Intent getDiary = getIntent();
+
+            diary_Content Temp = (diary_Content) getDiary.getSerializableExtra("Object");
+            ArrayList<String> uri = Temp.getDiaryUriTotal();
+
+            expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp);
+            main_Diary.add(Temp);
+            diary_Mainactivity.isDirectToWrite = false;
 
         }
     }
@@ -351,14 +352,10 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
     public void ExpandableListViewChangeItem(int groupDataNum, int childDataNum) {
         diary_Content sendToDiaryWrite = childdata.get(this.groupdata.get(groupDataNum)).get(childDataNum);
         Intent intentToWriteDairy = new Intent(context, diary_Write.class);
-        intentToWriteDairy.putStringArrayListExtra("diaryUri", sendToDiaryWrite.getDiaryUriTotal());
-        intentToWriteDairy.putExtra("diaryMood", sendToDiaryWrite.getDiaryMood());
-        intentToWriteDairy.putExtra("diaryWeather", sendToDiaryWrite.getDiaryWeather());
-        intentToWriteDairy.putExtra("diaryDate", sendToDiaryWrite.getDiaryDate());
-        intentToWriteDairy.putExtra("diaryTitle", sendToDiaryWrite.getDiaryTitle());
-        intentToWriteDairy.putExtra("diaryContent", sendToDiaryWrite.getDiaryContent());
+        intentToWriteDairy.putExtra("diaryReWrite", sendToDiaryWrite);
         intentToWriteDairy.putExtra("diaryGroupNum", groupDataNum);
         intentToWriteDairy.putExtra("diaryChildNum", childDataNum);
+        diary_Total.isButtonChangeClick = true;
         context.startActivity(intentToWriteDairy);
     }
 

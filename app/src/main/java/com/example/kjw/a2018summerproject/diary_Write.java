@@ -55,7 +55,7 @@ import static android.os.Environment.getExternalStorageState;
  * Created by jwell on 2018-07-17.
  */
 
-public class diary_Write extends AppCompatActivity {
+public class diary_Write extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     Bitmap tempImage = null; //임시
     int pictureCount;
@@ -71,6 +71,11 @@ public class diary_Write extends AppCompatActivity {
     //기분, 날씨 position을 받을 인트
     int weatherPosition;
     int moodPosition;
+
+    //일기 내용을 받을 스트링
+    String day = "";
+    String title = "";
+    String content = "";
 
     //사진 촬영, 이미지 추가 버튼
     Button buttonAddPhoto;
@@ -109,12 +114,17 @@ public class diary_Write extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_write);
 
-        tempImageView = (ImageView) findViewById(R.id.Temp_Image_View);
+        pictureCount = 0;
+        tempImageView = (ImageView) findViewById(R.id.Temp_Image_View); //임시
+        countPicutre = (TextView) findViewById(R.id.diary_write_txtv_count_photo); //임시
+
         editTextDiaryTitle = (EditText) findViewById(R.id.diary_write_title);
         editTextDiaryContent = (EditText) findViewById(R.id.diary_write_contents);
-        countPicutre = (TextView) findViewById(R.id.diary_write_txtv_count_photo);
 
-        pictureCount = 0;
+        diaryWeatherText = (TextView) findViewById(R.id.diary_weather_text);
+        diaryMoodText = (TextView) findViewById(R.id.diary_mood_text);
+
+        diaryDatePickerTextView = (TextView) findViewById(R.id.diary_date_picker_text);
 
         //사진을 담을 어레이
         pictureContent = new ArrayList<Bitmap>();
@@ -122,48 +132,11 @@ public class diary_Write extends AppCompatActivity {
 
         //확인버튼 누르면 일기 내용이 total로 넘어가게 구현 -> 일단 임시
         Button buttonSendDiary = (Button) findViewById(R.id.diary_write_button_confirm);
-        buttonSendDiary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (editTextDiaryTitle.getText().toString().equals("")) {
-                    Toast.makeText(getApplicationContext(), "제목이 없습니다.", Toast.LENGTH_LONG);
-                } else if (editTextDiaryContent.getText().toString().equals("")) {
-                    Toast.makeText(getApplicationContext(), "내용이 없습니다.", Toast.LENGTH_LONG);
-                } else {
-                    String sendedDate = diaryDatePickerTextView.getText().toString();
-                    String title = editTextDiaryTitle.getText().toString();
-                    String content = editTextDiaryContent.getText().toString();
-
-                    //다이어리 토탈을 거쳐서 바로왔을때 아닐때의 처리를 다르게 해줌
-                    if (diary_Mainactivity.isDirectToWrite == false) {
-                        Intent SendToDiaryTotal = new Intent();
-                        diary_Content kim = new diary_Content(pictureUri, moodPosition, weatherPosition, sendedDate, title, content);
-                        SendToDiaryTotal.putExtra("Diary", kim);
-                        if (comFromChange == true) {
-                            SendToDiaryTotal.putExtra("groupDataNum", groupDataNum);
-                            SendToDiaryTotal.putExtra("childDataNum", childDataNum);
-                        }
-                        comFromChange = false;
-                        setResult(RESULT_OK, SendToDiaryTotal);
-                        finish();
-                    } else {
-                        Intent Temp = new Intent(diary_Write.this, diary_Total.class);
-                        diary_Content kim = new diary_Content(pictureUri, moodPosition, weatherPosition, sendedDate, title, content);
-                        Temp.putExtra("Object", kim);
-                        startActivity(Temp);
-                    }
-                }
-            }
-        });
+        buttonSendDiary.setOnClickListener(this);
 
         //DatePicker 시작
-        diaryDatePickerTextView = (TextView) findViewById(R.id.diary_date_picker_text);
-        diaryDatePickerTextView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showDialog(Diary_Date_Dialog_ID);
-            }
-        });
+
+        diaryDatePickerTextView.setOnClickListener(this);
 
         //현재 날짜 인식
         final Calendar diaryDatePickerToday = Calendar.getInstance();
@@ -175,62 +148,26 @@ public class diary_Write extends AppCompatActivity {
         //인식된 날짜 출력
         updateDisplay();
 
-
-        //날씨스피너에서 고른후 텍스트에 표시
-        diaryWeatherText = (TextView) findViewById(R.id.diary_weather_text);
-        diaryWeatherSpinner = (Spinner) findViewById(R.id.diary_weather_spinner);
-        diaryWeatherSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position,
-                                       long id) {
-                diaryWeatherText.setText("" + parent.getItemAtPosition(position));
-                weatherPosition = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        //기분스피너에서 고른후 텍스트에 표시
-        diaryMoodText = (TextView) findViewById(R.id.diary_mood_text);
-        diaryMoodSpinner = (Spinner) findViewById(R.id.diary_mood_spinner);
-        diaryMoodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position,
-                                       long id) {
-                diaryMoodText.setText("" + parent.getItemAtPosition(position));
-                moodPosition = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        //사진 하나 추가 버튼 이벤트
-        buttonAddPhoto = (Button) findViewById(R.id.diary_write_button_add_photo);
-        buttonAddPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GoToGallery();
-            }
-        });
-
-        //사진 여라장 추가 버튼 이벤트
-        buttonAddMultiple = (Button) findViewById(R.id.diary_write_button_add_multiple_photo);
-        buttonAddMultiple.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GoToMultipleGallery();
-            }
-        });
-
-        //수정 버튼에서 왔는가
+        //수정 버튼에서 왔으면 기본 값을 설정해줌
         if (diary_Total.isButtonChangeClick == true) {
             isComeFromChange();
-            comFromChange = true;
         }
+
+
+        //날씨, 기분 스피너에서 고른후 텍스트에 표시
+        diaryWeatherSpinner = (Spinner) findViewById(R.id.diary_weather_spinner);
+        diaryMoodSpinner = (Spinner) findViewById(R.id.diary_mood_spinner);
+
+        diaryWeatherSpinner.setOnItemSelectedListener(this);
+        diaryMoodSpinner.setOnItemSelectedListener(this);
+
+        //사진 하나 추가 버튼 이벤트   //사진 여라장 추가 버튼 이벤트
+        buttonAddPhoto = (Button) findViewById(R.id.diary_write_button_add_photo);
+        buttonAddMultiple = (Button) findViewById(R.id.diary_write_button_add_multiple_photo);
+
+        buttonAddPhoto.setOnClickListener(this);
+        buttonAddMultiple.setOnClickListener(this);
+
 
     }//온크리에이트의 끝
 
@@ -349,7 +286,7 @@ public class diary_Write extends AppCompatActivity {
                 ClipData clipData = data.getClipData();
                 if (clipData == null) {
                     Log.d("클립데이터 에러", "에러에러에러에러");
-                    Toast.makeText(this,"다중 선택을 지원하지 않는 기기입니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "다중 선택을 지원하지 않는 기기입니다.", Toast.LENGTH_LONG).show();
                     return;
                 }
                 if (clipData.getItemCount() > 1) {
@@ -410,32 +347,100 @@ public class diary_Write extends AppCompatActivity {
 
     //수정 버튼을 통해 왔는가
     private void isComeFromChange() {
+        pictureUri.clear();
 
         Intent getDiaryDataBeforeChange = getIntent();
-        ArrayList<String> getChangeUri = getDiaryDataBeforeChange.getStringArrayListExtra("diaryUri");
-        int getChangeMood = getDiaryDataBeforeChange.getIntExtra("diaryMood", 0);
-        int getChangeWeather = getDiaryDataBeforeChange.getIntExtra("diaryWeather", 0);
-        String getChangeDate = getDiaryDataBeforeChange.getStringExtra("diaryDate");
-        String getChangeTitle = getDiaryDataBeforeChange.getStringExtra("diaryTitle");
-        String getChangeContent = getDiaryDataBeforeChange.getStringExtra("diaryContent");
+        diary_Content diaryReWrite = (diary_Content) getDiaryDataBeforeChange.getSerializableExtra("diaryReWrite");
+        pictureUri = (ArrayList<String>) diaryReWrite.getDiaryUriTotal();
+        moodPosition = diaryReWrite.getDiaryMood();
+        weatherPosition = diaryReWrite.getDiaryWeather();
+        day = diaryReWrite.getDiaryDate();
+        title = diaryReWrite.getDiaryTitle();
+        content = diaryReWrite.getDiaryContent();
         groupDataNum = getDiaryDataBeforeChange.getIntExtra("diaryGroupNum", -1);
         childDataNum = getDiaryDataBeforeChange.getIntExtra("diaryChildNum", -1);
 
-        addBitmapImage(Uri.parse(getChangeUri.get(0)));
+        addBitmapImage(Uri.parse(pictureUri.get(0)));
         tempImageView.setImageBitmap(tempImage);
-        countPicutre.setText(getChangeUri.size() + "개입니다.");
+        countPicutre.setText(pictureUri.size() + "개입니다.");
         //스피너 값 할당
-        diaryMoodSpinner.setSelection(getChangeMood);
-        diaryWeatherSpinner.setSelection(getChangeWeather);
+        diaryMoodSpinner.setSelection(moodPosition);
+        diaryWeatherSpinner.setSelection(weatherPosition);
 
         //텍스트 할당
         diaryMoodText.setText(diaryMoodSpinner.getItemAtPosition(moodPosition) + "");
         diaryWeatherText.setText(diaryWeatherSpinner.getItemAtPosition(weatherPosition) + "");
 
-        diaryDatePickerTextView.setText(getChangeDate);
-        editTextDiaryTitle.setText(getChangeTitle);
-        editTextDiaryContent.setText(getChangeContent);
+        diaryDatePickerTextView.setText(day);
+        editTextDiaryTitle.setText(title);
+        editTextDiaryContent.setText(content);
 
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.diary_write_button_add_photo:
+                GoToGallery();
+                break;
+            case R.id.diary_write_button_add_multiple_photo:
+                GoToMultipleGallery();
+                break;
+            case R.id.diary_date_picker_text:
+                showDialog(Diary_Date_Dialog_ID);
+                break;
+            case R.id.diary_write_button_confirm:
+                if (editTextDiaryTitle.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "제목이 없습니다.", Toast.LENGTH_LONG);
+                } else if (editTextDiaryContent.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "내용이 없습니다.", Toast.LENGTH_LONG);
+                } else {
+                    String sendedDate = diaryDatePickerTextView.getText().toString();
+                    String title = editTextDiaryTitle.getText().toString();
+                    String content = editTextDiaryContent.getText().toString();
+
+                    //다이어리 토탈을 거쳐서 바로왔을때 아닐때의 처리를 다르게 해줌
+                    if (diary_Mainactivity.isDirectToWrite == false) {
+                        Intent SendToDiaryTotal = new Intent();
+                        diary_Content kim = new diary_Content(pictureUri, moodPosition, weatherPosition, sendedDate, title, content);
+                        SendToDiaryTotal.putExtra("Diary", kim);
+                        if (diary_Total.isButtonChangeClick == true) {
+                            SendToDiaryTotal.putExtra("groupDataNum", groupDataNum);
+                            SendToDiaryTotal.putExtra("childDataNum", childDataNum);
+                        }
+                        setResult(RESULT_OK, SendToDiaryTotal);
+                        finish();
+                    } else {
+                        Intent Temp = new Intent(diary_Write.this, diary_Total.class);
+                        diary_Content kim = new diary_Content(pictureUri, moodPosition, weatherPosition, sendedDate, title, content);
+                        Temp.putExtra("Object", kim);
+                        startActivity(Temp);
+                    }
+                }
+                break;
+
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
+        switch (view.getId()) {
+            case R.id.diary_mood_spinner:
+                diaryMoodText.setText("" + parent.getItemAtPosition(position));
+                moodPosition = position;
+                break;
+            case R.id.diary_weather_spinner:
+                diaryWeatherText.setText("" + parent.getItemAtPosition(position));
+                weatherPosition = position;
+                break;
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
 }
 

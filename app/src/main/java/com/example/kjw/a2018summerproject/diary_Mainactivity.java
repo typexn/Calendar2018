@@ -2,12 +2,15 @@ package com.example.kjw.a2018summerproject;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -23,6 +26,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +40,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.zip.Inflater;
 
+import static com.example.kjw.a2018summerproject.activity.GVCalendarActivity.SUNDAY;
+
 /**
  * Created by jwell on 2018-07-15.
  */
@@ -43,37 +49,28 @@ import java.util.zip.Inflater;
 public class diary_Mainactivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     static ArrayList<diary_Content> diaryContent = new ArrayList<diary_Content>(); //일기정보
-    static ArrayList<Schedule> schList = new ArrayList<Schedule>(); // 일정 정보
 
-
-    static boolean isDirectToWrite = false;
     static final int MAIN_TO_WRITE = 0;
     static final int MAIN_TO_TOTAL = 1;
-
-    public static int SUNDAY = 1;
-    public static int MONDAY = 2;
-    public static int TUESDAY = 3;
-    public static int WEDNSESDAY = 4;
-    public static int THURSDAY = 5;
-    public static int FRIDAY = 6;
-    public static int SATURDAY = 7;
 
     private TextView mTvCalendarTitle;
     private GridView mGvCalendar;
     private ArrayList<DayInfo> mDayList;
     private CalendarAdapter mCalendarAdapter;
-    Calendar mLastMonthCalendar;
-    Calendar mThisMonthCalendar;
-    Calendar mNextMonthCalendar;
 
-    View previousDayView;
+    Calendar mThisMonthCalendar;
 
     Date diary_date;
     int year;
     int month;
 
+    static boolean isDirectToWrite = false;
+    static boolean intentFromTotal = false;
+    static boolean intentToView = false;
 
-    static boolean kim = false;
+    ListView listViewDialog;
+    diary_ListViewAdapter listViewAdapter;
+    ArrayList<diary_Content> diaryContentHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +85,6 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
         mTvCalendarTitle = (TextView) findViewById(R.id.diary_main_text_title);
         mGvCalendar = (GridView) findViewById(R.id.diary_main_gridview_calendar);
 
-
         bLastMonth.setOnClickListener(this);
         bNextMonth.setOnClickListener(this);
         buttonGoTotal.setOnClickListener(this);
@@ -98,21 +94,12 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
         mGvCalendar.setOnItemClickListener(this);
 
         mDayList = new ArrayList<DayInfo>();
+        diaryContentHolder = new ArrayList<diary_Content>();
 
-
-//인텐트로 자료 받아오기
-        if (kim == true) {
-            Intent data = getIntent();
-            int Temp = data.getIntExtra("Size", -1);
-            Log.d("Temp", Temp + "");
-            for (int i = 0; i < Temp; i++) {
-                diary_Content diary_Data = (diary_Content) data.getSerializableExtra("Data" + i);
-                diaryContent.add(diary_Data);
-            }
-            kim = false;
-        }
+        getData();
 
     }//온크리에이트의 끝
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -142,19 +129,30 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
         }
     }
 
-    private void stringToDate(diary_Content Data) {
-        String Date = Data.getDiaryDate();
-        SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
-
-        try {
-            diary_date = dt.parse(Date);
-        } catch (ParseException e) {
-            e.printStackTrace();
+    private void dialogShow(final ArrayList<diary_Content> inPutDiary) {
+        int Temp = inPutDiary.size();
+        final String[] items = new String[Temp];
+        for(int i =0; i < Temp; i++){
+            items[i] = inPutDiary.get(i).getDiaryTitle();
         }
-
+        AlertDialog.Builder diaryMainDialogBuilder = new AlertDialog.Builder(this);
+        diaryMainDialogBuilder.setTitle("다음중 보고 싶은 일기를 고르세요");
+        diaryMainDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int position) {
+                Intent IntentMainToView = new Intent(diary_Mainactivity.this, diary_View.class);
+                IntentMainToView.putExtra("SelectedDiary", inPutDiary.get(position));
+                dialogInterface.dismiss();
+                intentToView = true;
+                startActivity(IntentMainToView);
+            }
+        });
+        AlertDialog diaryMainDialog = diaryMainDialogBuilder.create();
+        diaryMainDialog.show();
     }
 
-    @Override
+
+    @Override  //onResume()
     protected void onResume() {
         super.onResume();
 
@@ -168,6 +166,25 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
 
     }
 
+    @Override //그리드뷰 아이템 클릭 -> 다이얼로그로 listView 띄우기
+    public void onItemClick(AdapterView<?> parent, View v, int position, long arg3) {
+        String day = mDayList.get(position).getDay();
+        String Temp = year + " - " + month + " - " + day;
+
+        if (diaryContent.size() == 0) {
+        } else {
+            diaryContentHolder.clear();
+            for (int i = 0; i < diaryContent.size(); i++) {
+                if (Temp.equals(diaryContent.get(i).getDiaryDate())) {
+                   diaryContentHolder.add(diaryContent.get(i));
+                }
+            }
+        }
+        dialogShow(diaryContentHolder);
+
+    }
+
+    //그리드 뷰에 캘린더 할당
     private void getCalendar(Calendar calendar) {
         int lastMonthStartDay;
         int dayOfMonth;
@@ -248,24 +265,18 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
         return calendar;
     }
 
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View v, int position, long arg3) {
-        String day = mDayList.get(position).getDay();
-        String Temp = year +  " - " + month + " - " + day;
-        Log.d("김준성", Temp );
-        Log.d("김준성", diaryContent.get(0).getDiaryDate());
-        if (diaryContent.size() == 0) {
-        } else {
-
-            for (int i = 0; i < diaryContent.size(); i++) {
-                if (Temp.equals(diaryContent.get(i).getDiaryDate())) {
-                    Toast.makeText(this, "일기내용" + diaryContent.get(i).getDiaryDate(), Toast.LENGTH_LONG).show();
-                    Log.d("김준성", "일기내용" + diaryContent.get(i).getDiaryDate());
-                }
+    //인텐트로 자료 받아오기
+    private void getData() {
+        if (intentFromTotal == true) {
+            Intent data = getIntent();
+            int Temp = data.getIntExtra("Size", -1);
+            Log.d("Temp", Temp + "");
+            for (int i = 0; i < Temp; i++) {
+                diary_Content diary_Data = (diary_Content) data.getSerializableExtra("Data" + i);
+                diaryContent.add(diary_Data);
             }
+            intentFromTotal = false;
         }
-
     }
 
 
@@ -375,13 +386,39 @@ class diary_Content implements Serializable {
 
 }
 
-class DiaryCalendarAdapter extends CalendarAdapter {
+class diary_ListViewAdapter extends BaseAdapter {
+    private ArrayList<diary_Content> listViewContent;
+    private LayoutInflater inflater = null;
 
-    public DiaryCalendarAdapter(Context context, int textResource, ArrayList<DayInfo> dayList) {
-        super(context, textResource, dayList);
-
-        //mLiInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public diary_ListViewAdapter(ArrayList<diary_Content> inPutList) {
+        this.listViewContent = inPutList;
     }
 
-}
+    @Override
+    public int getCount() {
+        return listViewContent.size();
+    }
 
+    @Override
+    public Object getItem(int position) {
+        return listViewContent.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup viewGroup) {
+
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.ex_cycle_listview, null);
+        }
+        ImageView listViewImage = (ImageView) convertView.findViewById(R.id.ex_cycle_image_representimage);
+        TextView listViewText = (TextView) convertView.findViewById(R.id.ex_cycle_text_title);
+        listViewText.setText(listViewContent.get(position).getDiaryTitle());
+
+        return convertView;
+    }
+}
