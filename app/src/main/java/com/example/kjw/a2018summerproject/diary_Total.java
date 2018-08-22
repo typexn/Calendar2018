@@ -32,13 +32,15 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
+import static com.example.kjw.a2018summerproject.diary_Mainactivity.intentFromTotal;
+
 //import static com.example.kjw.a2018summerproject.diary_Total.isButtonChangeClick;
 
 /**
  * Created by jwell on 2018-07-15.
  */
 
-public class diary_Total extends AppCompatActivity {
+public class diary_Total extends AppCompatActivity implements Button.OnClickListener {
 
     Bitmap tempImage = null;
 
@@ -49,12 +51,19 @@ public class diary_Total extends AppCompatActivity {
     ArrayList<String> list_Date;
     HashMap<String, ArrayList<diary_Content>> list_Diary;
 
+    ArrayList<diary_Content> main_Diary;
+
     //확장 리스트뷰 + 어댑터 선언
     ExpandableListView expandableListViewDiaryTotal;
     diary_ExpandableListAdapter expandableListAdapterDiaryTotal;
 
     //일기를 수정하려고 했는가 boolean값 -> 수정 버튼을 누르면 그 child의 item을 갖고 diary_write 페이지로 넘어가기
     static Boolean isButtonChangeClick = false;
+
+    static final int TOAL_TO_WRITE = 0;
+
+    int GroupNum = -1;
+    int ChildNum = -1;
 
     //온크리에이트 시작
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +73,7 @@ public class diary_Total extends AppCompatActivity {
 
         list_Date = new ArrayList<String>();
         list_Diary = new HashMap<String, ArrayList<diary_Content>>();
-
+        main_Diary = new ArrayList<diary_Content>();
 
         //확장리스트뷰 선언, 어댑터 할당
         expandableListViewDiaryTotal = (ExpandableListView) findViewById(R.id.diary_total_expandablelistview_total);
@@ -73,37 +82,14 @@ public class diary_Total extends AppCompatActivity {
 
 
         //write를 먼저 실행했을 경우 데이터를 받아 오기 -> 아닐경우 activityforresult의 값으로 받아줌
-        if (diary_Mainactivity.isDirectToWrite == true) {
-            Intent getDiary = getIntent();
-            ArrayList<String> uri = (ArrayList<String>) getDiary.getSerializableExtra("Uri_");
-            Log.d("김준성URI",uri.get(0)+"");
-            int mood = getDiary.getIntExtra("Mood_", 0);
-            int weather = getDiary.getIntExtra("Weather_", 0);
-            String date = getDiary.getStringExtra("Date_");
-            String title = getDiary.getStringExtra("Title_");
-            String content = getDiary.getStringExtra("Content_");
-            ArrayList<Bitmap> BitmapArrayList = new ArrayList<Bitmap>();
-
-            for (int i = 0; i < uri.size(); i++) {
-                addBitmapImage(Uri.parse(uri.get(i)));
-                BitmapArrayList.add(tempImage);
-            }
-            diary_Content diary = new diary_Content(BitmapArrayList, uri, mood, weather, date, title, content);
-            expandableListAdapterDiaryTotal.ExpandableListViewAddItem(diary);
-            diary_Mainactivity.isDirectToWrite = false;
-
-        }
+        getData();
 
         //일기 작성 페이지로 가기
-        Button buttonGoWrite = (Button) findViewById(R.id.diary_total_button_gowrite);
-        buttonGoWrite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        Button buttonGoWrite = (Button) findViewById(R.id.diary_total_button_total_to_write);
+        Button buttonGoMain = (Button) findViewById(R.id.diary_total_button_total_to_main);
 
-                Intent GoToWriteDiary = new Intent(diary_Total.this, diary_Write.class);
-                startActivityForResult(GoToWriteDiary, 3000);
-            }
-        });
+        buttonGoWrite.setOnClickListener(this);
+        buttonGoMain.setOnClickListener(this);
 
         //확장 리스트뷰 그룹 하나열리면 열려 있던거 닫히게 하는 기능
         expandableListViewDiaryTotal.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
@@ -122,30 +108,26 @@ public class diary_Total extends AppCompatActivity {
     //일기 내용 받아오기
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+        if (resultCode != RESULT_OK) {
+            isButtonChangeClick = false;
+        } else {
             switch (requestCode) {
-                case 3000:
-                    ArrayList<String> getPicutreUri = (ArrayList<String>) data.getStringArrayListExtra("Uri");
-                    int getMood = data.getIntExtra("Mood", 0);
-                    int getWeather = data.getIntExtra("Weather", 0);
-                    String getDate = data.getStringExtra("Date");
-                    String getTitle = data.getStringExtra("Title");
-                    String getContent = data.getStringExtra("Content");
+                case TOAL_TO_WRITE:
+                    diary_Content Temp_Content = (diary_Content) data.getSerializableExtra("Diary");
+                    main_Diary.add(Temp_Content);
+                    if (isButtonChangeClick == true) {
+                        int groupDataNum = data.getIntExtra("groupDataNum", -1);
+                        int childDataNum = data.getIntExtra("childDataNum", -1);
 
-                    ArrayList<Bitmap> BitmapArrayList = new ArrayList<Bitmap>();
-                    for (int i = 0; i <getPicutreUri.size(); i++) {
-                        addBitmapImage(Uri.parse(getPicutreUri.get(i)));
-                        BitmapArrayList.add(tempImage);
-                    }
-                    diary_Content Temp_Content = new diary_Content(BitmapArrayList, getPicutreUri, getMood, getWeather, getDate, getTitle, getContent);
-                    if(isButtonChangeClick == true){
-                        int groupDataNum = data.getIntExtra("groupDataNum",0);
-                        int childDataNum = data.getIntExtra("childDataNum",0);
-                        expandableListAdapterDiaryTotal.ExpandableListViewDeleteItem(groupDataNum,childDataNum);
-                        isButtonChangeClick = false;
+                        if (groupDataNum == -1) {
+                        } else {
+                            expandableListAdapterDiaryTotal.ExpandableListViewDeleteItem(groupDataNum, childDataNum);
+                        }
                     }
                     expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp_Content);
                     expandableListAdapterDiaryTotal.notifyDataSetChanged();
+                    isButtonChangeClick = false;
+                    break;
             }
         }
     }
@@ -163,6 +145,42 @@ public class diary_Total extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.diary_total_button_total_to_main:
+                Intent GoToMain = new Intent(diary_Total.this, diary_Mainactivity.class);
+                int Count = 0;
+                for (int i = 0; i < main_Diary.size(); i++) {
+                    GoToMain.putExtra("Data" + i, main_Diary.get(i));
+                    Count++;
+                }
+                GoToMain.putExtra("Size", Count);
+                intentFromTotal = true;
+                startActivity(GoToMain);
+                break;
+            case R.id.diary_total_button_total_to_write:
+                Intent GoToWriteDiary = new Intent(diary_Total.this, diary_Write.class);
+                startActivityForResult(GoToWriteDiary, TOAL_TO_WRITE);
+                break;
+
+        }
+    }
+
+    public void getData() {
+        if (diary_Mainactivity.isDirectToWrite == true) {
+            Intent getDiary = getIntent();
+
+            diary_Content Temp = (diary_Content) getDiary.getSerializableExtra("Object");
+            ArrayList<String> uri = Temp.getDiaryUriTotal();
+
+            expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp);
+            main_Diary.add(Temp);
+            diary_Mainactivity.isDirectToWrite = false;
+
+        }
     }
 }
 
@@ -234,10 +252,12 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
 
         //일기 사진 들어갈 이미지 뷰
         ImageView imgview = (ImageView) convertView.findViewById(R.id.diary_imageview_photo);
-        if (childdata.get(groupdata.get(groupPosition)).get(childPosition).getDIaryPictureUri(0) != null) {
-            Bitmap kim = childdata.get(groupdata.get(groupPosition)).get(childPosition).getDiaryMainPicture(0);
-            imgview.setImageBitmap(kim);
-        }
+
+//        if (childdata.get(groupdata.get(groupPosition)).get(childPosition).getDIaryPictureUri(0) != null) {
+//            Bitmap kim = childdata.get(groupdata.get(groupPosition)).get(childPosition).getDiaryMainPicture(0);
+//            imgview.setImageBitmap(kim);
+//        }
+
         //일기 제목 들어갈 텍스트뷰
         TextView txtView = (TextView) convertView.findViewById(R.id.diary_textview_child);
         txtView.setText(childdata.get(groupdata.get(groupPosition)).get(childPosition).getDiaryTitle() + "");
@@ -282,8 +302,10 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
 
     //확장 리스트뷰에 데이터 추가 함수
     public void ExpandableListViewAddItem(diary_Content diary_content) {
+
         String Temp_Date = diary_content.getDiaryDate();
         boolean hasSamegroup = false;
+
         //확장리스트뷰 그룹에 날짜가 같은게 있으면 그곳에 데이터 추가 아니면 새로운 그룹을 만들어 데이터 추가
         if (groupdata.size() < 1) {
             groupdata.add(Temp_Date);
@@ -304,11 +326,12 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
                 childdata.put(groupdata.get(groupdata.size() - 1), Temp_child);
 
             }
-        //그룹데이터를 정렬
-        if (groupdata.size() > 1) {
-            Collections.sort(groupdata);
-            Collections.reverse(groupdata);
-        }
+
+            //그룹데이터를 정렬
+            if (groupdata.size() > 0) {
+                Collections.sort(groupdata);
+                Collections.reverse(groupdata);
+            }
         }
         notifyDataSetChanged();
     }
@@ -325,18 +348,14 @@ class diary_ExpandableListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    //확장 리스트뷰의 데이터 수정 함수
+    //확장 리스트뷰의 데이터 수정버튼 함수
     public void ExpandableListViewChangeItem(int groupDataNum, int childDataNum) {
         diary_Content sendToDiaryWrite = childdata.get(this.groupdata.get(groupDataNum)).get(childDataNum);
         Intent intentToWriteDairy = new Intent(context, diary_Write.class);
-        intentToWriteDairy.putStringArrayListExtra("diaryUri", sendToDiaryWrite.getDiaryUriTotal());
-        intentToWriteDairy.putExtra("diaryMood", sendToDiaryWrite.getDiaryMood());
-        intentToWriteDairy.putExtra("diaryWeather", sendToDiaryWrite.getDiaryWeather());
-        intentToWriteDairy.putExtra("diaryDate", sendToDiaryWrite.getDiaryDate());
-        intentToWriteDairy.putExtra("diaryTitle", sendToDiaryWrite.getDiaryTitle());
-        intentToWriteDairy.putExtra("diaryContent", sendToDiaryWrite.getDiaryContent());
-        intentToWriteDairy.putExtra("diaryGroupNum",groupDataNum);
-        intentToWriteDairy.putExtra("diaryChildNum",childDataNum);
+        intentToWriteDairy.putExtra("diaryReWrite", sendToDiaryWrite);
+        intentToWriteDairy.putExtra("diaryGroupNum", groupDataNum);
+        intentToWriteDairy.putExtra("diaryChildNum", childDataNum);
+        diary_Total.isButtonChangeClick = true;
         context.startActivity(intentToWriteDairy);
     }
 

@@ -24,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.example.kjw.a2018summerproject.diary_Mainactivity.intentToView;
+
 /**
  * Created by jwell on 2018-07-25.
  */
@@ -32,8 +34,13 @@ public class diary_View extends AppCompatActivity {
 
     ArrayList<String> diaryUri;
     ArrayList<Bitmap> diaryBitmap;
-    int diaryMood;
-    int diaryWeather;
+
+    int diaryMood = -1;
+    int diaryWeather = -1;
+    String day = "";
+    String title = "";
+    String content = "";
+
     TextView diaryDay;
     TextView diaryTitle;
     TextView diaryContent;
@@ -49,21 +56,15 @@ public class diary_View extends AppCompatActivity {
         setContentView(R.layout.activity_diary_view);
 
         tempImage = null;
-        diaryBitmap = new ArrayList<Bitmap>();
         diaryUri = new ArrayList<String>();
+        diaryBitmap = new ArrayList<Bitmap>();
+        int selectedMood = -1;
 
-        Intent getDiaryIntent = getIntent();
-        ArrayList<String> selectedUri = (ArrayList<String>) getDiaryIntent.getStringArrayListExtra("view_Uri");
-        int selectedMood = getDiaryIntent.getIntExtra("view_Mood", 0);
-        int selectedWeather = getDiaryIntent.getIntExtra("view_Weather", 0);
-        String selectedDay = getDiaryIntent.getStringExtra("view_Day");
-        String selectedTitle = getDiaryIntent.getStringExtra("view_Title");
-        String selectedContent = getDiaryIntent.getStringExtra("view_Content");
-        diaryUri = selectedUri;
+        setData();
 
         for (int i = 0; i < diaryUri.size(); i++) {
             addBitmapImage(Uri.parse(diaryUri.get(i)));
-            Log.d("준성URI",diaryUri.get(i)+"");
+            Log.d("준성URI", diaryUri.get(i) + "");
             diaryBitmap.add(tempImage);
         }
 
@@ -71,15 +72,39 @@ public class diary_View extends AppCompatActivity {
         diaryTitle = (TextView) findViewById(R.id.diary_textview_title_view);
         diaryContent = (TextView) findViewById(R.id.diary_textview_content_view);
 
-        diaryDay.setText(selectedDay);
-        diaryTitle.setText(selectedTitle);
-        diaryContent.setText(selectedContent);
+        diaryDay.setText(day);
+        diaryTitle.setText(title);
+        diaryContent.setText(content);
 
         //어댑터 연걸
-        diaryImageVIewPager = (ViewPager)findViewById(R.id.diary_viewPager);
+        diaryImageVIewPager = (ViewPager) findViewById(R.id.diary_viewPager);
         diaryImageViewAdapter = new diary_ImageSlideAdapter(this, diaryBitmap);
         diaryImageVIewPager.setAdapter(diaryImageViewAdapter);
     }
+
+    private void setData() {
+        if (intentToView == false) {
+            Intent getDiaryIntent = getIntent();
+            diaryUri = (ArrayList<String>) getDiaryIntent.getStringArrayListExtra("view_Uri");
+            diaryMood = getDiaryIntent.getIntExtra("view_Mood", 0);
+            diaryWeather = getDiaryIntent.getIntExtra("view_Weather", 0);
+            day = getDiaryIntent.getStringExtra("view_Day");
+            title = getDiaryIntent.getStringExtra("view_Title");
+            content = getDiaryIntent.getStringExtra("view_Content");
+
+        } else {
+            Intent getDiaryIntent = getIntent();
+            diary_Content gettedData = (diary_Content) getDiaryIntent.getSerializableExtra("SelectedDiary");
+            diaryUri = (ArrayList<String>) gettedData.getDiaryUriTotal();
+            diaryMood = gettedData.getDiaryMood();
+            diaryWeather = gettedData.getDiaryWeather();
+            day = gettedData.getDiaryDate();
+            title = gettedData.getDiaryTitle();
+            content = gettedData.getDiaryContent();
+            intentToView = false;
+        }
+    }
+
 
     //입력받은 Uri를 tempImage에 bitmap 형식으로 저장
     private void addBitmapImage(Uri imageUri) {
@@ -124,11 +149,12 @@ class diary_ImageSlideAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         ImageView imageView = new ImageView(context);
         imageView.setImageBitmap(Diary_Picture_Bitmap.get(position));
-        ((ViewPager)container).addView(imageView,0);
-        return  imageView;
+        ((ViewPager) container).addView(imageView, 0);
+        return imageView;
     }
+
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object){
+    public void destroyItem(ViewGroup container, int position, Object object) {
         ((ViewPager) container).removeView((ImageView) object);
     }
 
