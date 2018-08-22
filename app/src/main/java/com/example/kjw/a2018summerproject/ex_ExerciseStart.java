@@ -11,6 +11,8 @@ public class ex_ExerciseStart extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_exercisestart);
     }
+
+    Intent getRoutineFromCycle = getIntent();
     public void backBtnClicked(View v) {
         Intent backToExerciseCycle = new Intent(ex_ExerciseStart.this,ex_Cycle.class);
         startActivity(backToExerciseCycle);

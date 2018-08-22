@@ -63,16 +63,28 @@ public class ex_Cycle extends AppCompatActivity {
             }
         });
 
+        Intent getRoutine = getIntent();
+        final int nth_Couting = getRoutine.getExtras().getInt("nth");
+        final ArrayList<ex_ExerciseRoutine> nth_Routine = (ArrayList<ex_ExerciseRoutine>) getRoutine.getSerializableExtra("Routine");
+
+        ex_ExerciseCycle tmpCycle = new ex_ExerciseCycle("a","a",(double)1,1,1,1,1);
+        nth_Routine.get(nth_Couting).addCycle(tmpCycle);
+
 
         Button btn_go = (Button) findViewById(R.id.ex_cycle_image_start);
         btn_go.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
-                        Intent intent = new Intent(getApplicationContext(), ex_ExerciseStart.class);
-                        startActivity(intent);
+                        Intent goToStart = new Intent(getApplicationContext(), ex_ExerciseStart.class);
+                        goToStart.putExtra("routine",nth_Routine);
+                        goToStart.putExtra("count",nth_Couting);
+                        startActivity(goToStart);
                     }
                 }
         );
+
+
+
     }
 }
     class ex_CycleAdapter {
