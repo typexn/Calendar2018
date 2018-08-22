@@ -24,7 +24,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class sch_Mainactivity extends Activity implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class sch_Mainactivity extends Activity implements AdapterView.OnItemClickListener, View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     public static int SUNDAY = 1;
     public static int MONDAY = 2;
@@ -88,7 +88,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
     private void setData() {
 
         for (int i = 1; i < 21; i++) {
-            Schedule sch = new Schedule("title" + i, "location" + i, 2018,8,i,2018,8,i,"08","00","08","00", "");
+            Schedule sch = new Schedule("title" + i, "location" + i, 2018, 8, i, 2018, 8, i, "08", "00", "08", "00", "");
             schList.add(sch);
         }
 
@@ -101,7 +101,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
         //Log.d("minyoung", schList.size() + "");
         View v;
         for (int i = 0; i < schList.size(); i++) {
-            Toast.makeText(this, schList.get(i).title, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, schList.get(i).title, Toast.LENGTH_LONG).show();
             //LayoutInflater layoutInFlater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             //View rootView = layoutInFlater.inflate(R.layout.day, null);
             //v = mCalendarAdapter.getView(schList.get(i).startDay, null, mGvCalendar);
@@ -111,15 +111,13 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
 //            tvExist.setText("●");
 //            Log.d("minyoungcheck", tvExist.getText().toString());
 //            Log.d("minyoung", schList.get(i).startDay + "/" + v.toString() + "/" + tvExist.toString());
-            for(int j = schList.get(i).startDay;j < schList.get(i).endDay+1; j++) {
-                if(schList.get(i).startMonth == (mThisMonthCalendar.get(Calendar.MONTH) + 1)){
+            for (int j = schList.get(i).startDay; j < schList.get(i).endDay + 1; j++) {
+                if (schList.get(i).startMonth == (mThisMonthCalendar.get(Calendar.MONTH) + 1)) {
                     mCalendarAdapter.changeDayInfo(j + mThisMonthCalendar.get(Calendar.DAY_OF_WEEK) - 2, true);
                 }
             }
         }
         mCalendarAdapter.notifyDataSetChanged(); // 월 이동하면 reset됨
-
-
 
 
     }
@@ -228,7 +226,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
         //if(!(((DayInfo)mCalendarAdapter.getItem(position)).isInMonth())){}
 
         ArrayList<Schedule> selected = new ArrayList<Schedule>();
-        DayInfo selectedDay = ((DayInfo)((CalendarAdapter) parent.getAdapter()).getItem(position));
+        DayInfo selectedDay = ((DayInfo) ((CalendarAdapter) parent.getAdapter()).getItem(position));
         int day = Integer.parseInt(selectedDay.getDay());
 
         if (previousDayView != v) {
@@ -243,17 +241,17 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
         } else {
             if (!selectedDay.isExistSch()) { //일정이 없으면
                 Intent intent = new Intent(sch_Mainactivity.this, sch_AddActivity.class);
-                intent.putExtra("year", mThisMonthCalendar.get(Calendar.YEAR));
-                intent.putExtra("month", mThisMonthCalendar.get(Calendar.MONTH)+1);
-                intent.putExtra("day", selectedDay.getDay());
+                intent.putExtra("startYear", mThisMonthCalendar.get(Calendar.YEAR));
+                intent.putExtra("startMonth", mThisMonthCalendar.get(Calendar.MONTH) + 1);
+                intent.putExtra("startDay", selectedDay.getDay());
                 Log.d("minyoung", selectedDay.getDay());
                 startActivity(intent); //또는 *forResult
             } else { //일정이 있으면
                 //검색
-                for(int i = 0; i < schList.size(); i++){
-                    for(int j = schList.get(i).startDay;j < schList.get(i).endDay+1; j++) {
-                        if(schList.get(i).startMonth == (mThisMonthCalendar.get(Calendar.MONTH) + 1)){
-                            if(j == day){
+                for (int i = 0; i < schList.size(); i++) {
+                    for (int j = schList.get(i).startDay; j < schList.get(i).endDay + 1; j++) {
+                        if (schList.get(i).startMonth == (mThisMonthCalendar.get(Calendar.MONTH) + 1)) {
+                            if (j == day) {
                                 selected.add(schList.get(i));
                             }
                         }
@@ -262,7 +260,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
 
                 DialogListViewAdapter dialogAdapter = new DialogListViewAdapter(this, selected);
                 View view = this.getLayoutInflater().inflate(R.layout.activity_sch_cal_daily, null);
-                ListView listview = (ListView)view.findViewById(R.id.sch_calDaily_listview_showList);
+                ListView listview = (ListView) view.findViewById(R.id.sch_calDaily_listview_showList);
                 TextView title = view.findViewById(R.id.sch_calDaily_text_title);
 
                 title.setText(mThisMonthCalendar.get(Calendar.YEAR) + "년 "
@@ -303,12 +301,12 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
                 break;
 
             case R.id.sch_main_button_add:
-                Intent toAddActivity = new Intent(sch_Mainactivity.this, sch_AddActivity.class);
-                startActivity(toAddActivity);
+//                Intent toAddActivity = new Intent(sch_Mainactivity.this, sch_AddActivity.class);
+//                startActivity(toAddActivity);
                 break;
 
             case R.id.sch_main_text_title: //날짜가 안떠야함.
-                MyDatePickerDialog datePickerDialog = new MyDatePickerDialog(sch_Mainactivity.this, mDateSetListener, mThisMonthCalendar.get(Calendar.YEAR), (mThisMonthCalendar.get(Calendar.MONTH)), mThisMonthCalendar.get(Calendar.DAY_OF_MONTH));
+                MyDatePickerDialog datePickerDialog = new MyDatePickerDialog(sch_Mainactivity.this, this, mThisMonthCalendar.get(Calendar.YEAR), (mThisMonthCalendar.get(Calendar.MONTH)), mThisMonthCalendar.get(Calendar.DAY_OF_MONTH));
                 ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(android.content.res.Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
                 datePickerDialog.getDatePicker().setCalendarViewShown(false);
                 datePickerDialog.show();
@@ -317,14 +315,24 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
         }
     }
 
-    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            Calendar newCal = Calendar.getInstance();
-            newCal.set(year, monthOfYear, dayOfMonth);
-            getCalendar(newCal);
-        }
-    };
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+//            mThisMonthCalendar = Calendar.getInstance();
+        mThisMonthCalendar.set(year, monthOfYear, dayOfMonth);
+        getCalendar(mThisMonthCalendar);
+
+//            mThisMonthCalendar.add(Calendar.MONTH, +1);
+//
+//            mThisMonthCalendar = getNextMonth(mThisMonthCalendar);
+//            getCalendar(mThisMonthCalendar);
+//
+//            mThisMonthCalendar.set(mThisMonthCalendar.get(Calendar.YEAR), mThisMonthCalendar.get(Calendar.MONTH), 1);
+//            mThisMonthCalendar.add(Calendar.MONTH, +1);
+
+
+        this.onResume();
+    }
 
     private void initCalendarAdapter() {
 
@@ -373,7 +381,7 @@ class MyDatePickerDialog extends DatePickerDialog {
 
     public MyDatePickerDialog(Context context, OnDateSetListener callBack, int year, int monthOfYear, int dayOfMonth) {
         super(context, THEME_HOLO_DARK, callBack, year, monthOfYear, dayOfMonth);
-        setTitle(year + "년 " + (monthOfYear+1) + "월");
+        setTitle(year + "년 " + (monthOfYear + 1) + "월");
     }
 
     @Override
@@ -384,13 +392,13 @@ class MyDatePickerDialog extends DatePickerDialog {
 }
 
 
-class DialogListViewAdapter extends BaseAdapter{
+class DialogListViewAdapter extends BaseAdapter {
 
     private ArrayList<Schedule> schedules;
     private LayoutInflater inflater = null;
     private Context context;
 
-    DialogListViewAdapter(Context context, ArrayList<Schedule> schedules){
+    DialogListViewAdapter(Context context, ArrayList<Schedule> schedules) {
         this.context = context;
         this.schedules = schedules;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -415,8 +423,8 @@ class DialogListViewAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         final Schedule selected = (Schedule) getItem(position);
 
-        if(convertView == null){
-            convertView = inflater.inflate(R.layout.sch_cal_daily_listview,null);
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.sch_cal_daily_listview, null);
         }
         TextView textTitle = convertView.findViewById(R.id.sch_calDaily_listview_text_title);
         textTitle.setText(selected.title);
@@ -449,25 +457,6 @@ class DialogListViewAdapter extends BaseAdapter{
         return convertView;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //쓰레기통

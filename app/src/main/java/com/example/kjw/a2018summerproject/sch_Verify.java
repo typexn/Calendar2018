@@ -67,6 +67,8 @@ public class sch_Verify extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(sch_Verify.this, sch_AddActivity.class);
+                intent.putExtra("activity", 1);
+
                 intent.putExtra("title", title);
                 intent.putExtra("location", location);
                 intent.putExtra("memo", memo);
@@ -83,6 +85,7 @@ public class sch_Verify extends AppCompatActivity {
                 intent.putExtra("endHour", endHour);
                 intent.putExtra("endMinute", endMinute);
 
+                startActivity(intent);
             }
         });
     }
