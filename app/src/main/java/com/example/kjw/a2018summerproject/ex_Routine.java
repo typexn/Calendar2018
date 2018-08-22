@@ -2,6 +2,7 @@ package com.example.kjw.a2018summerproject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,7 @@ public class ex_Routine extends Activity {
     ex_ExerciseRoutine [] routineArray = new ex_ExerciseRoutine[0];
     ListView listView;
     ex_RoutineBaseAdapter ex_RoutineBase;
+    ArrayList<ex_ExerciseRoutine> routinelist = new ArrayList<ex_ExerciseRoutine>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,31 +51,43 @@ public class ex_Routine extends Activity {
             {
                 final EditText routineTitle = (EditText) findViewById(R.id.ex_routine_edittext_routinetitle);
                 String value = routineTitle.getText().toString();
-                ex_ExerciseRoutine newRoutine = new ex_ExerciseRoutine(value);
-
-                ex_ExerciseRoutine[] tmpRoutine = new ex_ExerciseRoutine[routineArray.length+1];
-                System.arraycopy(routineArray,0,tmpRoutine,0,routineArray.length);
-                routineArray = tmpRoutine;
-                routineArray[routineCount] = newRoutine;
-
-                Log.d("Uk", "routineArray.length : " + routineArray.length + "");
-                ex_RoutineAdapter newAdapter = new ex_RoutineAdapter(R.drawable.ic_launcher_foreground, routineArray[routineCount].routineTitle, R.drawable.ic_launcher_foreground);
+//                ex_ExerciseRoutine newRoutine = new ex_ExerciseRoutine(value);
+//
+//                ex_ExerciseRoutine[] tmpRoutine = new ex_ExerciseRoutine[routineArray.length+1];
+//                System.arraycopy(routineArray,0,tmpRoutine,0,routineArray.length);
+//                routineArray = tmpRoutine;
+//                routineArray[routineCount] = newRoutine;
+//
+//                Log.d("Uk", "routineArray.length : " + routineArray.length + "");
+                routinelist.add(new ex_ExerciseRoutine(value));
+                ex_RoutineAdapter newAdapter = new ex_RoutineAdapter(R.drawable.ic_launcher_foreground, routinelist.get(routinelist.size()-1).routineTitle, R.drawable.ic_launcher_foreground);
                 ex_RoutineBase.addItem(newAdapter);
-
-                Log.d("Uk", "list_itemArrayList.size : " + list_ItemArrayList.size() + "");
+//
+//                Log.d("Uk", "list_itemArrayList.size : " + list_ItemArrayList.size() + "");
 
                 ex_RoutineBase.notifyDataSetChanged();
 
-                routineCount++;
+//                routineCount++;
+            }
+        });
+        Button tmpButton = (Button) findViewById(R.id.ex_routine_button_delactivate);
+        tmpButton.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                Intent tmpintent = new Intent(ex_Routine.this,ex_Cycle.class);
+                startActivity(tmpintent);
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent Cycleto
-                
+            public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
+                Intent goToCycle = new Intent(ex_Routine.this, ex_Cycle.class);
+                goToCycle.putExtra("nth",routinelist.size());
+                goToCycle.putExtra("position",position);
+                goToCycle.putExtra("Routine",routinelist);
+                startActivity(goToCycle);
             }
         });
+
     }
 }
 
@@ -175,7 +190,8 @@ class ex_ExerciseRoutine {
     int cycleIndexNumber = 0;
     ex_ExerciseCycle [] Cycle = new ex_ExerciseCycle [5];
 
-    ex_ExerciseRoutine(String routineTitle){
+    ex_ExerciseRoutine(String routineTitle)
+    {
         this.routineTitle =  routineTitle;
     }
 

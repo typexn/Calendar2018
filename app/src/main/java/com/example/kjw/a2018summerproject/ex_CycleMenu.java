@@ -38,8 +38,25 @@ public class ex_CycleMenu extends Dialog {
 
         final EditText exerciseCycleTitle = (EditText) findViewById(R.id.ex_cyclemenu_edittext_name);
         String getExerciseCycleTitle = exerciseCycleTitle.getText().toString();
-        Spinner part_Spinner = (Spinner)findViewById(R.id.ex_cyclemenu_spinner_exercisepart);
-        String getExerciseCyclePart = part_Spinner.getSelectedItem().toString();
+//        final String[] ar = {"팔", "가슴", "상체", "하체", "전신"};
+//        Spinner part_Spinner = (Spinner)findViewById(R.id.ex_cyclemenu_spinner_exercisepart);
+//
+//        final String getExerciseCyclePart;
+//        ArrayAdapter<String> ex_cyclemenu_spinner_adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, ar);
+//        part_Spinner.setAdapter(ex_cyclemenu_spinner_adapter);
+//        part_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                switch (i)
+//                case 0:
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//        String getExerciseCyclePart = part_Spinner.getSelectedItem().toString();
         final EditText exerciseCycleWeight = (EditText) findViewById(R.id.ex_cyclemenu_edittext_weight);
         String getExerciseCycleWeight = exerciseCycleWeight.getText().toString();
         final EditText exerciseCycleNumber = (EditText) findViewById(R.id.ex_cyclemenu_edittext_number);
@@ -53,10 +70,10 @@ public class ex_CycleMenu extends Dialog {
         {
             getExerciseCycleTitle = "제목 없음";
         }
-        if(getExerciseCyclePart == null)
-        {
-            getExerciseCyclePart = "전신";
-        }
+//        if(getExerciseCyclePart == null)
+//        {
+//            getExerciseCyclePart = "전신";
+//        }
         if(getExerciseCycleWeight == null)
         {
             getExerciseCycleWeight = "0";
