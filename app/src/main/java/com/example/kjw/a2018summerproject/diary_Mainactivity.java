@@ -30,12 +30,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.zip.Inflater;
@@ -48,8 +55,8 @@ import static com.example.kjw.a2018summerproject.activity.GVCalendarActivity.SUN
 
 public class diary_Mainactivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
-    static ArrayList<diary_Content> diaryContent = new ArrayList<diary_Content>(); //일기정보
-
+    static diary_Content[] diaryContent; //일기정보
+    static ArrayList<diary_Content> diaryTotal; // 변환한 일기정보
     static final int MAIN_TO_WRITE = 0;
     static final int MAIN_TO_TOTAL = 1;
 
@@ -68,14 +75,21 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
     static boolean intentFromTotal = false;
     static boolean intentToView = false;
 
-    ListView listViewDialog;
-    diary_ListViewAdapter listViewAdapter;
     ArrayList<diary_Content> diaryContentHolder;
+
+    //    ArrayList<String> picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_mainactivity);
+
+
+        diaryTotal = new ArrayList<diary_Content>();
+
+        //csv파일로부터 데이터 읽고 세팅
+        readCSV();
+        setData(); //DiaryTotal은 Date기준으로 내림차순으로 정렬되었다.
 
         Button bLastMonth = (Button) findViewById(R.id.diary_main_button_last);
         Button bNextMonth = (Button) findViewById(R.id.diary_main_button_next);
@@ -94,7 +108,7 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
         mGvCalendar.setOnItemClickListener(this);
 
         mDayList = new ArrayList<DayInfo>();
-        diaryContentHolder = new ArrayList<diary_Content>();
+
 
         getData();
 
@@ -122,17 +136,11 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
         }
     }
 
-    private void setData(ArrayList<diary_Content> Content) {
-        int rowNum = Content.size();
-        for (int i = 0; i < rowNum; i++) {
-
-        }
-    }
-
+    //캘린더 아이템 클릭하면 다이얼로그로 리스트뷰 띄워주는 함수
     private void dialogShow(final ArrayList<diary_Content> inPutDiary) {
         int Temp = inPutDiary.size();
         final String[] items = new String[Temp];
-        for(int i =0; i < Temp; i++){
+        for (int i = 0; i < Temp; i++) {
             items[i] = inPutDiary.get(i).getDiaryTitle();
         }
         AlertDialog.Builder diaryMainDialogBuilder = new AlertDialog.Builder(this);
@@ -140,17 +148,21 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
         diaryMainDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int position) {
-                Intent IntentMainToView = new Intent(diary_Mainactivity.this, diary_View.class);
-                IntentMainToView.putExtra("SelectedDiary", inPutDiary.get(position));
-                dialogInterface.dismiss();
                 intentToView = true;
+                Intent IntentMainToView = new Intent(diary_Mainactivity.this, diary_View.class);
+                IntentMainToView.putExtra("SelectedDiaryMood", inPutDiary.get(position).getDiaryMood());
+                IntentMainToView.putExtra("SelectedDiaryWhether", inPutDiary.get(position).getDiaryWeather());
+                IntentMainToView.putExtra("SelectedDiaryDate", inPutDiary.get(position).getDiaryDate());
+                IntentMainToView.putExtra("SelectedDiaryTitle", inPutDiary.get(position).getDiaryTitle());
+                IntentMainToView.putExtra("SelectedDiaryContent", inPutDiary.get(position).getDiaryContent());
+                IntentMainToView.putExtra("SelectedDiaryPicture", inPutDiary.get(position).getDiaryUriTotal());
+                dialogInterface.dismiss();
                 startActivity(IntentMainToView);
             }
         });
         AlertDialog diaryMainDialog = diaryMainDialogBuilder.create();
         diaryMainDialog.show();
     }
-
 
     @Override  //onResume()
     protected void onResume() {
@@ -168,18 +180,20 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
 
     @Override //그리드뷰 아이템 클릭 -> 다이얼로그로 listView 띄우기
     public void onItemClick(AdapterView<?> parent, View v, int position, long arg3) {
+        diaryContentHolder = new ArrayList<diary_Content>(); // 날짜에 맞는 어레이를 찾기 위한 어레이
         String day = mDayList.get(position).getDay();
-        String Temp = year + " - " + month + " - " + day;
-
-        if (diaryContent.size() == 0) {
+        String Temp = year + "-" + month + "-" + day;
+        int TempCount = diaryTotal.size();
+        Log.d("김준성Temp", Temp);
+        if (TempCount == 0) {
         } else {
-            diaryContentHolder.clear();
-            for (int i = 0; i < diaryContent.size(); i++) {
-                if (Temp.equals(diaryContent.get(i).getDiaryDate())) {
-                   diaryContentHolder.add(diaryContent.get(i));
+            for (int i = 0; i < TempCount; i++) {
+                if (Temp.equals(diaryTotal.get(i).getDiaryDate())) {
+                    diaryContentHolder.add(diaryTotal.get(i));
                 }
             }
         }
+        Log.d("민영", diaryContentHolder.get(0).getDiaryUriTotal().size() + "");
         dialogShow(diaryContentHolder);
 
     }
@@ -273,14 +287,159 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
             Log.d("Temp", Temp + "");
             for (int i = 0; i < Temp; i++) {
                 diary_Content diary_Data = (diary_Content) data.getSerializableExtra("Data" + i);
-                diaryContent.add(diary_Data);
+                diaryTotal.add(diary_Data);
             }
             intentFromTotal = false;
         }
     }
 
+    //csv파일 읽기
+    private void readCSV() {
+        int mood = 0;
+        int weather = 0;
+        String date = "";
+        String title = "";
+        String content = "";
+        String picture1 = "";
+        String picture2 = "";
+        String picture3 = "";
+        String picture4 = "";
+        String picture5 = "";
 
-    @Override
+        String line = "";
+        BufferedReader br = null;
+
+        int totalRow = 0;
+        int rowCount = 0;
+
+        ArrayList<String> picture;
+
+        try {
+            InputStream csv = getResources().openRawResource(R.raw.diary);
+            InputStreamReader in = new InputStreamReader(csv, "euc-kr"); //UTF-8일수도?
+            br = new BufferedReader(in);
+
+            while ((line = br.readLine()) != null) {
+                totalRow++;
+            }
+            br.close();
+            in.close();
+            csv.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        diaryContent = new diary_Content[totalRow];
+
+        try {
+            InputStream csv = getResources().openRawResource(R.raw.diary);
+            InputStreamReader in = new InputStreamReader(csv, "euc-kr"); //UTF-8일수도?
+            br = new BufferedReader(in);
+
+
+            while ((line = br.readLine()) != null) {
+
+                picture = new ArrayList<String>();
+
+                mood = 0;
+                weather = 0;
+                date = "";
+                title = "";
+                content = "";
+                picture1 = "";
+                picture2 = "";
+                picture3 = "";
+                picture4 = "";
+                picture5 = "";
+
+                String[] array = line.split(",", -1);
+
+
+                for (int i = 0; i < 10; i++) {
+
+                    switch (i) {
+                        case 0:
+                            mood = Integer.parseInt(array[i]);
+                            Log.d("김준성", mood + "");
+                            break;
+                        case 1:
+                            weather = Integer.parseInt(array[i]);
+                            break;
+                        case 2:
+                            date = array[i].toString();
+                            Log.d("김준성", date + "");
+                            break;
+                        case 3:
+                            title = array[i].toString();
+                            break;
+                        case 4:
+                            content = array[i].toString();
+                            break;
+                        case 5:
+                            picture1 = array[i].toString();
+                            picture.add(picture1);
+                            Log.d("김준성", picture1 + "");
+                            break;
+                        case 6:
+                            picture2 = array[i].toString();
+                            picture.add(picture2);
+                            Log.d("김준성", picture2 + "");
+                            break;
+                        case 7:
+                            picture3 = array[i].toString();
+                            picture.add(picture3);
+                            break;
+                        case 8:
+                            picture4 = array[i].toString();
+                            picture.add(picture4);
+                            break;
+                        case 9:
+                            picture5 = array[i].toString();
+                            picture.add(picture5);
+                            Log.d("김준성", picture5 + "");
+                    }
+                }
+
+                diary_Content Temp = new diary_Content(mood, weather, date, title, content, picture);
+                diaryContent[rowCount] = Temp;
+                rowCount = rowCount + 1;
+            }
+            br.close();
+            in.close();
+            csv.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //배열형태의 읽은 CSV파일을 어레이 리스트에 넣어주고 Date순으로 내림차순 정렬
+    private void setData() {
+        for (int i = 0; i < diaryContent.length; i++) {
+            diaryTotal.add(diaryContent[i]);
+        }
+        Collections.sort(diaryTotal);
+    }
+
+    @Override //온클릭 오버라이드
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.diary_main_button_last:
@@ -329,7 +488,7 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
     }
 }
 
-class diary_Content implements Serializable {
+class diary_Content implements Serializable, Comparable<diary_Content> {
 
     ArrayList<String> diaryPictureUri; //Uri를 담을 스트링
     int diaryMood; //기분을 표현하는 스피너 값
@@ -339,7 +498,7 @@ class diary_Content implements Serializable {
     String diaryContent; //일기 내용
 
     //생성자
-    public diary_Content(ArrayList<String> _diaryMainUri, int _diaryMood, int _diaryWeather, String _Date, String _Title, String _Content) {
+    public diary_Content(int _diaryMood, int _diaryWeather, String _Date, String _Title, String _Content, ArrayList<String> _diaryMainUri) {
         this.diaryPictureUri = _diaryMainUri;
         this.diaryMood = _diaryMood;
         this.diaryWeather = _diaryWeather;
@@ -383,6 +542,31 @@ class diary_Content implements Serializable {
     public String getDiaryContent() {
         return diaryContent;
     }
+
+    //정렬기능 구현
+    @Override
+    public int compareTo(@NonNull diary_Content diary) {
+
+        SimpleDateFormat transToDate = new SimpleDateFormat("yyyy-mm-dd");
+        Date diary1_Date = null;
+        Date diary2_Date = null;
+
+        try {
+            diary1_Date = transToDate.parse(this.getDiaryDate());
+            diary2_Date = transToDate.parse(diary.getDiaryDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        int compareDate = diary1_Date.compareTo(diary2_Date);
+        if (compareDate > 0) {
+            return -1;
+        } else if (compareDate < 0) {
+            return 1;
+        }
+        return 0;
+    }
+
 
 }
 

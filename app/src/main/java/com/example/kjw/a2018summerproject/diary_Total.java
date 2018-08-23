@@ -25,6 +25,7 @@ import android.widget.TextView;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,9 +33,12 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
+import static com.example.kjw.a2018summerproject.diary_Mainactivity.MAIN_TO_TOTAL;
+import static com.example.kjw.a2018summerproject.diary_Mainactivity.diaryContent;
+import static com.example.kjw.a2018summerproject.diary_Mainactivity.diaryTotal;
 import static com.example.kjw.a2018summerproject.diary_Mainactivity.intentFromTotal;
 
-//import static com.example.kjw.a2018summerproject.diary_Total.isButtonChangeClick;
+import static com.example.kjw.a2018summerproject.diary_Total.isButtonChangeClick;
 
 /**
  * Created by jwell on 2018-07-15.
@@ -50,6 +54,7 @@ public class diary_Total extends AppCompatActivity implements Button.OnClickList
     //확장 리스트뷰에 필요한 어레이, 해시맵 선언
     ArrayList<String> list_Date;
     HashMap<String, ArrayList<diary_Content>> list_Diary;
+    ArrayList<diary_Content> TempChild;
 
     ArrayList<diary_Content> main_Diary;
 
@@ -59,7 +64,6 @@ public class diary_Total extends AppCompatActivity implements Button.OnClickList
 
     //일기를 수정하려고 했는가 boolean값 -> 수정 버튼을 누르면 그 child의 item을 갖고 diary_write 페이지로 넘어가기
     static Boolean isButtonChangeClick = false;
-
     static final int TOAL_TO_WRITE = 0;
 
     int GroupNum = -1;
@@ -70,10 +74,12 @@ public class diary_Total extends AppCompatActivity implements Button.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_total);
 
-
         list_Date = new ArrayList<String>();
         list_Diary = new HashMap<String, ArrayList<diary_Content>>();
-        main_Diary = new ArrayList<diary_Content>();
+        TempChild = new ArrayList<diary_Content>();
+
+        //csv파일로 읽은 arraylist를 확장리스트뷰에 들어가게 잘 설정한다.
+        initializeData();
 
         //확장리스트뷰 선언, 어댑터 할당
         expandableListViewDiaryTotal = (ExpandableListView) findViewById(R.id.diary_total_expandablelistview_total);
@@ -104,29 +110,38 @@ public class diary_Total extends AppCompatActivity implements Button.OnClickList
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        changeDiary();
+    }
 
     //일기 내용 받아오기
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
             isButtonChangeClick = false;
+            Log.d("오류", "오류");
         } else {
             switch (requestCode) {
                 case TOAL_TO_WRITE:
                     diary_Content Temp_Content = (diary_Content) data.getSerializableExtra("Diary");
-                    main_Diary.add(Temp_Content);
-                    if (isButtonChangeClick == true) {
-                        int groupDataNum = data.getIntExtra("groupDataNum", -1);
-                        int childDataNum = data.getIntExtra("childDataNum", -1);
+//                    diaryTotal.add(Temp_Content);
+                    Log.d("불린3", isButtonChangeClick + "");
 
-                        if (groupDataNum == -1) {
-                        } else {
-                            expandableListAdapterDiaryTotal.ExpandableListViewDeleteItem(groupDataNum, childDataNum);
-                        }
-                    }
-                    expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp_Content);
+                    //Hashmap형식의 데이러를 어레이 리스트로 변환 후 인텐트 받은 내용을 추가 후 정렬 한다음 다시 할당
+                    ArrayList<diary_Content> TempHold = extractDataFormExpListView(list_Date, list_Diary);
+                    TempHold.add(Temp_Content);
+                    Collections.sort(TempHold);
+                    diaryTotal = TempHold;
+
+                    list_Date.clear();
+                    list_Diary.clear();
+
+                    initializeData();
+
                     expandableListAdapterDiaryTotal.notifyDataSetChanged();
-                    isButtonChangeClick = false;
                     break;
             }
         }
@@ -147,19 +162,49 @@ public class diary_Total extends AppCompatActivity implements Button.OnClickList
 
     }
 
+    //확장 리스트뷰에 맞게 데이터 세팅
+    private void initializeData() {
+        int CountGroup = 0;
+
+        list_Date.add(diaryTotal.get(0).getDiaryDate());
+        TempChild.add(diaryTotal.get(0));
+
+        for (int i = 1; i < diaryTotal.size(); i++) {
+            if (diaryTotal.get(i).getDiaryDate().equals(diaryTotal.get(i - 1).getDiaryDate())) {
+                TempChild.add(diaryTotal.get(i));
+
+            } else {
+                list_Diary.put(list_Date.get(CountGroup), TempChild);
+                TempChild = new ArrayList<diary_Content>();
+                TempChild.add(diaryTotal.get(i));
+                list_Date.add(diaryTotal.get(i).getDiaryDate());
+                CountGroup = CountGroup + 1;
+            }
+            if (i == diaryTotal.size() - 1) {
+                list_Diary.put(list_Date.get(CountGroup), TempChild);
+            }
+        }
+    }
+
+    //HashMap형식을 어레이 리스트로 직렬화
+    private ArrayList<diary_Content> extractDataFormExpListView(ArrayList<String> TempGroup, HashMap<String, ArrayList<diary_Content>> TempChild) {
+        ArrayList<diary_Content> returnArray = new ArrayList<diary_Content>();
+        for (int i = 0; i < TempGroup.size(); i++) {
+            for (int j = 0; j < TempChild.get(TempGroup.get(i)).size(); j++) {
+                returnArray.add(TempChild.get(TempGroup.get(i)).get(j));
+            }
+        }
+        return returnArray;
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.diary_total_button_total_to_main:
                 Intent GoToMain = new Intent(diary_Total.this, diary_Mainactivity.class);
-                int Count = 0;
-                for (int i = 0; i < main_Diary.size(); i++) {
-                    GoToMain.putExtra("Data" + i, main_Diary.get(i));
-                    Count++;
-                }
-                GoToMain.putExtra("Size", Count);
                 intentFromTotal = true;
-                startActivity(GoToMain);
+                setResult(RESULT_OK, GoToMain);
+                finish();
                 break;
             case R.id.diary_total_button_total_to_write:
                 Intent GoToWriteDiary = new Intent(diary_Total.this, diary_Write.class);
@@ -178,8 +223,43 @@ public class diary_Total extends AppCompatActivity implements Button.OnClickList
 
             expandableListAdapterDiaryTotal.ExpandableListViewAddItem(Temp);
             main_Diary.add(Temp);
+            diaryTotal.add(Temp);
+            diary_Content[] CopyTemp = diaryContent.clone();
+            diaryContent = new diary_Content[CopyTemp.length + 1];
             diary_Mainactivity.isDirectToWrite = false;
 
+            initializeData();
+        }
+        expandableListAdapterDiaryTotal.notifyDataSetChanged();
+    }
+
+    //수정을 했을 경우 일기 받아오기
+    private void changeDiary(){
+        if (diary_Write.comFromChange == true) {
+            Log.d("수정?", "수정");
+            Intent data = getIntent();
+            diary_Content getDiary = data.getParcelableExtra("Object");
+            int groupDataNum = data.getIntExtra("groupDataNum", -1);
+            int childDataNum = data.getIntExtra("childDataNum", -1);
+            Log.d("넘버", groupDataNum + "/" + childDataNum);
+            if (groupDataNum == -1) {
+            } else {
+                expandableListAdapterDiaryTotal.ExpandableListViewDeleteItem(groupDataNum, childDataNum);
+            }
+            ArrayList<diary_Content> TempHold = extractDataFormExpListView(list_Date, list_Diary);
+            TempHold.add(getDiary);
+//            Collections.sort(TempHold);
+//            diaryTotal = TempHold;
+//
+//            list_Date.clear();
+//            list_Diary.clear();
+//
+//            initializeData();
+//
+//            expandableListAdapterDiaryTotal.notifyDataSetChanged();
+
+            isButtonChangeClick = false;
+            diary_Write.comFromChange = false;
         }
     }
 }

@@ -64,7 +64,6 @@ public class diary_View extends AppCompatActivity {
 
         for (int i = 0; i < diaryUri.size(); i++) {
             addBitmapImage(Uri.parse(diaryUri.get(i)));
-            Log.d("준성URI", diaryUri.get(i) + "");
             diaryBitmap.add(tempImage);
         }
 
@@ -91,16 +90,17 @@ public class diary_View extends AppCompatActivity {
             day = getDiaryIntent.getStringExtra("view_Day");
             title = getDiaryIntent.getStringExtra("view_Title");
             content = getDiaryIntent.getStringExtra("view_Content");
+            Log.d("Uri", diaryUri.get(0));
 
         } else {
             Intent getDiaryIntent = getIntent();
-            diary_Content gettedData = (diary_Content) getDiaryIntent.getSerializableExtra("SelectedDiary");
-            diaryUri = (ArrayList<String>) gettedData.getDiaryUriTotal();
-            diaryMood = gettedData.getDiaryMood();
-            diaryWeather = gettedData.getDiaryWeather();
-            day = gettedData.getDiaryDate();
-            title = gettedData.getDiaryTitle();
-            content = gettedData.getDiaryContent();
+            diaryMood = getDiaryIntent.getIntExtra("SelectedDiaryMood", 0);
+            diaryWeather = getDiaryIntent.getIntExtra("SelectedDiaryWhether", 0);
+            day = getDiaryIntent.getStringExtra("SelectedDiaryDate");
+            title = getDiaryIntent.getStringExtra("SelectedDiaryTitle");
+            content = getDiaryIntent.getStringExtra("SelectedDiaryContent");
+            diaryUri = (ArrayList<String>) getDiaryIntent.getStringArrayListExtra("SelectedDiaryPicture");
+            Log.d("Uri", diaryUri.get(0));
             intentToView = false;
         }
     }
