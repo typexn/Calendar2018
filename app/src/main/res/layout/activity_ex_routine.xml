@@ -24,6 +24,7 @@
                 android:text="운동 루틴"/>
 
             <Button
+                android:id="@+id/ex_routine_button_delactivate"
                 android:text="삭제"
                 android:layout_weight="5"
                 android:layout_width="match_parent"

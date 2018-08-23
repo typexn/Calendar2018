@@ -19,6 +19,7 @@ import java.util.Calendar;
 
 public class sch_AddActivity extends AppCompatActivity {
 
+    final int FROMMAIN = 0;
     final int FROMVERIFY = 1;
 
     EditText editTitle;
@@ -74,7 +75,7 @@ public class sch_AddActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String title = editTitle.getText().toString();
                 String location = editLocation.getText().toString();
-                String memo = editLocation.getText().toString();
+                String memo = editMemo.getText().toString();
 
                 if(editTitle.getText() == null || editTitle.getText().toString().equals("")) {
                     Toast.makeText(sch_AddActivity.this,"제목을 입력해주세요", Toast.LENGTH_SHORT).show();
@@ -112,7 +113,7 @@ public class sch_AddActivity extends AppCompatActivity {
         startTime.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mStartTimeSetListener, 8, 0, true);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mStartTimeSetListener, startTimeInfo.getHour(), startTimeInfo.getMinute(), true);
                 timePickerDialog.show();
             }
         });
@@ -120,7 +121,7 @@ public class sch_AddActivity extends AppCompatActivity {
         endTime.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mEndTimeSetListener, 8, 0, true);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mEndTimeSetListener, endTimeInfo.getHour(), endTimeInfo.getMinute(), true);
                 timePickerDialog.show();
             }
         });
@@ -129,9 +130,8 @@ public class sch_AddActivity extends AppCompatActivity {
     private void setData(){
         Intent getIntent = getIntent();
 
-
         int fromWhere = getIntent.getIntExtra("activity", 0);
-        if(fromWhere == FROMVERIFY) {
+        if(fromWhere == FROMVERIFY) { //확인화면 - 편집버튼으로
             title = getIntent.getStringExtra("title");
             editTitle.setText(title);
             location = getIntent.getStringExtra("location");
@@ -142,26 +142,32 @@ public class sch_AddActivity extends AppCompatActivity {
             startDay = getIntent.getIntExtra("startDay", 1);
             startHour = getIntent.getStringExtra("startHour");
             startMinute = getIntent.getStringExtra("startMinute");
+//            textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
+            startTime.setText(startHour + ":" + startMinute);
+
             endYear = getIntent.getIntExtra("endYear", 2018);
             endMonth = getIntent.getIntExtra("endMonth", 1);
             endDay = getIntent.getIntExtra("endDay", 1);
             endHour = getIntent.getStringExtra("endHour");
             endMinute = getIntent.getStringExtra("endMinute");
-
-            textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
-            textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
-            startTime.setText(startHour + ":" + startMinute);
+//            textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
             endTime.setText(endHour + ":" + endMinute);
 
             memo = getIntent.getStringExtra("memo");
             editMemo.setText(memo);
-        }else{
-            startYear = getIntent.getIntExtra("year", 2018);
-            startMonth = getIntent.getIntExtra("month", 1);
-            startDay = getIntent.getIntExtra("day", 1);
+        }else if(fromWhere == FROMMAIN){ // 메인화면 - 추가버튼으로
+            endYear = startYear = getIntent.getIntExtra("startYear", 2018);
+            endMonth = startMonth = getIntent.getIntExtra("startMonth", 1);
+            endDay = startDay = Integer.parseInt(getIntent.getStringExtra("startDay"));
+            endHour = startHour = getIntent.getStringExtra("startHour");
+            endMinute = getIntent.getStringExtra("startMinute");
 
-
+            startTime.setText("08:00");
+            endTime.setText("08:00");
         }
+
+        textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
+        textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
 
         startDayInfo = new DayInfo();
         startDayInfo.setYear(startYear);
@@ -173,8 +179,8 @@ public class sch_AddActivity extends AppCompatActivity {
         endDayInfo.setMonth(endMonth);
         endDayInfo.setDay(String.valueOf(endDay));
 
-        textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
-        textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
+//        textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
+//        textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
 
         startTimeInfo = new TimeInfo();
         startTimeInfo.setHour(8);
@@ -183,9 +189,9 @@ public class sch_AddActivity extends AppCompatActivity {
         endTimeInfo = new TimeInfo();
         endTimeInfo.setHour(8);
         endTimeInfo.setMinute(0);
-
-        startTime.setText("08:00");
-        endTime.setText("08:00");
+//
+//        startTime.setText("08:00");
+//        endTime.setText("08:00");
 
 
 
@@ -200,12 +206,16 @@ public class sch_AddActivity extends AppCompatActivity {
             startDayInfo.setMonth(monthOfYear+1);
             startDayInfo.setDay(String.valueOf(dayOfMonth));
 
-            if(!checkDay()) {
+            if(!checkTime()) {
                 android.util.Log.d("minyoung", "되냐start");
                 endDayInfo.setYear(year);
                 endDayInfo.setMonth(monthOfYear+1);
                 endDayInfo.setDay(String.valueOf(dayOfMonth));
                 textEndDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
+
+                endTimeInfo.setHour(startTimeInfo.getHour());
+                endTimeInfo.setMinute(startTimeInfo.getMinute());
+                endTime.setText(startTimeInfo.getHourString() + ":" + startTimeInfo.getMinuteString());
             }
         }
     };
@@ -218,12 +228,16 @@ public class sch_AddActivity extends AppCompatActivity {
             endDayInfo.setMonth(monthOfYear+1);
             endDayInfo.setDay(String.valueOf(dayOfMonth));
 
-            if(!checkDay()) {
+            if(!checkTime()) {
                 android.util.Log.d("minyoung", "되냐end");
                 startDayInfo.setYear(year);
                 startDayInfo.setMonth(monthOfYear+1);
                 startDayInfo.setDay(String.valueOf(dayOfMonth));
                 textStartDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
+
+                startTimeInfo.setHour(endTimeInfo.getHour());
+                startTimeInfo.setMinute(endTimeInfo.getMinute());
+                startTime.setText(endTimeInfo.getHourString() + ":" + endTimeInfo.getMinuteString());
             }
         }
     };

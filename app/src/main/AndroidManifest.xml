@@ -33,7 +33,6 @@
         <activity android:name=".ex_ExerciseStart" />
         <activity android:name=".ex_Routine" />
         <activity android:name=".ex_Mainactivity"/>
-        <!--<activity android:name=".ex_Help"/>-->
         <activity android:name=".ex_ExerciseFinish"/>
         <activity android:name=".ex_ExerciseReport"/>
         //가계부팀 화면 추가//
