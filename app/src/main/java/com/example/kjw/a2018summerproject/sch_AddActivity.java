@@ -54,6 +54,9 @@ public class sch_AddActivity extends AppCompatActivity {
     int month;
     String day;
 
+    int fromWhere;
+    Schedule schedule;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,10 +85,25 @@ public class sch_AddActivity extends AppCompatActivity {
                     return;
                 }
 
-                Schedule newSchedule = new Schedule(title, location, startDayInfo.getYear(), startDayInfo.getMonth(), Integer.parseInt(startDayInfo.getDay()),
-                        endDayInfo.getYear(), endDayInfo.getMonth(), Integer.parseInt(endDayInfo.getDay()),
-                        startTimeInfo.getHourString(), startTimeInfo.getMinuteString(), endTimeInfo.getHourString(), endTimeInfo.getMinuteString(), memo);
-                sch_Mainactivity.schList.add(newSchedule);
+                schedule.title = title;
+                schedule.location = location;
+                schedule.memo = memo;
+
+                schedule.startYear = startDayInfo.getYear();
+                schedule.startMonth = startDayInfo.getMonth();
+                schedule.startDay = Integer.parseInt(startDayInfo.getDay());
+                schedule.startHour = startTimeInfo.getHourString();
+                schedule.startMinute = startTimeInfo.getMinuteString();
+
+                schedule.endYear = endDayInfo.getYear();
+                schedule.endMonth = endDayInfo.getMonth();
+                schedule.endDay = Integer.parseInt(endDayInfo.getDay());
+                schedule.endHour = endTimeInfo.getHourString();
+                schedule.endMinute = endTimeInfo.getMinuteString();
+
+                if(fromWhere == FROMMAIN){
+                    sch_Mainactivity.schList.add(schedule);
+                }
                 android.util.Log.d("minyoung", startTimeInfo.getHourString() + "" + startTimeInfo.getMinuteString());
 
                 finish();
@@ -130,37 +148,38 @@ public class sch_AddActivity extends AppCompatActivity {
     private void setData(){
         Intent getIntent = getIntent();
 
-        int fromWhere = getIntent.getIntExtra("activity", 0);
+        fromWhere = getIntent.getIntExtra("activity", 0);
         if(fromWhere == FROMVERIFY) { //확인화면 - 편집버튼으로
-            title = getIntent.getStringExtra("title");
+            schedule = (Schedule)getIntent.getSerializableExtra("Schedule");
+
+            title = schedule.title;
             editTitle.setText(title);
-            location = getIntent.getStringExtra("location");
+            location = schedule.location;
             editLocation.setText(location);
 
-            startYear = getIntent.getIntExtra("startYear", 2018);
-            startMonth = getIntent.getIntExtra("startMonth", 1);
-            startDay = getIntent.getIntExtra("startDay", 1);
-            startHour = getIntent.getStringExtra("startHour");
-            startMinute = getIntent.getStringExtra("startMinute");
+            startYear = schedule.startYear;
+            startMonth = schedule.startMonth;
+            startDay = schedule.startDay;
+            startHour = schedule.startHour;
+            startMinute = schedule.startMinute;
 //            textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
             startTime.setText(startHour + ":" + startMinute);
 
-            endYear = getIntent.getIntExtra("endYear", 2018);
-            endMonth = getIntent.getIntExtra("endMonth", 1);
-            endDay = getIntent.getIntExtra("endDay", 1);
-            endHour = getIntent.getStringExtra("endHour");
-            endMinute = getIntent.getStringExtra("endMinute");
+            endYear = schedule.endYear;
+            endMonth = schedule.endMonth;
+            endDay = schedule.endDay;
+            endHour = schedule.endHour;
+            endMinute = schedule.endMinute;
 //            textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
             endTime.setText(endHour + ":" + endMinute);
 
-            memo = getIntent.getStringExtra("memo");
+            memo = schedule.memo;
             editMemo.setText(memo);
         }else if(fromWhere == FROMMAIN){ // 메인화면 - 추가버튼으로
+            schedule = new Schedule();
             endYear = startYear = getIntent.getIntExtra("startYear", 2018);
             endMonth = startMonth = getIntent.getIntExtra("startMonth", 1);
             endDay = startDay = Integer.parseInt(getIntent.getStringExtra("startDay"));
-            endHour = startHour = getIntent.getStringExtra("startHour");
-            endMinute = getIntent.getStringExtra("startMinute");
 
             startTime.setText("08:00");
             endTime.setText("08:00");

@@ -16,8 +16,6 @@ public class sch_Verify extends AppCompatActivity {
     TextView textEnd;
     TextView textMemo;
 
-    String title;
-    String location;
     int startYear;
     int startMonth;
     int startDay;
@@ -28,7 +26,8 @@ public class sch_Verify extends AppCompatActivity {
     int endDay;
     String endHour;
     String endMinute;
-    String memo;
+
+    Schedule schedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,25 +42,24 @@ public class sch_Verify extends AppCompatActivity {
         textMemo = findViewById(R.id.sch_verify_text_memo);
 
         Intent getIntent = getIntent();
-        title = getIntent.getStringExtra("title");
-        location = getIntent.getStringExtra("location");
-        startYear = getIntent.getIntExtra("startYear",2018);
-        startMonth = getIntent.getIntExtra("startMonth",1);
-        startDay = getIntent.getIntExtra("startDay",1);
-        startHour = getIntent.getStringExtra("startHour");
-        startMinute = getIntent.getStringExtra("startMinute");
-        endYear = getIntent.getIntExtra("endYear",2018);
-        endMonth = getIntent.getIntExtra("endMonth",1);
-        endDay = getIntent.getIntExtra("endDay",1);
-        endHour = getIntent.getStringExtra("endHour");
-        endMinute = getIntent.getStringExtra("endMinute");
-        memo = getIntent.getStringExtra("memo");
 
-        textTitle.setText(title);
-        textLocation.setText(location);
+        schedule = (Schedule)getIntent.getSerializableExtra("Schedule");
+        startYear = schedule.startYear;
+        startMonth = schedule.startMonth;
+        startDay = schedule.startDay;
+        startHour = schedule.startHour;
+        startMinute = schedule.startMinute;
+        endYear = schedule.endYear;
+        endMonth = schedule.endMonth;
+        endDay = schedule.endDay;
+        endHour = schedule.endHour;
+        endMinute = schedule.endMinute;
+
+        textTitle.setText(schedule.title);
+        textLocation.setText(schedule.location);
         textStart.setText(startYear + "년" + startMonth + "월" + startDay + "일  " + startHour + ":" + startMinute);
         textEnd.setText(endYear + "년" + endMonth + "월" + endDay + "일  " + endHour + ":" + endMinute);
-        textMemo.setText(memo);
+        textMemo.setText(schedule.memo);
 
         btnToEdit.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -69,23 +67,25 @@ public class sch_Verify extends AppCompatActivity {
                 Intent intent = new Intent(sch_Verify.this, sch_AddActivity.class);
                 intent.putExtra("activity", 1);
 
-                intent.putExtra("title", title);
-                intent.putExtra("location", location);
-                intent.putExtra("memo", memo);
-
-                intent.putExtra("startYear", startYear);
-                intent.putExtra("startMonth", startMonth);
-                intent.putExtra("startDay", startDay);
-                intent.putExtra("startHour", startHour);
-                intent.putExtra("startMinute", startMinute);
-
-                intent.putExtra("endYear", endYear);
-                intent.putExtra("endMonth", endMonth);
-                intent.putExtra("endDay", endDay);
-                intent.putExtra("endHour", endHour);
-                intent.putExtra("endMinute", endMinute);
+                intent.putExtra("Schedule", schedule);
+//                intent.putExtra("title", title);
+//                intent.putExtra("location", location);
+//                intent.putExtra("memo", memo);
+//
+//                intent.putExtra("startYear", startYear);
+//                intent.putExtra("startMonth", startMonth);
+//                intent.putExtra("startDay", startDay);
+//                intent.putExtra("startHour", startHour);
+//                intent.putExtra("startMinute", startMinute);
+//
+//                intent.putExtra("endYear", endYear);
+//                intent.putExtra("endMonth", endMonth);
+//                intent.putExtra("endDay", endDay);
+//                intent.putExtra("endHour", endHour);
+//                intent.putExtra("endMinute", endMinute);
 
                 startActivity(intent);
+                finish();
             }
         });
     }

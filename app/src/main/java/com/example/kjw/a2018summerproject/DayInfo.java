@@ -7,6 +7,7 @@ public class DayInfo {
     private int year;
     private int month;
     private boolean inMonth;
+    private boolean inYear; //minyoung
     private boolean isExistSch; //minyoung
 
     /**
@@ -49,6 +50,8 @@ public class DayInfo {
         this.inMonth = inMonth;
     }
 
+    public boolean isInYear() { return inYear; }
+    public void setInYear(boolean inYear) { this.inYear = inYear; }
     public void setExistSch(boolean isExist){ this.isExistSch = isExist; } //minyoung
     public boolean isExistSch() { return isExistSch; } //minyoung
     public void setYear(int year){ this.year = year; }
