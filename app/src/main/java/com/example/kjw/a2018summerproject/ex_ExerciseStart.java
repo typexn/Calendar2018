@@ -17,11 +17,26 @@ public class ex_ExerciseStart extends AppCompatActivity{
 
         Intent getRoutineFromCycle = getIntent();
         final ArrayList<ex_ExerciseRoutine> nth_routine = (ArrayList<ex_ExerciseRoutine>) getRoutineFromCycle.getSerializableExtra("routine");
+        final int nth_counting = getRoutineFromCycle.getExtras().getInt("count");
+
+        final int nowExerciseCounting = 0;
 
         ImageButton nextButton = (ImageButton) findViewById(R.id.ex_exercisestart_image_preprocess);
         nextButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-
+                if(nth_routine.get(nth_counting).cycleCounting == nowExerciseCounting)
+                {
+                    Intent goToExerciseFinish = new Intent(ex_ExerciseStart.this, ex_ExerciseFinish.class);
+                    startActivity(goToExerciseFinish);
+                }
+                else
+                {
+                    Intent goToBreakTime = new Intent(ex_ExerciseStart.this,ex_Breaktime.class);
+                    goToBreakTime.putExtra("routine",nth_routine);
+                    goToBreakTime.putExtra("count",nth_counting);
+                    goToBreakTime.putExtra("nowcount",nowExerciseCounting);
+                    startActivity(goToBreakTime);
+                }
             }
         });
     }

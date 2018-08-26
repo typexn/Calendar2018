@@ -190,6 +190,7 @@ class ex_ExerciseRoutine implements Serializable {
 
     int cycleIndexNumber = 0;
     ex_ExerciseCycle [] Cycle = new ex_ExerciseCycle [5];
+    int cycleCounting = 0;
 
     ex_ExerciseRoutine(String routineTitle)
     {
@@ -203,6 +204,7 @@ class ex_ExerciseRoutine implements Serializable {
             Cycle = tmpCycleCart;
         }
         Cycle[cycleIndexNumber++] = newCycle;
+        cycleCounting++;
     }
 
     void deleteCycle(int deleteIndexNumber){
