@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ex_Routine extends Activity {
@@ -183,7 +184,7 @@ class ex_RoutineBaseAdapter extends BaseAdapter {
         return view;
     }
 }
-class ex_ExerciseRoutine {
+class ex_ExerciseRoutine implements Serializable {
 
     String routineTitle;
 
