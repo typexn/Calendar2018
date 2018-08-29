@@ -80,9 +80,10 @@ public class ex_Routine extends Activity {
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent goToCycle = new Intent(ex_Routine.this, ex_Cycle.class);
                 goToCycle.putExtra("nth",routinelist.size());
+                Log.d("Uk", "routinelist.size() " + routinelist.size() + "");
                 goToCycle.putExtra("position",position);
                 goToCycle.putExtra("Routine",routinelist);
                 startActivity(goToCycle);

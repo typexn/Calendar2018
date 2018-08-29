@@ -17,7 +17,7 @@ public class ex_ExerciseStart extends AppCompatActivity{
 
         Intent getRoutineFromCycle = getIntent();
         final ArrayList<ex_ExerciseRoutine> nth_routine = (ArrayList<ex_ExerciseRoutine>) getRoutineFromCycle.getSerializableExtra("routine");
-        final int nth_counting = getRoutineFromCycle.getExtras().getInt("count");
+        final int nth_counting = getRoutineFromCycle.getIntExtra("count",1);
 
         final int nowExerciseCounting = 0;
 

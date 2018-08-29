@@ -64,7 +64,7 @@ public class ex_Cycle extends AppCompatActivity {
         });
 
         Intent getRoutine = getIntent();
-        final int nth_Couting = getRoutine.getExtras().getInt("nth");
+        final int nth_Couting = getRoutine.getIntExtra("nth",1);
         final ArrayList<ex_ExerciseRoutine> nth_Routine = (ArrayList<ex_ExerciseRoutine>) getRoutine.getSerializableExtra("Routine");
 
         ex_ExerciseCycle tmpCycle = new ex_ExerciseCycle("a","a",(double)1,1,1,1,1);
