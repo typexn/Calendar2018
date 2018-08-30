@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,11 +65,12 @@ public class ex_Cycle extends AppCompatActivity {
         });
 
         Intent getRoutine = getIntent();
-        final int nth_Couting = getRoutine.getIntExtra("nth",1);
-        final ArrayList<ex_ExerciseRoutine> nth_Routine = (ArrayList<ex_ExerciseRoutine>) getRoutine.getSerializableExtra("Routine");
+        final int nth_Couting = getRoutine.getIntExtra("position",1);
+        Log.d("Uk", "routineposition " + nth_Couting + "");
+//        final ArrayList<ex_ExerciseRoutine> nth_Routine = (ArrayList<ex_ExerciseRoutine>) getRoutine.getSerializableExtra("Routine");
 
         ex_ExerciseCycle tmpCycle = new ex_ExerciseCycle("a","a",(double)1,1,1,1,1);
-        nth_Routine.get(nth_Couting).addCycle(tmpCycle);
+//        nth_Routine.get(nth_Couting).addCycle(tmpCycle);
 
 
         Button btn_go = (Button) findViewById(R.id.ex_cycle_image_start);
@@ -76,7 +78,6 @@ public class ex_Cycle extends AppCompatActivity {
                 new Button.OnClickListener() {
                     public void onClick(View v) {
                         Intent goToStart = new Intent(getApplicationContext(), ex_ExerciseStart.class);
-                        goToStart.putExtra("routine",nth_Routine);
                         goToStart.putExtra("count",nth_Couting);
                         startActivity(goToStart);
                     }

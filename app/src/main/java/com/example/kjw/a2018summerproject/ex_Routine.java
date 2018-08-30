@@ -165,7 +165,7 @@ class ex_RoutineBaseAdapter extends BaseAdapter {
     ImageView delete_imageView;
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         if(view == null) {
             view = mLiInflater.inflate(R.layout.ex_routine_listview, null);
 //            view = LayoutInflater.from(context).inflate(R.layout.ex_routine_listview, null);
@@ -182,6 +182,7 @@ class ex_RoutineBaseAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context.getApplicationContext(), ex_Cycle.class);
+                intent.putExtra("position",i);
                 context.startActivity(intent);
             }
         });
