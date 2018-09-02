@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,17 +18,18 @@
                 android:id="@+id/diary_total_button_total_to_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="메인으로 가기"/>
+                android:text="메인으로 가기" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
+
             <Button
                 android:id="@+id/diary_total_button_total_to_write"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="일기 쓰기"/>
+                android:text="일기 쓰기" />
         </LinearLayout>
 
         <LinearLayout
@@ -38,17 +40,24 @@
             <ExpandableListView
                 android:id="@+id/diary_total_expandablelistview_total"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </ExpandableListView>
+                android:layout_height="match_parent"></ExpandableListView>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="칸조정 임시 버튼"/>
+                android:text="칸조정 임시 버튼" />
+
+            <Button
+                android:id="@+id/diary_total_button_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="검색"></Button>
 
             <!--<Button-->
             <!--android:id="@+id/btn_goToDiaryTotal"-->

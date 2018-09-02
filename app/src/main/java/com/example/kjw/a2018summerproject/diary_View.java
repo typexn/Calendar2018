@@ -63,15 +63,21 @@ public class diary_View extends AppCompatActivity {
         setData();
 
         for (int i = 0; i < diaryUri.size(); i++) {
-            addBitmapImage(Uri.parse(diaryUri.get(i)));
-            diaryBitmap.add(tempImage);
+            if (diaryUri.get(i).equals("")) {
+            } else {
+                addBitmapImage(Uri.parse(diaryUri.get(i)));
+                diaryBitmap.add(tempImage);
+            }
         }
 
         diaryDay = (TextView) findViewById(R.id.diary_textview_day_view);
         diaryTitle = (TextView) findViewById(R.id.diary_textview_title_view);
         diaryContent = (TextView) findViewById(R.id.diary_textview_content_view);
 
-        diaryDay.setText(day);
+        String dayHolder[] = new String[3];
+        dayHolder = day.split("-");
+
+        diaryDay.setText(dayHolder[0] + " 년  " + dayHolder[1] + " 월  " + dayHolder[2] + " 일");
         diaryTitle.setText(title);
         diaryContent.setText(content);
 
@@ -90,7 +96,6 @@ public class diary_View extends AppCompatActivity {
             day = getDiaryIntent.getStringExtra("view_Day");
             title = getDiaryIntent.getStringExtra("view_Title");
             content = getDiaryIntent.getStringExtra("view_Content");
-            Log.d("Uri", diaryUri.get(0));
 
         } else {
             Intent getDiaryIntent = getIntent();
@@ -100,7 +105,6 @@ public class diary_View extends AppCompatActivity {
             title = getDiaryIntent.getStringExtra("SelectedDiaryTitle");
             content = getDiaryIntent.getStringExtra("SelectedDiaryContent");
             diaryUri = (ArrayList<String>) getDiaryIntent.getStringArrayListExtra("SelectedDiaryPicture");
-            Log.d("Uri", diaryUri.get(0));
             intentToView = false;
         }
     }
@@ -110,11 +114,13 @@ public class diary_View extends AppCompatActivity {
     private void addBitmapImage(Uri imageUri) {
         tempImage = null;
         try {
-            tempImage = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), imageUri);
+            tempImage = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
         } catch (FileNotFoundException e) {
+            Log.d("사진", "FileNotFound");
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
+            Log.d("사진", "IoException");
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
