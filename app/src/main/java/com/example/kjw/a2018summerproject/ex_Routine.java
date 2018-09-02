@@ -72,17 +72,17 @@ public class ex_Routine extends Activity {
                 startActivity(tmpintent);
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent goToCycle = new Intent(ex_Routine.this, ex_Cycle.class);
-                goToCycle.putExtra("nth",routinelist.size());
-                Log.d("Uk", "routinelist.size() " + routinelist.size() + "");
-                goToCycle.putExtra("position",position);
-                goToCycle.putExtra("Routine",routinelist);
-                startActivity(goToCycle);
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent goToCycle = new Intent(ex_Routine.this, ex_Cycle.class);
+//                goToCycle.putExtra("nth",routinelist.size());
+//                Log.d("Uk", "routinelist.size() " + routinelist.size() + "");
+//                goToCycle.putExtra("position",position);
+//                goToCycle.putExtra("Routine",routinelist);
+//                startActivity(goToCycle);
+//            }
+//        });
 
     }
 }
@@ -133,6 +133,7 @@ class ex_RoutineBaseAdapter extends BaseAdapter {
     Context context;
     ArrayList<ex_RoutineAdapter> list_ex_RoutineAdapter;
     LayoutInflater mLiInflater;
+    String getTitleToCycle;
 
     public ex_RoutineBaseAdapter(Context context, ArrayList<ex_RoutineAdapter> list_ex_RoutineAdapter) {
         this.context = context;
@@ -176,13 +177,13 @@ class ex_RoutineBaseAdapter extends BaseAdapter {
         profile_imageView.setImageResource(list_ex_RoutineAdapter.get(i).getProfile_image());
         title_textView.setText(list_ex_RoutineAdapter.get(i).getTitle());
         delete_imageView.setImageResource(list_ex_RoutineAdapter.get(i).getDelete_image());
-
-
+        getTitleToCycle = title_textView.getText().toString();
         view.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context.getApplicationContext(), ex_Cycle.class);
                 intent.putExtra("position",i);
+                intent.putExtra("title",getTitleToCycle);
                 context.startActivity(intent);
             }
         });

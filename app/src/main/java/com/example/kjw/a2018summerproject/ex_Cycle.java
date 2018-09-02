@@ -29,6 +29,7 @@ public class ex_Cycle extends AppCompatActivity {
     ListView listView_Downside;
     ex_CycleBaseAdapter ex_CycleBaseUpside;
     ex_CycleBaseAdapter ex_CycleBaseDownside;
+    ArrayList<ex_ExerciseRoutine> routineList = new ArrayList<ex_ExerciseRoutine>();
 
     private LinearLayout container;
 
@@ -39,6 +40,23 @@ public class ex_Cycle extends AppCompatActivity {
         DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
         int width = dm.widthPixels; //디바이스 화면 너비
         int height = dm.heightPixels; //디바이스 화면 높이
+
+        Intent getRoutine = getIntent();
+        final int nth_Couting = getRoutine.getIntExtra("position",1);
+        ArrayList<Integer> intentCount = new ArrayList<Integer>();
+        final String nth_Title = getRoutine.getStringExtra("title");
+        int nowRoutine;
+        if(intentCount.contains(nth_Couting))
+        {
+            nowRoutine = intentCount.indexOf(nth_Couting);
+        }
+        else
+        {
+            intentCount.add(nth_Couting);
+            nowRoutine = routineList.size();
+            ex_ExerciseRoutine newRoutine = new ex_ExerciseRoutine(nth_Title);
+            routineList.add(newRoutine);
+        }
 
         final ArrayList<ex_CycleAdapter> list_ItemUpsideArrayList = new ArrayList<ex_CycleAdapter>();
         final ArrayList<ex_CycleAdapter> list_ItemDownsideArrayList = new ArrayList<ex_CycleAdapter>();
@@ -64,8 +82,6 @@ public class ex_Cycle extends AppCompatActivity {
             }
         });
 
-        Intent getRoutine = getIntent();
-        final int nth_Couting = getRoutine.getIntExtra("position",1);
         Log.d("Uk", "routineposition " + nth_Couting + "");
 //        final ArrayList<ex_ExerciseRoutine> nth_Routine = (ArrayList<ex_ExerciseRoutine>) getRoutine.getSerializableExtra("Routine");
 
@@ -83,8 +99,6 @@ public class ex_Cycle extends AppCompatActivity {
                     }
                 }
         );
-
-
 
     }
 }
