@@ -24,30 +24,24 @@
                 android:text="운동 루틴"/>
 
             <Button
+                android:id="@+id/ex_routine_button_delactivate"
                 android:text="삭제"
                 android:layout_weight="5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
         </LinearLayout>
-        <ScrollView
+        <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:orientation="vertical"
+            <ListView
+                android:id="@+id/ex_routine_listview_routine"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"></ListView>
 
-                <ListView
-                    android:id="@+id/ex_routine_listview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></ListView>
-
-            </LinearLayout>
-
-        </ScrollView>
+        </LinearLayout>
         <LinearLayout
             android:layout_weight="10"
             android:orientation="horizontal"

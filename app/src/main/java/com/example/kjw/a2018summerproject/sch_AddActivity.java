@@ -19,12 +19,15 @@ import java.util.Calendar;
 
 public class sch_AddActivity extends AppCompatActivity {
 
+    final int FROMMAIN = 0;
+    final int FROMVERIFY = 1;
+
     EditText editTitle;
     EditText editLocation;
     EditText editMemo;
-    TextView startDay;
+    TextView textStartDay;
     TextView startTime;
-    TextView endDay;
+    TextView textEndDay;
     TextView endTime;
     Button btnComplete;
 
@@ -33,9 +36,26 @@ public class sch_AddActivity extends AppCompatActivity {
     TimeInfo startTimeInfo;
     TimeInfo endTimeInfo;
 
+    String title;
+    String location;
+    int startYear;
+    int startMonth;
+    int startDay;
+    String startHour;
+    String startMinute;
+    int endYear;
+    int endMonth;
+    int endDay;
+    String endHour;
+    String endMinute;
+    String memo;
+
     int year;
     int month;
     String day;
+
+    int fromWhere;
+    Schedule schedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +65,9 @@ public class sch_AddActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.sch_add_edit_title);
         editLocation = findViewById(R.id.sch_add_edit_location);
         editMemo = findViewById(R.id.sch_add_edit_memo);
-        startDay = findViewById(R.id.sch_add_text_startDay);
+        textStartDay = findViewById(R.id.sch_add_text_startDay);
         startTime = findViewById(R.id.sch_add_text_startTime);
-        endDay = findViewById(R.id.sch_add_text_endDay);
+        textEndDay = findViewById(R.id.sch_add_text_endDay);
         endTime = findViewById(R.id.sch_add_text_endTime);
         btnComplete = findViewById(R.id.sch_add_button_complete);
 
@@ -58,23 +78,39 @@ public class sch_AddActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String title = editTitle.getText().toString();
                 String location = editLocation.getText().toString();
-                String memo = editLocation.getText().toString();
+                String memo = editMemo.getText().toString();
 
-                if(editTitle.getText().toString()=="")
-                {
+                if(editTitle.getText() == null || editTitle.getText().toString().equals("")) {
                     Toast.makeText(sch_AddActivity.this,"제목을 입력해주세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
+                schedule.title = title;
+                schedule.location = location;
+                schedule.memo = memo;
 
-                Schedule newSchedule = new Schedule(title, location, 15, 1, null, null, memo);
-                sch_Mainactivity.schList.add(newSchedule);
+                schedule.startYear = startDayInfo.getYear();
+                schedule.startMonth = startDayInfo.getMonth();
+                schedule.startDay = Integer.parseInt(startDayInfo.getDay());
+                schedule.startHour = startTimeInfo.getHourString();
+                schedule.startMinute = startTimeInfo.getMinuteString();
+
+                schedule.endYear = endDayInfo.getYear();
+                schedule.endMonth = endDayInfo.getMonth();
+                schedule.endDay = Integer.parseInt(endDayInfo.getDay());
+                schedule.endHour = endTimeInfo.getHourString();
+                schedule.endMinute = endTimeInfo.getMinuteString();
+
+                if(fromWhere == FROMMAIN){
+                    sch_Mainactivity.schList.add(schedule);
+                }
+                android.util.Log.d("minyoung", startTimeInfo.getHourString() + "" + startTimeInfo.getMinuteString());
 
                 finish();
             }
         });
 
-        startDay.setOnClickListener(new View.OnClickListener(){
+        textStartDay.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mStartSetListener, startDayInfo.getYear(), startDayInfo.getMonth()-1, Integer.parseInt(startDayInfo.getDay()));
@@ -83,7 +119,7 @@ public class sch_AddActivity extends AppCompatActivity {
             }
         });
 
-        endDay.setOnClickListener(new View.OnClickListener(){
+        textEndDay.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mEndSetListener, endDayInfo.getYear(), endDayInfo.getMonth()-1, Integer.parseInt(endDayInfo.getDay()));
@@ -95,7 +131,7 @@ public class sch_AddActivity extends AppCompatActivity {
         startTime.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mStartTimeSetListener, 8, 0, true);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mStartTimeSetListener, startTimeInfo.getHour(), startTimeInfo.getMinute(), true);
                 timePickerDialog.show();
             }
         });
@@ -103,64 +139,125 @@ public class sch_AddActivity extends AppCompatActivity {
         endTime.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mEndTimeSetListener, 8, 0, true);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(sch_AddActivity.this, android.R.style.Theme_Holo_Dialog, mEndTimeSetListener, endTimeInfo.getHour(), endTimeInfo.getMinute(), true);
                 timePickerDialog.show();
             }
         });
     }
 
     private void setData(){
-        Intent fromMain = getIntent();
-        year = fromMain.getIntExtra("year", 2018);
-        month = fromMain.getIntExtra("month", 1);
-        day = fromMain.getStringExtra("day");
+        Intent getIntent = getIntent();
+
+        fromWhere = getIntent.getIntExtra("activity", 0);
+        if(fromWhere == FROMVERIFY) { //확인화면 - 편집버튼으로
+            schedule = (Schedule)getIntent.getSerializableExtra("Schedule");
+
+            title = schedule.title;
+            editTitle.setText(title);
+            location = schedule.location;
+            editLocation.setText(location);
+
+            startYear = schedule.startYear;
+            startMonth = schedule.startMonth;
+            startDay = schedule.startDay;
+            startHour = schedule.startHour;
+            startMinute = schedule.startMinute;
+//            textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
+            startTime.setText(startHour + ":" + startMinute);
+
+            endYear = schedule.endYear;
+            endMonth = schedule.endMonth;
+            endDay = schedule.endDay;
+            endHour = schedule.endHour;
+            endMinute = schedule.endMinute;
+//            textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
+            endTime.setText(endHour + ":" + endMinute);
+
+            memo = schedule.memo;
+            editMemo.setText(memo);
+        }else if(fromWhere == FROMMAIN){ // 메인화면 - 추가버튼으로
+            schedule = new Schedule();
+            endYear = startYear = getIntent.getIntExtra("startYear", 2018);
+            endMonth = startMonth = getIntent.getIntExtra("startMonth", 1);
+            endDay = startDay = Integer.parseInt(getIntent.getStringExtra("startDay"));
+
+            startTime.setText("08:00");
+            endTime.setText("08:00");
+        }
+
+        textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
+        textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
 
         startDayInfo = new DayInfo();
-        startDayInfo.setYear(year);
-        startDayInfo.setMonth(month);
-        startDayInfo.setDay(day);
+        startDayInfo.setYear(startYear);
+        startDayInfo.setMonth(startMonth);
+        startDayInfo.setDay(String.valueOf(startDay));
 
         endDayInfo = new DayInfo();
-        endDayInfo.setYear(year);
-        endDayInfo.setMonth(month);
-        endDayInfo.setDay(day);
+        endDayInfo.setYear(endYear);
+        endDayInfo.setMonth(endMonth);
+        endDayInfo.setDay(String.valueOf(endDay));
 
-        startDay.setText(year + "년 " + month + "월 " + day + "일");
-        endDay.setText(year + "년 " + month + "월 " + day + "일");
+//        textStartDay.setText(startYear + "년 " + startMonth + "월 " + startDay + "일");
+//        textEndDay.setText(endYear + "년 " + endMonth + "월 " + endDay + "일");
 
         startTimeInfo = new TimeInfo();
         startTimeInfo.setHour(8);
-        startTimeInfo.setHour(0);
+        startTimeInfo.setMinute(0);
 
         endTimeInfo = new TimeInfo();
         endTimeInfo.setHour(8);
-        endTimeInfo.setHour(0);
+        endTimeInfo.setMinute(0);
+//
+//        startTime.setText("08:00");
+//        endTime.setText("08:00");
 
-        startTime.setText("08:00");
-        endTime.setText("08:00");
+
+
+
     }
 
     private DatePickerDialog.OnDateSetListener mStartSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            startDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
+            textStartDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
             startDayInfo.setYear(year);
-            startDayInfo.setMonth(month);
+            startDayInfo.setMonth(monthOfYear+1);
             startDayInfo.setDay(String.valueOf(dayOfMonth));
 
-            endDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
+            if(!checkTime()) {
+                android.util.Log.d("minyoung", "되냐start");
+                endDayInfo.setYear(year);
+                endDayInfo.setMonth(monthOfYear+1);
+                endDayInfo.setDay(String.valueOf(dayOfMonth));
+                textEndDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
+
+                endTimeInfo.setHour(startTimeInfo.getHour());
+                endTimeInfo.setMinute(startTimeInfo.getMinute());
+                endTime.setText(startTimeInfo.getHourString() + ":" + startTimeInfo.getMinuteString());
+            }
         }
     };
 
     private DatePickerDialog.OnDateSetListener mEndSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            endDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
+            textEndDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
             endDayInfo.setYear(year);
-            endDayInfo.setMonth(month);
+            endDayInfo.setMonth(monthOfYear+1);
             endDayInfo.setDay(String.valueOf(dayOfMonth));
 
-            startDay.setText(year + "년 " + (monthOfYear+1) + "월 " + dayOfMonth + "일");
+            if(!checkTime()) {
+                android.util.Log.d("minyoung", "되냐end");
+                startDayInfo.setYear(year);
+                startDayInfo.setMonth(monthOfYear+1);
+                startDayInfo.setDay(String.valueOf(dayOfMonth));
+                textStartDay.setText(year + "년 " + (monthOfYear + 1) + "월 " + dayOfMonth + "일");
+
+                startTimeInfo.setHour(endTimeInfo.getHour());
+                startTimeInfo.setMinute(endTimeInfo.getMinute());
+                startTime.setText(endTimeInfo.getHourString() + ":" + endTimeInfo.getMinuteString());
+            }
         }
     };
 
@@ -170,6 +267,12 @@ public class sch_AddActivity extends AppCompatActivity {
             startTimeInfo.setHour(hour);
             startTimeInfo.setMinute(minute);
             startTime.setText(startTimeInfo.getHourString() + ":" + startTimeInfo.getMinuteString());
+
+            if(!checkTime()){
+                endTimeInfo.setHour(hour);
+                endTimeInfo.setMinute(minute);
+                endTime.setText(startTimeInfo.getHourString() + ":" + startTimeInfo.getMinuteString());
+            }
         }
     };
 
@@ -179,14 +282,45 @@ public class sch_AddActivity extends AppCompatActivity {
             endTimeInfo.setHour(hour);
             endTimeInfo.setMinute(minute);
             endTime.setText(endTimeInfo.getHourString() + ":" + endTimeInfo.getMinuteString());
+
+            if(!checkTime()){
+                startTimeInfo.setHour(hour);
+                startTimeInfo.setMinute(minute);
+                startTime.setText(endTimeInfo.getHourString() + ":" + endTimeInfo.getMinuteString());
+            }
         }
     };
 
     private boolean checkTime(){
         boolean ret = false;
-        String start = startDayInfo.getYear() + startDayInfo.getMonth() + startDayInfo.getDay() + startTimeInfo.getHourString() + startTimeInfo.getMinuteString();
-        String end = endDayInfo.getYear() + endDayInfo.getMonth() + endDayInfo.getDay() + endTimeInfo.getHourString() + endTimeInfo.getMinuteString();
+        long startSpot = 0;
+        long endSpot = 0;
 
+        String start = startDayInfo.getYear() + "" + startDayInfo.getMonth() + startDayInfo.getDay() + startTimeInfo.getHourString() + startTimeInfo.getMinuteString();
+        String end = endDayInfo.getYear() + "" + endDayInfo.getMonth() + endDayInfo.getDay() + endTimeInfo.getHourString() + endTimeInfo.getMinuteString();
+
+        android.util.Log.d("minyoung", start + "/" + end);
+        startSpot = Long.parseLong(start);
+        endSpot = Long.parseLong(end);
+
+        ret = startSpot > endSpot ? false : true;
+
+        return ret;
+    }
+
+    private boolean checkDay(){
+        boolean ret = false;
+        int startSpot = 0;
+        int endSpot = 0;
+
+        String start = startDayInfo.getYear() + "" + startDayInfo.getMonth() + startDayInfo.getDay();
+        String end = endDayInfo.getYear() + "" + endDayInfo.getMonth() + endDayInfo.getDay();
+        android.util.Log.d("minyoung", start + "/" + end);
+
+        startSpot = Integer.parseInt(start);
+        endSpot = Integer.parseInt(end);
+
+        ret = startSpot > endSpot ? false : true;
 
         return ret;
     }

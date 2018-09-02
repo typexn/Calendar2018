@@ -1,5 +1,7 @@
 package com.example.kjw.a2018summerproject;
 
+import android.content.ContentUris;
+import android.content.Context;
 import android.widget.TextView;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -29,7 +31,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.sql.Savepoint;
 import java.util.Calendar;
 
 import android.widget.EditText;
@@ -45,13 +50,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.os.Environment.MEDIA_MOUNTED;
+import static android.os.Environment.getExternalStorageState;
+import static com.example.kjw.a2018summerproject.diary_Mainactivity.diaryTotal;
+
 
 /**
  * Created by jwell on 2018-07-17.
  */
 
-public class diary_Write extends AppCompatActivity {
-
+public class diary_Write extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     Bitmap tempImage = null; //임시
     int pictureCount;
@@ -68,8 +76,16 @@ public class diary_Write extends AppCompatActivity {
     int weatherPosition;
     int moodPosition;
 
+    //일기 내용을 받을 스트링
+    String day = "";
+    String title = "";
+    String content = "";
+
     //사진 촬영, 이미지 추가 버튼
     Button buttonAddPhoto;
+    Button buttonAddMultiple;
+    Button buttonDeletePhoto;
+    Button buttonDelete;
 
     Uri albumUri;
     String absolutepath;
@@ -80,8 +96,8 @@ public class diary_Write extends AppCompatActivity {
     TextView diaryMoodText;
     TextView diaryWeatherText;
     TextView countPicutre;
-
     TextView diaryDatePickerTextView;
+
     int diaryDatePickerYear;
     int diaryDatePickerMonth;
     int diaryDatePickerDay;
@@ -93,7 +109,8 @@ public class diary_Write extends AppCompatActivity {
     static final int Diary_Date_Dialog_ID = 0;
     static final int PICK_FROM_ALBUM = 0;
     static final int CROP_FROM_IMAGE = 1;
-
+    static final int PICK_MULTIPLE = 2;
+    static boolean ChangeData = false;
     ImageView tempImageView;
 
     @Override
@@ -101,12 +118,20 @@ public class diary_Write extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_write);
 
-        tempImageView = (ImageView) findViewById(R.id.Temp_Image_View);
+        pictureCount = 0;
+        weatherPosition = 0;
+        moodPosition = 0;
+
+        tempImageView = (ImageView) findViewById(R.id.Temp_Image_View); //임시
+        countPicutre = (TextView) findViewById(R.id.diary_write_txtv_count_photo); //임시
+
         editTextDiaryTitle = (EditText) findViewById(R.id.diary_write_title);
         editTextDiaryContent = (EditText) findViewById(R.id.diary_write_contents);
-        countPicutre = (TextView) findViewById(R.id.diary_write_txtv_count_photo);
 
-        pictureCount = 0;
+        diaryWeatherText = (TextView) findViewById(R.id.diary_weather_text);
+        diaryMoodText = (TextView) findViewById(R.id.diary_mood_text);
+
+        diaryDatePickerTextView = (TextView) findViewById(R.id.diary_date_picker_text);
 
         //사진을 담을 어레이
         pictureContent = new ArrayList<Bitmap>();
@@ -114,56 +139,11 @@ public class diary_Write extends AppCompatActivity {
 
         //확인버튼 누르면 일기 내용이 total로 넘어가게 구현 -> 일단 임시
         Button buttonSendDiary = (Button) findViewById(R.id.diary_write_button_confirm);
-        buttonSendDiary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (editTextDiaryTitle.getText().toString().equals("")) {
-                    Toast.makeText(getApplicationContext(), "제목이 없습니다.", Toast.LENGTH_LONG);
-                } else if (editTextDiaryContent.getText().toString().equals("")) {
-                    Toast.makeText(getApplicationContext(), "내용이 없습니다.", Toast.LENGTH_LONG);
-                } else {
-                    String sendedDate = diaryDatePickerTextView.getText().toString();
-                    String title = editTextDiaryTitle.getText().toString();
-                    String content = editTextDiaryContent.getText().toString();
-
-                    //다이어리 토탈을 거쳐서 바로왔을때 아닐때의 처리를 다르게 해줌
-                    if (diary_Mainactivity.isDirectToWrite == false) {
-                        Intent SendToDiaryTotal = new Intent();
-                        SendToDiaryTotal.putStringArrayListExtra("Uri", pictureUri);
-                        SendToDiaryTotal.putExtra("Mood", moodPosition);
-                        SendToDiaryTotal.putExtra("Weather", weatherPosition);
-                        SendToDiaryTotal.putExtra("Date", sendedDate);
-                        SendToDiaryTotal.putExtra("Title", title);
-                        SendToDiaryTotal.putExtra("Content", content);
-                        if (diary_Total.isButtonChangeClick == true) {
-                            SendToDiaryTotal.putExtra("groupDataNum", groupDataNum);
-                            SendToDiaryTotal.putExtra("childDataNum", childDataNum);
-                        }
-                        setResult(RESULT_OK, SendToDiaryTotal);
-                        finish();
-                    } else {
-                        Intent Temp = new Intent(diary_Write.this, diary_Total.class);
-                        Temp.putStringArrayListExtra("Uri_", pictureUri);
-                        Temp.putExtra("Mood_", moodPosition);
-//                        Log.d("준성 Mood", moodPosition + "");
-                        Temp.putExtra("Weather_", weatherPosition);
-                        Temp.putExtra("Date_", sendedDate);
-                        Temp.putExtra("Title_", title);
-                        Temp.putExtra("Content_", content);
-                        startActivity(Temp);
-                    }
-                }
-            }
-        });
+        buttonSendDiary.setOnClickListener(this);
 
         //DatePicker 시작
-        diaryDatePickerTextView = (TextView) findViewById(R.id.diary_date_picker_text);
-        diaryDatePickerTextView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showDialog(Diary_Date_Dialog_ID);
-            }
-        });
+
+        diaryDatePickerTextView.setOnClickListener(this);
 
         //현재 날짜 인식
         final Calendar diaryDatePickerToday = Calendar.getInstance();
@@ -175,57 +155,84 @@ public class diary_Write extends AppCompatActivity {
         //인식된 날짜 출력
         updateDisplay();
 
-
-        //날씨스피너에서 고른후 텍스트에 표시
-        diaryWeatherText = (TextView) findViewById(R.id.diary_weather_text);
+        //날씨, 기분 스피너에서 고른후 텍스트에 표시
         diaryWeatherSpinner = (Spinner) findViewById(R.id.diary_weather_spinner);
-        diaryWeatherSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position,
-                                       long id) {
-                diaryWeatherText.setText("" + parent.getItemAtPosition(position));
-                weatherPosition = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        //기분스피너에서 고른후 텍스트에 표시
-        diaryMoodText = (TextView) findViewById(R.id.diary_mood_text);
         diaryMoodSpinner = (Spinner) findViewById(R.id.diary_mood_spinner);
-        diaryMoodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position,
-                                       long id) {
-                diaryMoodText.setText("" + parent.getItemAtPosition(position));
-                moodPosition = position;
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        diaryWeatherSpinner.setOnItemSelectedListener(this);
+        diaryMoodSpinner.setOnItemSelectedListener(this);
 
-        //사진 추가 버튼 이벤트
+        //사진 하나 추가 버튼 이벤트   //사진 여라장 추가 버튼 이벤트
         buttonAddPhoto = (Button) findViewById(R.id.diary_write_button_add_photo);
-        buttonAddPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GoToGallery();
-            }
-        });
+        buttonAddMultiple = (Button) findViewById(R.id.diary_write_button_add_multiple_photo);
+        buttonDeletePhoto = (Button) findViewById(R.id.diary_write_button_delete_photo);
+        buttonDelete = (Button)findViewById(R.id.diary_write_button_delete);
 
-        //수정 버튼에서 왔는가
+        buttonAddPhoto.setOnClickListener(this);
+        buttonAddMultiple.setOnClickListener(this);
+        buttonDeletePhoto.setOnClickListener(this);
+        buttonDelete.setOnClickListener(this);
+
+        //수정 버튼에서 왔으면 기본 값을 설정해줌
         if (diary_Total.isButtonChangeClick == true) {
             isComeFromChange();
-
         }
 
 
+    }//온크리에이트의 끝
+
+    @Override  //온Resume 시작
+    protected void onResume() {
+        super.onResume();
+        Log.d("현준", "온리슘 시작");
     }
 
+    @Override //온스탑 시작
+    protected void onStop() {
+        super.onStop();
+        Log.d("현준", "온스탑 시작");
+    }
+
+    //csv 파일 저장하는 함수
+    public void saveCSV(diary_Content TempDiary) {
+        String filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Calendar2018";
+        int rowCount = 0;
+        diaryTotal.add(TempDiary);
+
+        diary_Content SaveDiaryMember = TempDiary;
+        int Mood = SaveDiaryMember.getDiaryMood();
+        int Weather = SaveDiaryMember.getDiaryWeather();
+        String Date = SaveDiaryMember.getDiaryDate();
+        String diarytitle = SaveDiaryMember.getDiaryTitle();
+        String Content = SaveDiaryMember.getDiaryContent();
+        ArrayList<String> Picture = SaveDiaryMember.getDiaryUriTotal();
+        try {
+            BufferedWriter fw = new BufferedWriter(new FileWriter(filepath + "/diary.csv", true));
+            String PictureHolder[] = new String[5];
+
+            int PictureCount = 0;
+
+            for (int j = 0; j < Picture.size(); j++) {
+                PictureHolder[j] = Picture.get(j);
+            }
+            for (int j = Picture.size(); j < 5; j++) {
+                PictureHolder[j] = "";
+            }
+            fw.write(Mood + "," + Weather + "," + Date + "," + diarytitle + "," + Content + "," + PictureHolder[0] + ","
+                    + PictureHolder[1] + "," + PictureHolder[2] + "," + PictureHolder[3] + "," + PictureHolder[4]);
+
+            fw.append('\n');
+
+            fw.flush();
+            fw.close();
+        } catch (
+                IOException e1)
+
+        {
+            e1.printStackTrace();
+        }
+
+    }
 
     //다이어로그 출력시 DatePicker 다이어로그 출력
     @Override
@@ -255,19 +262,28 @@ public class diary_Write extends AppCompatActivity {
         diaryDatePickerTextView.setText(
                 new StringBuilder()
                         //월은 시스템에서 0 - 11 로 인식하기 때문에 1을 더해줌
-                        .append(diaryDatePickerYear).append(" - ")
-                        .append(diaryDatePickerMonth + 1).append(" - ")
+                        .append(diaryDatePickerYear).append("-")
+                        .append(diaryDatePickerMonth + 1).append("-")
                         .append(diaryDatePickerDay).append("")
         );
     }
 
-    //갤러리로 가는 함수
+    //사진 하나 선택하는 방법으로 갤러리로 가는 함수
     private void GoToGallery() {
         Intent intentToGallery = new Intent(Intent.ACTION_PICK);
-        intentToGallery.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intentToGallery.setType("image/*");
         intentToGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(Intent.createChooser(intentToGallery, "Select Picture"), PICK_FROM_ALBUM);
+        startActivityForResult(intentToGallery, PICK_FROM_ALBUM);
+    }
+
+    //사진 여러장 선택하는 방법으로 갤러리로 가는 함수
+    private void GoToMultipleGallery() {
+        Intent intentToMultipleGallery = new Intent(Intent.ACTION_PICK);
+        intentToMultipleGallery.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intentToMultipleGallery.setType("image/*");
+        intentToMultipleGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intentToMultipleGallery, "Select Picture"), PICK_FROM_ALBUM);
+        startActivityForResult(intentToMultipleGallery, PICK_MULTIPLE);
     }
 
     //앨범에서 선택한 사진 받아오기
@@ -279,83 +295,91 @@ public class diary_Write extends AppCompatActivity {
         }
         switch (requestCode) {
             case PICK_FROM_ALBUM:
-                pictureCount = 0;
                 albumUri = data.getData();
-                ClipData clipData = data.getClipData();
-                if (clipData == null) { //다중 선택을 지원하지 않는 기기
-                }else if(clipData.getItemCount() == 1) {  //클립데이터에서 1개만 선택했을때
-                    String dataStr = String.valueOf(clipData.getItemAt(0).getUri());
-                    addBitmapImage(Uri.parse(dataStr));
-                    pictureUri.add(dataStr);
-                    pictureContent.add(tempImage);
-                    countPicutre.setText(1 + " 개입니다.");
-                }else{
-                    for (int i = 0; i < clipData.getItemCount(); i++) {
-                        Uri tempUri = clipData.getItemAt(i).getUri();
-                        pictureUri.add(tempUri.toString());
+                Intent intentToCropPicutre = new Intent("com.android.camera.action.CROP");
+                intentToCropPicutre.setDataAndType(albumUri, "image/*");
+                intentToCropPicutre.putExtra("outputX", 200);
+                intentToCropPicutre.putExtra("outputY", 200);
+                intentToCropPicutre.putExtra("aspectX", 1);
+                intentToCropPicutre.putExtra("aspectY", 1);
+                intentToCropPicutre.putExtra("scale", true);
+                intentToCropPicutre.putExtra("return-data", true);
+                startActivityForResult(intentToCropPicutre, CROP_FROM_IMAGE);
+                break;
+            case CROP_FROM_IMAGE:
 
-                        addBitmapImage(tempUri);
-                        pictureContent.add(tempImage);
-
-                        //사진 몇개 선택했는지 나타내줌
-                        pictureCount = pictureCount + 1;
-                    }
-                    countPicutre.setText(pictureCount + " 개입니다.");
+                if (resultCode != RESULT_OK) {
+                    return;
                 }
+                final Bundle extras = data.getExtras();
+                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/Calendar2018/" + System.currentTimeMillis() + ".jpg";
+                Log.d("파일 이름", filePath + "");
+                if (extras != null) {
+                    Bitmap cropedPhoto = extras.getParcelable("data"); //crop된 비트맵
+                    tempImageView.setImageBitmap(cropedPhoto); //임시 이미지 뷰에 선택한 이미지를 보여줌
+
+                    storeCropImage(cropedPhoto, filePath); //외부저장소, 앨범에 크롭된 이미지를 저장한다.
+                    absolutepath = "file://" + filePath;
+
+                    Uri tempUri = Uri.parse(absolutepath);
+                    if (pictureUri.size() < 5) {
+                        pictureUri.add(absolutepath);
+                    } else {
+                        Toast.makeText(this, "사진은 5개 까지만 추가 가능합니다.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    addBitmapImage(tempUri);
+                    pictureContent.add(tempImage);
+                    tempImageView.setImageBitmap(tempImage);
+                    break;
+                }
+
+                //임시 파일 삭제
+                File f = new File(albumUri.getPath());
+                if (f.exists()) {
+                    f.delete();
+                }
+                break;
+
+            case PICK_MULTIPLE:
+                if (resultCode != RESULT_OK) {
+                    return;
+                }
+                ClipData clipData = data.getClipData();
+                if (clipData == null) {
+                    Log.d("클립데이터 에러", "에러에러에러에러");
+                    Toast.makeText(this, "오류가 발생했습니다. 다시 선택해주세요", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (clipData.getItemCount() + pictureUri.size() > 5) {
+                    Toast.makeText(this, "사진은 5개까지 선택가능합니다.", Toast.LENGTH_LONG).show();
+                    return;
+                } else if (clipData.getItemCount() > 1) {
+                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                        albumUri = clipData.getItemAt(i).getUri();
+                        pictureUri.add(albumUri.toString());
+                        addBitmapImage(albumUri);
+                        pictureContent.add(tempImage);
+                    }
+                } else {
+                    albumUri = data.getData();
+                    pictureUri.add(albumUri.toString());
+                    addBitmapImage(albumUri);
+                    pictureContent.add(tempImage);
+                }
+                tempImageView.setImageBitmap(pictureContent.get(0));
+                break;
+
         }
-
     }
-
-//                Intent intentToCrop = new Intent("com.android.camera.action.CROP");
-//                intentToCrop.setDataAndType(albumUri, "image/*");
-//                intentToCrop.putExtra("outputX", 200);
-//                intentToCrop.putExtra("ouputY", 200);
-//                intentToCrop.putExtra("aspectX", 1);
-//                intentToCrop.putExtra("aspectY", 1);
-//                intentToCrop.putExtra("scale", true);
-//                intentToCrop.putExtra("return-data", true);
-//                startActivityForResult(intentToCrop, CROP_FROM_IMAGE);
-//                break;
-//
-    //임시로 만든 이미지 뷰에 이미지 할당
-//                addBitmapImage(albumUri);
-////                tempImageView.setImageBitmap(tempImage);
-//
-//                //어레이 리스트에 추가
-//                pictureContent.add(tempImage);
-//                pictureUri.add(albumUri.toString());
-//
-//                //사진 몇개 선택했는지 나타내줌
-//                pictureCount = pictureCount +1;
-//                countPicutre.setText(pictureCount + " 개입니다.");
-
-//            case CROP_FROM_IMAGE:
-//                if (requestCode != RESULT_OK) {
-//                    return;
-//                }
-//                final Bundle extras = data.getExtras();
-//                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()
-//                        + "/Calendar2018/" + System.currentTimeMillis() + ".jpg";
-//                if (extras != null) {
-//                    Bitmap photo = extras.getParcelable("data"); //crop된 비트맵
-//                    tempImageView.setImageBitmap(photo); //임시 이미지 뷰에 선택한 이미지를 보여줌
-//                    storeCropImage(photo, filePath); //외부저장소, 앨범에 크롭된 이미지를 저장한다.
-//                    absolutepath = filePath;
-//                    break;
-//                }
-//                //임시 파일 삭제
-//                File f = new File(albumUri.getPath());
-//                if (f.exists()) {
-//                    f.delete();
-//                }
-
 
     //외부저장소에 크롭된 이미지를 저장하는 함수
     private void storeCropImage(Bitmap bitmap, String filePath) {
         String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Calendar2018";
-        File directory_Calender2018 = new File(dirPath);
-        if (!directory_Calender2018.exists()) {
-            directory_Calender2018.mkdir();
+        File directory_Calendar2018 = new File(dirPath);
+        if (!directory_Calendar2018.exists()) { //Calendar2018 폴더가 없으면 새로 만들어줌
+            directory_Calendar2018.mkdir();
         }
         File copyFile = new File(filePath);
         BufferedOutputStream out = null;
@@ -389,37 +413,148 @@ public class diary_Write extends AppCompatActivity {
     //수정 버튼을 통해 왔는가
     private void isComeFromChange() {
 
+        pictureUri = new ArrayList<String>();
         Intent getDiaryDataBeforeChange = getIntent();
-        ArrayList<String> getChangeUri = getDiaryDataBeforeChange.getStringArrayListExtra("diaryUri");
-        int getChangeMood = getDiaryDataBeforeChange.getIntExtra("diaryMood", 0);
-        int getChangeWeather = getDiaryDataBeforeChange.getIntExtra("diaryWeather", 0);
-        String getChangeDate = getDiaryDataBeforeChange.getStringExtra("diaryDate");
-        String getChangeTitle = getDiaryDataBeforeChange.getStringExtra("diaryTitle");
-        String getChangeContent = getDiaryDataBeforeChange.getStringExtra("diaryContent");
-        groupDataNum = getDiaryDataBeforeChange.getIntExtra("diaryGroupNum", 0);
-        childDataNum = getDiaryDataBeforeChange.getIntExtra("diaryChildNum", 0);
-        Log.d("Uri개수", getChangeUri.size() + "");
-//        for (int i = 0; i < getChangeUri.size(); i++) {
-//            addBitmapImage(Uri.parse(getChangeUri.get(i)));
-//            tempImageView.setImageBitmap(tempImage);
-//            //어레이 리스트에 추가
-//            pictureContent.add(tempImage);
-//        }
-        addBitmapImage(Uri.parse(getChangeUri.get(0)));
-//        tempImageView.setImageBitmap(tempImage);
-        countPicutre.setText(getChangeUri.size() + "개입니다.");
+        int Temp = getDiaryDataBeforeChange.getIntExtra("diaryUriSize", -1);
+
+        if (Temp == 1) {
+            pictureUri = (ArrayList<String>) getDiaryDataBeforeChange.getStringArrayListExtra("diaryReWriteUri");
+            addBitmapImage(Uri.parse(pictureUri.get(0)));
+            tempImageView.setImageBitmap(tempImage);
+            countPicutre.setText(pictureUri.size() + "개입니다.");
+        }
+
+        moodPosition = getDiaryDataBeforeChange.getIntExtra("diaryReWriteMood", 0);
+        weatherPosition = getDiaryDataBeforeChange.getIntExtra("diaryReWriteWeather", 0);
+        day = getDiaryDataBeforeChange.getStringExtra("diaryReWriteDate");
+        title = getDiaryDataBeforeChange.getStringExtra("diaryReWriteTitle");
+        content = getDiaryDataBeforeChange.getStringExtra("diaryReWriteContent");
+
+        groupDataNum = getDiaryDataBeforeChange.getIntExtra("diaryGroupNum", -1);
+        childDataNum = getDiaryDataBeforeChange.getIntExtra("diaryChildNum", -1);
+
+
         //스피너 값 할당
-        diaryMoodSpinner.setSelection(getChangeMood);
-        diaryWeatherSpinner.setSelection(getChangeWeather);
+        diaryMoodSpinner.setSelection(moodPosition);
+        diaryWeatherSpinner.setSelection(weatherPosition);
 
         //텍스트 할당
         diaryMoodText.setText(diaryMoodSpinner.getItemAtPosition(moodPosition) + "");
         diaryWeatherText.setText(diaryWeatherSpinner.getItemAtPosition(weatherPosition) + "");
 
-        diaryDatePickerTextView.setText(getChangeDate);
-        editTextDiaryTitle.setText(getChangeTitle);
-        editTextDiaryContent.setText(getChangeContent);
+        diaryDatePickerTextView.setText(day);
+        editTextDiaryTitle.setText(title);
+        editTextDiaryContent.setText(content);
 
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.diary_write_button_add_photo:
+                GoToGallery();
+                break;
+            case R.id.diary_write_button_add_multiple_photo:
+                GoToMultipleGallery();
+                break;
+            case R.id.diary_date_picker_text:
+                showDialog(Diary_Date_Dialog_ID);
+                break;
+            case R.id.diary_write_button_delete_photo:
+                pictureUri.clear();
+                pictureUri = new ArrayList<String>();
+                tempImage = null;
+                countPicutre.setText(pictureUri.size() + "개");
+                break;
+            case R.id.diary_write_button_delete:
+                editTextDiaryContent.setText(null);
+                editTextDiaryTitle.setText(null);
+
+                editTextDiaryContent.setHint("내용을 입력하세요");
+                editTextDiaryTitle.setHint("제목을 입력하세요");
+
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                diaryDatePickerTextView.setText(dateFormat+"");
+                diaryMoodSpinner.setSelection(0);
+                diaryWeatherSpinner.setSelection(0);
+
+                break;
+            case R.id.diary_write_button_confirm:
+                if (editTextDiaryTitle.getText().toString().equals("")) {
+                    Toast.makeText(this, "제목이 없습니다.", Toast.LENGTH_LONG);
+                } else if (editTextDiaryContent.getText().toString().equals("")) {
+                    Toast.makeText(this, "내용이 없습니다.", Toast.LENGTH_LONG);
+                } else {
+                    String sendedDate = diaryDatePickerTextView.getText().toString();
+                    String title = editTextDiaryTitle.getText().toString();
+                    String content = editTextDiaryContent.getText().toString();
+
+                    //다이어리 토탈을 거쳐서 바로왔을때 아닐때의 처리를 다르게 해줌
+                    if (diary_Mainactivity.isDirectToWrite == false) {
+                        if (diary_Total.isButtonChangeClick == true) {
+                            Intent Temp = new Intent(diary_Write.this, diary_Total.class);
+                            Temp.putExtra("diary___Mood", moodPosition);
+                            Temp.putExtra("diary___Weather", weatherPosition);
+                            Temp.putExtra("diary___Date", sendedDate);
+                            Temp.putExtra("diary___Title", title);
+                            Temp.putExtra("diary___Content", content);
+                            Temp.putStringArrayListExtra("diary___Uri", pictureUri);
+                            Temp.putExtra("groupDataNum", groupDataNum);
+                            Temp.putExtra("childDataNum", childDataNum);
+                            ChangeData = true;
+                            startActivity(Temp);
+                        } else {
+                            Intent SendToDiaryTotal = new Intent();
+
+                            SendToDiaryTotal.putExtra("diary__Mood", moodPosition);
+                            SendToDiaryTotal.putExtra("diary__Weather", weatherPosition);
+                            SendToDiaryTotal.putExtra("diary__Date", sendedDate);
+                            SendToDiaryTotal.putExtra("diary__Title", title);
+                            SendToDiaryTotal.putExtra("diary__Content", content);
+                            SendToDiaryTotal.putStringArrayListExtra("diary__Uri", pictureUri);
+
+                            setResult(RESULT_OK, SendToDiaryTotal);
+                        }
+                        finish();
+                    } else {
+                        Intent SendToDiaryTotal = new Intent(diary_Write.this, diary_Total.class);
+                        SendToDiaryTotal.putExtra("diary_Mood", moodPosition);
+                        SendToDiaryTotal.putExtra("diary_Weather", weatherPosition);
+                        SendToDiaryTotal.putExtra("diary_Date", sendedDate);
+                        SendToDiaryTotal.putExtra("diary_Title", title);
+                        SendToDiaryTotal.putExtra("diary_Content", content);
+                        SendToDiaryTotal.putStringArrayListExtra("diary_Uri", pictureUri);
+
+                        startActivity(SendToDiaryTotal);
+                    }
+                }
+                break;
+
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
+        switch (view.getId()) {
+            case R.id.diary_mood_spinner:
+                diaryMoodText.setText("" + parent.getItemAtPosition(position));
+                Log.d("현준", parent.getItemAtPosition(position)+"");
+                moodPosition = position;
+                break;
+            case R.id.diary_weather_spinner:
+                diaryWeatherText.setText("" + parent.getItemAtPosition(position));
+                weatherPosition = position;
+                break;
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
 }
 

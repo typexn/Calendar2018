@@ -33,11 +33,20 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
-        <TextView
+        <Chronometer
             android:id="@+id/ex_breaktime_text_timer"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="40dp"
+            />
+        <TextView
+            android:id="@+id/TextView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="TextView"/>
 
         <LinearLayout
             android:layout_marginLeft="60sp"
@@ -56,13 +65,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <ImageButton
+
+
+            <ToggleButton
                 android:id="@+id/ex_breaktime_image_stoptime"
                 android:layout_marginLeft="15sp"
                 android:layout_marginRight="15sp"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:onClick="mOnClick"
+                android:text="시작"
+                />
 
             <ImageButton
                 android:id="@+id/ex_breaktime_image_postprocess"

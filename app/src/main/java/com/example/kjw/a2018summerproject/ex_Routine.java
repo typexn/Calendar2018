@@ -3,13 +3,12 @@ package com.example.kjw.a2018summerproject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ex_Routine extends Activity {
@@ -24,59 +24,72 @@ public class ex_Routine extends Activity {
     int routineCount = 0;
     ex_ExerciseRoutine [] routineArray = new ex_ExerciseRoutine[0];
     ListView listView;
-    ex_RoutineBaseAdapter ex_RoutineBaseAdapter;
+    ex_RoutineBaseAdapter ex_RoutineBase;
+    ArrayList<ex_ExerciseRoutine> routinelist = new ArrayList<ex_ExerciseRoutine>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_routine);
-        listView = (ListView)findViewById(R.id.ex_routine_listview);
+        listView = (ListView)findViewById(R.id.ex_routine_listview_routine);
 
 
         final ArrayList<ex_RoutineAdapter> list_ItemArrayList = new ArrayList<ex_RoutineAdapter>();
-        final ArrayAdapter exerciseRoutineAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice,list_ItemArrayList);
 
-        listView.setAdapter(exerciseRoutineAdapter);
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        ex_RoutineBase = new ex_RoutineBaseAdapter(this, list_ItemArrayList);
 
-        /*  "내용에 따른 목록 추가"
-        list_ItemArrayList.add()
-        */
+        listView.setAdapter(ex_RoutineBase);
+
         Button routinePlus = (Button) findViewById(R.id.ex_routine_button_routineplus);
         routinePlus.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v)
             {
                 final EditText routineTitle = (EditText) findViewById(R.id.ex_routine_edittext_routinetitle);
                 String value = routineTitle.getText().toString();
-                ex_ExerciseRoutine newRoutine = new ex_ExerciseRoutine(value);
+//                ex_ExerciseRoutine newRoutine = new ex_ExerciseRoutine(value);
+//
+//                ex_ExerciseRoutine[] tmpRoutine = new ex_ExerciseRoutine[routineArray.length+1];
+//                System.arraycopy(routineArray,0,tmpRoutine,0,routineArray.length);
+//                routineArray = tmpRoutine;
+//                routineArray[routineCount] = newRoutine;
+//
+//                Log.d("Uk", "routineArray.length : " + routineArray.length + "");
+                routinelist.add(new ex_ExerciseRoutine(value));
+                ex_RoutineAdapter newAdapter = new ex_RoutineAdapter(R.drawable.ic_launcher_foreground, routinelist.get(routinelist.size()-1).routineTitle, R.drawable.ic_launcher_foreground);
+                ex_RoutineBase.addItem(newAdapter);
+//
+//                Log.d("Uk", "list_itemArrayList.size : " + list_ItemArrayList.size() + "");
 
-                ex_ExerciseRoutine[] tmpRoutine = new ex_ExerciseRoutine[routineArray.length+1];
-                System.arraycopy(routineArray,0,tmpRoutine,0,routineArray.length);
-                routineArray = tmpRoutine;
-                routineArray[routineCount] = newRoutine;
+                ex_RoutineBase.notifyDataSetChanged();
 
-                Log.d("Uk", "routineArray.length : " + routineArray.length + "");
-
-                ex_RoutineAdapter newAdapter = new ex_RoutineAdapter(R.drawable.ic_launcher_foreground, routineArray[routineCount].routineTitle, R.drawable.ic_launcher_foreground);
-                list_ItemArrayList.add(newAdapter);
-//                int count;
-//                count = adapter.getCount();
-//                list_ItemArrayList.add("LIST" + Integer.toString(count + 1));
-                exerciseRoutineAdapter.notifyDataSetChanged();
-
-                routineCount++;
+//                routineCount++;
             }
         });
-/*        Button routineToCycle = (Button) findViewById(R.id.ex_routine_listview_text_exercisetitle);
-        routineToCycle.setOnClickListener(new Button.OnClickListener(){
+        Button tmpButton = (Button) findViewById(R.id.ex_routine_button_delactivate);
+        tmpButton.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
-                Intent routineTmp = new Intent(ex_Routine.this,ex_Cycle.class);
-                startActivity(routineTmp);
+                Intent tmpintent = new Intent(ex_Routine.this,ex_Cycle.class);
+                startActivity(tmpintent);
             }
-        });*/
-    }
+        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent goToCycle = new Intent(ex_Routine.this, ex_Cycle.class);
+//                goToCycle.putExtra("nth",routinelist.size());
+//                Log.d("Uk", "routinelist.size() " + routinelist.size() + "");
+//                goToCycle.putExtra("position",position);
+//                goToCycle.putExtra("Routine",routinelist);
+//                startActivity(goToCycle);
+//            }
+//        });
 
+    }
 }
+
+/*
+    Routine 객체 (이미지 / 텍스트 / 이미지)
+ */
 class ex_RoutineAdapter {
     private int profile_image;
     private String title;
@@ -119,16 +132,25 @@ class ex_RoutineBaseAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<ex_RoutineAdapter> list_ex_RoutineAdapter;
+    LayoutInflater mLiInflater;
+    String getTitleToCycle;
 
     public ex_RoutineBaseAdapter(Context context, ArrayList<ex_RoutineAdapter> list_ex_RoutineAdapter) {
         this.context = context;
         this.list_ex_RoutineAdapter = list_ex_RoutineAdapter;
+        this.mLiInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public void addItem(ex_RoutineAdapter item){
+        list_ex_RoutineAdapter.add(item);
     }
 
     @Override
     public int getCount() {
         return this.list_ex_RoutineAdapter.size();
     }
+
+    public int getPosition() { return this.getPosition(); }
 
     @Override
     public Object getItem(int i) {
@@ -144,27 +166,41 @@ class ex_RoutineBaseAdapter extends BaseAdapter {
     ImageView delete_imageView;
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         if(view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.ex_routine_listview, null);
+            view = mLiInflater.inflate(R.layout.ex_routine_listview, null);
+//            view = LayoutInflater.from(context).inflate(R.layout.ex_routine_listview, null);
             profile_imageView = (ImageView)view.findViewById(R.id.ex_routine_listview_image_part);
             title_textView  =(TextView)view.findViewById(R.id.ex_routine_listview_text_exercisetitle);
-            profile_imageView = (ImageView)view.findViewById(R.id.ex_routine_listview_image_delete);
+            delete_imageView = (ImageView)view.findViewById(R.id.ex_routine_listview_image_delete);
         }
         profile_imageView.setImageResource(list_ex_RoutineAdapter.get(i).getProfile_image());
         title_textView.setText(list_ex_RoutineAdapter.get(i).getTitle());
         delete_imageView.setImageResource(list_ex_RoutineAdapter.get(i).getDelete_image());
+        getTitleToCycle = title_textView.getText().toString();
+        view.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context.getApplicationContext(), ex_Cycle.class);
+                intent.putExtra("position",i);
+                intent.putExtra("title",getTitleToCycle);
+                context.startActivity(intent);
+            }
+        });
+
         return view;
     }
 }
-class ex_ExerciseRoutine {
+class ex_ExerciseRoutine implements Serializable {
 
     String routineTitle;
 
     int cycleIndexNumber = 0;
     ex_ExerciseCycle [] Cycle = new ex_ExerciseCycle [5];
+    int cycleCounting = 0;
 
-    ex_ExerciseRoutine(String routineTitle){
+    ex_ExerciseRoutine(String routineTitle)
+    {
         this.routineTitle =  routineTitle;
     }
 
@@ -175,6 +211,7 @@ class ex_ExerciseRoutine {
             Cycle = tmpCycleCart;
         }
         Cycle[cycleIndexNumber++] = newCycle;
+        cycleCounting++;
     }
 
     void deleteCycle(int deleteIndexNumber){

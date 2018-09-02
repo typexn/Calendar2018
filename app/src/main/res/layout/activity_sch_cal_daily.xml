@@ -7,6 +7,7 @@ android:orientation="vertical">
     
 
 <TextView
+    android:id="@+id/sch_calDaily_text_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal|center_vertical"
@@ -15,6 +16,7 @@ android:orientation="vertical">
     android:textSize="28sp" />
 
     <Button
+        android:id="@+id/sch_calDaily_button_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
