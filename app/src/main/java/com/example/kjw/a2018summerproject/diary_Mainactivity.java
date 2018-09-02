@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -31,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,7 +76,7 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
 
     static boolean isDirectToWrite = false;
     static boolean intentFromTotal = false;
-    static boolean intentToView = false;
+    static boolean intentToView;
 
     ArrayList<diary_Content> diaryContentHolder;
 
@@ -84,12 +87,12 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_mainactivity);
 
-
+        intentToView = false;
         diaryTotal = new ArrayList<diary_Content>();
 
-        //csv파일로부터 데이터 읽고 세팅
+        //csv파일로부터 데이터 읽고 setData함수로 세팅 -> DIaryTotal을 내림차순정렬
         readCSV();
-        setData(); //DiaryTotal은 Date기준으로 내림차순으로 정렬되었다.
+
 
         Button bLastMonth = (Button) findViewById(R.id.diary_main_button_last);
         Button bNextMonth = (Button) findViewById(R.id.diary_main_button_next);
@@ -186,6 +189,7 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
         int TempCount = diaryTotal.size();
         Log.d("김준성Temp", Temp);
         if (TempCount == 0) {
+            return;
         } else {
             for (int i = 0; i < TempCount; i++) {
                 if (Temp.equals(diaryTotal.get(i).getDiaryDate())) {
@@ -193,9 +197,9 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
                 }
             }
         }
-        Log.d("민영", diaryContentHolder.get(0).getDiaryUriTotal().size() + "");
-        dialogShow(diaryContentHolder);
-
+        if (diaryContentHolder.size() != 0) {
+            dialogShow(diaryContentHolder);
+        }
     }
 
     //그리드 뷰에 캘린더 할당
@@ -314,9 +318,21 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
 
         ArrayList<String> picture;
 
+        String FilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Calendar2018";
+        File dirFile = new File(FilePath);
+        if (!dirFile.exists()) { //폴더 존재 x이면 폴더 생성
+            dirFile.mkdir();
+            return;
+        }
+
+        String FileName = dirFile + "/diary.csv";
+        File csvFile = new File(FileName);
+        if (!csvFile.exists()) {
+            return;
+        }
+
         try {
-            InputStream csv = getResources().openRawResource(R.raw.diary);
-            InputStreamReader in = new InputStreamReader(csv, "euc-kr"); //UTF-8일수도?
+            InputStreamReader in = new InputStreamReader(new FileInputStream(csvFile), "UTF-8"); //UTF-8일수도?
             br = new BufferedReader(in);
 
             while ((line = br.readLine()) != null) {
@@ -324,7 +340,6 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
             }
             br.close();
             in.close();
-            csv.close();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -341,8 +356,7 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
         diaryContent = new diary_Content[totalRow];
 
         try {
-            InputStream csv = getResources().openRawResource(R.raw.diary);
-            InputStreamReader in = new InputStreamReader(csv, "euc-kr"); //UTF-8일수도?
+            InputStreamReader in = new InputStreamReader(new FileInputStream(csvFile), "UTF-8");
             br = new BufferedReader(in);
 
 
@@ -387,12 +401,10 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
                         case 5:
                             picture1 = array[i].toString();
                             picture.add(picture1);
-                            Log.d("김준성", picture1 + "");
                             break;
                         case 6:
                             picture2 = array[i].toString();
                             picture.add(picture2);
-                            Log.d("김준성", picture2 + "");
                             break;
                         case 7:
                             picture3 = array[i].toString();
@@ -405,7 +417,7 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
                         case 9:
                             picture5 = array[i].toString();
                             picture.add(picture5);
-                            Log.d("김준성", picture5 + "");
+
                     }
                 }
 
@@ -415,7 +427,6 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
             }
             br.close();
             in.close();
-            csv.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -429,6 +440,7 @@ public class diary_Mainactivity extends AppCompatActivity implements AdapterView
                 e.printStackTrace();
             }
         }
+        setData();
     }
 
     //배열형태의 읽은 CSV파일을 어레이 리스트에 넣어주고 Date순으로 내림차순 정렬
