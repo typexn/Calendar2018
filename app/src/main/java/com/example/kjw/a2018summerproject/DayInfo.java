@@ -59,5 +59,20 @@ public class DayInfo {
 
     public void setMonth(int month){ this.month = month; }
     public int getMonth(){ return this.month; }
+    public String getMonthString(){
+        String ret = String.valueOf(this.month);
+        if(this.month / 10 == 0){
+            ret = "0"+ret;
+        }
+        return ret;
+    }
+
+    public String getDayString(){
+        String ret = this.day;
+        if(Integer.parseInt(this.day) / 10 == 0){
+            ret = "0"+ret;
+        }
+        return ret;
+    }
 }
 

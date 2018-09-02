@@ -89,27 +89,70 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
     private void setData() {
 
         for (int i = 1; i < 11; i++) {
-            Schedule sch = new Schedule("title" + i, "location" + i, 2018, 8, i, 2018, 8, i, "08", "00", "08", "00", "");
+            Schedule sch = new Schedule("title" + i, "location" + i, 2018, 9, i, 2018, 9, i, "08", "00", "08", "00", "");
             schList.add(sch);
         }
 
+    }
+
+    private boolean isContainInTerm(Schedule schedule, int year, int month, int day){
+        String start = schedule.startYear + "" + schedule.startMonth + "" + schedule.startDay;
+        String end = schedule.endYear + "" + schedule.endMonth + "" + schedule.endDay;
+        int date = Integer.parseInt(year + "" + month + "" + day);
+        if(Integer.parseInt(start) <= date &&  date <= Integer.parseInt(end)){
+            return true;
+        }
+        return false;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        Log.d("minyoung", schList.size() + "");
         for (int i = 0; i < schList.size(); i++) {
-            //Toast.makeText(this, schList.get(i).title, Toast.LENGTH_LONG).show();
-            for (int j = schList.get(i).startDay; j < schList.get(i).endDay + 1; j++) { //8/26~9/1 => 오류
-                if ( (schList.get(i).startMonth == (mThisMonthCalendar.get(Calendar.MONTH) + 1)) && (schList.get(i).startYear == mThisMonthCalendar.get(Calendar.YEAR))) {
+//            int endDay;
+//            endDay = schList.get(i).startDay <= schList.get(i).endDay ? schList.get(i).endDay : mThisMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+            int thisYear = mThisMonthCalendar.get(Calendar.YEAR);
+            int thisMonth = mThisMonthCalendar.get(Calendar.MONTH) + 1;
+
+            Log.d("minyoung", thisMonth + "");
+            for(int j = 0; j < mThisMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH); j++){
+                if(isContainInTerm(schList.get(i), thisYear, thisMonth, j)){
                     mCalendarAdapter.changeDayInfo(j + mThisMonthCalendar.get(Calendar.DAY_OF_WEEK) - 2, true);
                 }
             }
+
+//            if(schList.get(i).startMonth == schList.get(i).endMonth) {
+//                for (int j = schList.get(i).startDay; j < schList.get(i).endDay+1; j++) {
+//
+//                }
+//            }
+//            else if(schList.get(i).endMonth - schList.get(i).startMonth == 1){ // ex) 9월~10월
+//                if(schList.get(i).startMonth == (mThisMonthCalendar.get(Calendar.MONTH)+1)){
+//                    for (int j = schList.get(i).startDay; j < mThisMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH); j++) {
+//                        mCalendarAdapter.changeDayInfo(j + mThisMonthCalendar.get(Calendar.DAY_OF_WEEK) - 2, true);
+//                    }
+//                }else if(schList.get(i).endMonth == (mThisMonthCalendar.get(Calendar.MONTH)+1)){
+//                    for (int j = 0; j < schList.get(i).endDay; j++) {
+//                        mCalendarAdapter.changeDayInfo(j + mThisMonthCalendar.get(Calendar.DAY_OF_WEEK) - 2, true);
+//                    }
+//                }
+//            }
+//            else{ // ex) 9월~11월
+//
+//            }
+//            for (int j = 1; j < endDay + 1; j++) {
+//                if ( (schList.get(i).endMonth == (mThisMonthCalendar.get(Calendar.MONTH) + 1)) && (schList.get(i).startYear == mThisMonthCalendar.get(Calendar.YEAR))) {
+//                    mCalendarAdapter.changeDayInfo(j + mThisMonthCalendar.get(Calendar.DAY_OF_WEEK) - 2, true);
+//                }
+//            }
+
+            //8/26~9/1 => 오류
         }
+
         mCalendarAdapter.notifyDataSetChanged();
-
-
     }
 
     private void getCalendar(Calendar calendar) {
@@ -218,7 +261,6 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
 //        View convertView = ((CalendarAdapter) parent.getAdapter()).getView(position, null, null);
 //        CalendarAdapter.DayViewHolde dayViewHolder = (CalendarAdapter.DayViewHolde) convertView.getTag();
 //        String day = ((TextView) v.findViewById(R.id.day_cell_tv_day)).getText().toString();
-        //Integer.parseInt(day)
         //if(!(((DayInfo)mCalendarAdapter.getItem(position)).isInMonth())){}
 
         ArrayList<Schedule> selected = new ArrayList<Schedule>();
@@ -262,7 +304,8 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
 
                 title.setText(mThisMonthCalendar.get(Calendar.YEAR) + "년 "
                         + (mThisMonthCalendar.get(Calendar.MONTH) + 1) + "월" + selectedDay.getDay() + "일");
-                addBtn.setOnClickListener(new View.OnClickListener(){
+
+                addBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(sch_Mainactivity.this, sch_AddActivity.class);
@@ -342,6 +385,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
         this.onResume();
     }
 
+
     private void initCalendarAdapter() {
 
         mCalendarAdapter = new CalendarAdapter(this, R.layout.day, mDayList);
@@ -349,7 +393,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
     }
 }
 
-class Schedule implements Serializable{
+class Schedule implements Serializable {
     public String title;
     public String location;
     public int startDay;
@@ -384,7 +428,7 @@ class Schedule implements Serializable{
     }
 }
 
-
+//달력에서 년월 선택
 class MyDatePickerDialog extends DatePickerDialog {
 
     public MyDatePickerDialog(Context context, OnDateSetListener callBack, int year, int monthOfYear, int dayOfMonth) {
@@ -399,7 +443,7 @@ class MyDatePickerDialog extends DatePickerDialog {
     }
 }
 
-
+//일 선택시 그날 일정목록 리스트
 class DialogListViewAdapter extends BaseAdapter {
 
     private ArrayList<Schedule> schedules;
@@ -432,6 +476,7 @@ class DialogListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         final Schedule selected = (Schedule) getItem(position);
+        Log.d("minyoung", String.valueOf(selected.startDay));
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.sch_cal_daily_listview, null);
@@ -447,6 +492,9 @@ class DialogListViewAdapter extends BaseAdapter {
                 Intent intent = new Intent(context.getApplicationContext(), sch_Verify.class);
 
                 intent.putExtra("Schedule", selected);
+
+                int index = sch_Mainactivity.schList.indexOf(selected);
+                intent.putExtra("index", index); //수정을 위해서
 
 //                intent.putExtra("title", selected.title);
 //                intent.putExtra("location", selected.location);

@@ -28,6 +28,7 @@ public class sch_Verify extends AppCompatActivity {
     String endMinute;
 
     Schedule schedule;
+    int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class sch_Verify extends AppCompatActivity {
 
         Intent getIntent = getIntent();
 
+        index = getIntent.getIntExtra("index", -1);
         schedule = (Schedule)getIntent.getSerializableExtra("Schedule");
         startYear = schedule.startYear;
         startMonth = schedule.startMonth;
@@ -68,6 +70,7 @@ public class sch_Verify extends AppCompatActivity {
                 intent.putExtra("activity", 1);
 
                 intent.putExtra("Schedule", schedule);
+                intent.putExtra("index", index);
 //                intent.putExtra("title", title);
 //                intent.putExtra("location", location);
 //                intent.putExtra("memo", memo);
@@ -86,6 +89,8 @@ public class sch_Verify extends AppCompatActivity {
 
                 startActivity(intent);
                 finish();
+
+
             }
         });
     }
