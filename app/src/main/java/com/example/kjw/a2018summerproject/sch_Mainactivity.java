@@ -96,14 +96,32 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
     }
 
     private boolean isContainInTerm(Schedule schedule, int year, int month, int day){
-        String start = schedule.startYear + "" + schedule.startMonth + "" + schedule.startDay;
-        String end = schedule.endYear + "" + schedule.endMonth + "" + schedule.endDay;
-        int date = Integer.parseInt(year + "" + month + "" + day);
+        String start = schedule.startYear + "" + getMonthString(schedule.startMonth) + "" + getDayString(schedule.startDay);
+        String end = schedule.endYear + "" + getMonthString(schedule.endMonth) + "" + getDayString(schedule.endDay);
+        int date = Integer.parseInt(year + "" + getMonthString(month) + "" + getDayString(day));
+        Log.d("minyoung", start + " / " + end + " / " + date);
         if(Integer.parseInt(start) <= date &&  date <= Integer.parseInt(end)){
             return true;
         }
         return false;
     }
+
+    private String getMonthString(int month){ //임시함수니까 쓰지마셈
+        String ret = String.valueOf(month);
+        if(month / 10 == 0){
+            ret = "0"+ret;
+        }
+        return ret;
+    }
+
+    private String getDayString(int day){
+        String ret = String.valueOf(day);
+        if(day / 10 == 0){
+            ret = "0"+ret;
+        }
+        return ret;
+    }
+
 
     @Override
     protected void onResume() {
@@ -118,7 +136,7 @@ public class sch_Mainactivity extends Activity implements AdapterView.OnItemClic
             int thisMonth = mThisMonthCalendar.get(Calendar.MONTH) + 1;
 
             Log.d("minyoung", thisMonth + "");
-            for(int j = 0; j < mThisMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH); j++){
+            for(int j = 1; j < mThisMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)+1; j++){
                 if(isContainInTerm(schList.get(i), thisYear, thisMonth, j)){
                     mCalendarAdapter.changeDayInfo(j + mThisMonthCalendar.get(Calendar.DAY_OF_WEEK) - 2, true);
                 }
