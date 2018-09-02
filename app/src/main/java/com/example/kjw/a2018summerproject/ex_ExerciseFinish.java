@@ -28,6 +28,9 @@ public class ex_ExerciseFinish extends AppCompatActivity {
 
         addListenerOnRatingBar();
         addListenerOnButton();
+TextView text = (TextView)findViewById(R.id.ex_exercisefinish_text_result);
+text .setText("SSANG");
+
     }
 
     public void addListenerOnRatingBar() {
