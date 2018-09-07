@@ -19,9 +19,13 @@ import android.widget.TextView;
 
 import com.example.kjw.a2018summerproject.R;
 
+import java.util.ArrayList;
+
 import static android.R.color.transparent;
+import static android.R.layout.simple_spinner_item;
 
 public class ex_CycleMenu extends Dialog {
+
 
     private LinearLayout container;
 
@@ -38,25 +42,8 @@ public class ex_CycleMenu extends Dialog {
 
         final EditText exerciseCycleTitle = (EditText) findViewById(R.id.ex_cyclemenu_edittext_name);
         String getExerciseCycleTitle = exerciseCycleTitle.getText().toString();
-//        final String[] ar = {"팔", "가슴", "상체", "하체", "전신"};
-//        Spinner part_Spinner = (Spinner)findViewById(R.id.ex_cyclemenu_spinner_exercisepart);
-//
-//        final String getExerciseCyclePart;
-//        ArrayAdapter<String> ex_cyclemenu_spinner_adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, ar);
-//        part_Spinner.setAdapter(ex_cyclemenu_spinner_adapter);
-//        part_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                switch (i)
-//                case 0:
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-//        String getExerciseCyclePart = part_Spinner.getSelectedItem().toString();
+        Spinner part_Spinner = (Spinner)findViewById(R.id.ex_cyclemenu_spinner_exercisepart);
+        part_Spinner.setSelection(0);
         final EditText exerciseCycleWeight = (EditText) findViewById(R.id.ex_cyclemenu_edittext_weight);
         String getExerciseCycleWeight = exerciseCycleWeight.getText().toString();
         final EditText exerciseCycleNumber = (EditText) findViewById(R.id.ex_cyclemenu_edittext_number);
@@ -70,10 +57,7 @@ public class ex_CycleMenu extends Dialog {
         {
             getExerciseCycleTitle = "제목 없음";
         }
-//        if(getExerciseCyclePart == null)
-//        {
-//            getExerciseCyclePart = "전신";
-//        }
+
         if(getExerciseCycleWeight == null)
         {
             getExerciseCycleWeight = "0";
@@ -91,11 +75,26 @@ public class ex_CycleMenu extends Dialog {
             getExerciseCycleBreakTime = "0";
         }
 
+        final String getExerciseCyclePart = part_Spinner.getSelectedItem().toString();
+        final String takeExerciseCycleTitle = getExerciseCycleTitle;
+        final String takeExerciseCyclePart = getExerciseCyclePart;
+        final String takeExerciseCycleWeight = getExerciseCycleWeight;
+        final String takeExerciseCycleNumber = getExerciseCycleNumber;
+        final String takeExerciseCycleTime = getExerciseCycleTime;
+        final String takeExerciseCycleBreakTime = getExerciseCycleBreakTime;
+
         Button saveValueToCycle = (Button) findViewById(R.id.ex_cyclemenu_button_next);
         saveValueToCycle.setOnClickListener(new Button.OnClickListener()
             {
             public void onClick(View v){
-
+                Intent goToCycle = new Intent();
+                goToCycle.putExtra("cycletitle",takeExerciseCycleTitle);
+                goToCycle.putExtra("cyclepart",takeExerciseCyclePart);
+                goToCycle.putExtra("cycleweight",takeExerciseCycleWeight);
+                goToCycle.putExtra("cyclenumber",takeExerciseCycleNumber);
+                goToCycle.putExtra("cycleTime",takeExerciseCycleTime);
+                goToCycle.putExtra("cyclebreaktime",takeExerciseCycleBreakTime);
+                ex_CycleMenu.this.dismiss();
             }
         });
     }

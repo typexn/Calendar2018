@@ -1,18 +1,23 @@
 package com.example.kjw.a2018summerproject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Checkable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,8 +32,8 @@ public class ex_Cycle extends AppCompatActivity {
     int ex_CycleCount = 0;
     ListView listView_Upside;
     ListView listView_Downside;
-    ex_CycleBaseAdapter ex_CycleBaseUpside;
-    ex_CycleBaseAdapter ex_CycleBaseDownside;
+//    ex_CycleBaseAdapter ex_CycleBaseUpside;
+//    ex_CycleBaseAdapter ex_CycleBaseDownside;
     ArrayList<ex_ExerciseRoutine> routineList = new ArrayList<ex_ExerciseRoutine>();
 
     private LinearLayout container;
@@ -58,14 +63,11 @@ public class ex_Cycle extends AppCompatActivity {
             routineList.add(newRoutine);
         }
 
-        final ArrayList<ex_CycleAdapter> list_ItemUpsideArrayList = new ArrayList<ex_CycleAdapter>();
-        final ArrayList<ex_CycleAdapter> list_ItemDownsideArrayList = new ArrayList<ex_CycleAdapter>();
+//        final ArrayList<ex_CycleAdapter> list_ItemUpsideArrayList = new ArrayList<ex_CycleAdapter>();
+//        final ArrayList<ex_CycleAdapter> list_ItemDownsideArrayList = new ArrayList<ex_CycleAdapter>();
 
-        listView_Upside = (ListView) findViewById(R.id.ex_cycle_listview_launch);
-        listView_Downside = (ListView) findViewById(R.id.ex_cycle_listview_savedlist);
-
-        ex_CycleBaseUpside = new ex_CycleBaseAdapter(this,list_ItemUpsideArrayList);
-        ex_CycleBaseDownside = new ex_CycleBaseAdapter(this,list_ItemDownsideArrayList);
+//        ex_CycleBaseUpside = new ex_CycleBaseAdapter(this,list_ItemUpsideArrayList);
+//        ex_CycleBaseDownside = new ex_CycleBaseAdapter(this,list_ItemDownsideArrayList);
 
 
         dial = (Button) findViewById(R.id.ex_cycle_image_plus);
@@ -99,77 +101,271 @@ public class ex_Cycle extends AppCompatActivity {
                     }
                 }
         );
+        final ArrayList<String> cycleItems = new ArrayList<String>();
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, cycleItems);
 
+        CustomChoiceSavedListViewAdapter savedAdapter;
+        CustomChoiceStartListViewAdapter startAdapter;
+
+        listView_Upside = (ListView) findViewById(R.id.ex_cycle_listview_launch);
+        listView_Downside = (ListView) findViewById(R.id.ex_cycle_listview_savedlist);
+
+        ImageButton btn_listUp = (ImageButton) findViewById(R.id.ex_cycle_image_listup);
+        btn_listUp.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        int count;
+                        count = adapter.getCount();
+                        cycleItems.add("List");
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+        );
     }
 }
-    class ex_CycleAdapter {
-        private int profile_image;
-        private String title;
+class CheckableDownsideLinearLayout extends LinearLayout implements Checkable {
+    public CheckableDownsideLinearLayout(Context context, AttributeSet attrs) {
+        super(context,attrs);
+    }
 
-        public ex_CycleAdapter(int profile_image, String title) {
-            this.profile_image = profile_image;
-            this.title = title;
+    @Override
+    public void setChecked(boolean checked) {
+        CheckBox checkBox = (CheckBox) findViewById(R.id.ex_cycle_checkbox_downside);
+
+        if(checkBox.isChecked() != checked) {
+            checkBox.setChecked(checked);
         }
+    }
 
-        public int getProfile_image() {
+    @Override
+    public boolean isChecked() {
+        CheckBox checkBox = (CheckBox) findViewById(R.id.ex_cycle_checkbox_downside);
 
-            return profile_image;
-        }
+        return checkBox.isChecked();
+    }
 
-        public void setProfile_image(int profile_image) {
-            this.profile_image = profile_image;
-        }
+    @Override
+    public void toggle() {
+        CheckBox checkbox = (CheckBox) findViewById(R.id.ex_cycle_checkbox_downside);
 
-        public String getTitle() {
-            return title;
-        }
+        setChecked(checkbox.isChecked() ? false : true);
+    }
+}
+class ListViewItem {
+    private Drawable icon ;
+    private String text ;
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
+    public void setIcon(Drawable icon) {
+        this.icon = icon ;
+    }
+    public void setText(String text) {
+        this.text = text ;
+    }
+
+    public Drawable getIcon() {
+        return this.icon ;
+    }
+
+    public String getText() {
+        return this.text ;
+    }
+}
+
+class CustomChoiceSavedListViewAdapter extends BaseAdapter {
+    // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
+    private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
+
+    // ListViewAdapter의 생성자
+    public CustomChoiceSavedListViewAdapter() {
 
     }
 
-    class ex_CycleBaseAdapter extends BaseAdapter {
-
-        Context context;
-        ArrayList<ex_CycleAdapter> list_ex_CycleAdapter;
-
-        public ex_CycleBaseAdapter(Context context, ArrayList<ex_CycleAdapter> list_ex_CycleAdapter) {
-            this.context = context;
-            this.list_ex_CycleAdapter = list_ex_CycleAdapter;
-        }
-
-        @Override
-        public int getCount() {
-            return this.list_ex_CycleAdapter.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return list_ex_CycleAdapter.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        ImageView profile_imageView;
-        TextView title_textView;
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.ex_cycle_listview, null);
-                profile_imageView = (ImageView) view.findViewById(R.id.ex_cycle_image_representimage);
-                title_textView = (TextView) view.findViewById(R.id.ex_cycle_text_title);
-            }
-            profile_imageView.setImageResource(list_ex_CycleAdapter.get(i).getProfile_image());
-            title_textView.setText(list_ex_CycleAdapter.get(i).getTitle());
-            return view;
-        }
+    // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
+    @Override
+    public int getCount() {
+        return listViewItemList.size() ;
     }
+
+    // position에 위치한 데이터를 화면에 출력하는데 사용될 View를 리턴. : 필수 구현
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final int pos = position;
+        final Context context = parent.getContext();
+
+        // "listview_item" Layout을 inflate하여 convertView 참조 획득.
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.ex_cyclesaved_listview, parent, false);
+        }
+
+        // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
+        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.ex_cycle_image_representimage_downside) ;
+        TextView textTextView = (TextView) convertView.findViewById(R.id.ex_cycle_text_title_downside) ;
+
+        // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
+        ListViewItem listViewItem = listViewItemList.get(position);
+
+        // 아이템 내 각 위젯에 데이터 반영
+        iconImageView.setImageDrawable(listViewItem.getIcon());
+        textTextView.setText(listViewItem.getText());
+
+        return convertView;
+    }
+
+    // 지정한 위치(position)에 있는 데이터와 관계된 아이템(row)의 ID를 리턴. : 필수 구현
+    @Override
+    public long getItemId(int position) {
+        return position ;
+    }
+
+    // 지정한 위치(position)에 있는 데이터 리턴 : 필수 구현
+    @Override
+    public Object getItem(int position) {
+        return listViewItemList.get(position) ;
+    }
+
+    // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
+    public void addItem(Drawable icon, String text) {
+        ListViewItem item = new ListViewItem();
+
+        item.setIcon(icon);
+        item.setText(text);
+
+        listViewItemList.add(item);
+    }
+}
+
+class CustomChoiceStartListViewAdapter extends BaseAdapter {
+    // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
+    private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
+
+    // ListViewAdapter의 생성자
+    public CustomChoiceStartListViewAdapter() {
+
+    }
+
+    // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
+    @Override
+    public int getCount() {
+        return listViewItemList.size() ;
+    }
+
+    // position에 위치한 데이터를 화면에 출력하는데 사용될 View를 리턴. : 필수 구현
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final int pos = position;
+        final Context context = parent.getContext();
+
+        // "listview_item" Layout을 inflate하여 convertView 참조 획득.
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.ex_cyclestart_listview, parent, false);
+        }
+
+        // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
+        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.ex_cycle_image_representimage_upside) ;
+        TextView textTextView = (TextView) convertView.findViewById(R.id.ex_cycle_text_title_upside) ;
+
+        // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
+        ListViewItem listViewItem = listViewItemList.get(position);
+
+        // 아이템 내 각 위젯에 데이터 반영
+        iconImageView.setImageDrawable(listViewItem.getIcon());
+        textTextView.setText(listViewItem.getText());
+
+        return convertView;
+    }
+
+    // 지정한 위치(position)에 있는 데이터와 관계된 아이템(row)의 ID를 리턴. : 필수 구현
+    @Override
+    public long getItemId(int position) {
+        return position ;
+    }
+
+    // 지정한 위치(position)에 있는 데이터 리턴 : 필수 구현
+    @Override
+    public Object getItem(int position) {
+        return listViewItemList.get(position) ;
+    }
+
+    // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
+    public void addItem(Drawable icon, String text) {
+        ListViewItem item = new ListViewItem();
+
+        item.setIcon(icon);
+        item.setText(text);
+
+        listViewItemList.add(item);
+    }
+}
+//class ex_CycleAdapter {
+//        private int profile_image;
+//        private String title;
+//
+//        public ex_CycleAdapter(int profile_image, String title) {
+//            this.profile_image = profile_image;
+//            this.title = title;
+//        }
+//
+//        public int getProfile_image() {
+//
+//            return profile_image;
+//        }
+//
+//        public void setProfile_image(int profile_image) {
+//            this.profile_image = profile_image;
+//        }
+//
+//        public String getTitle() {
+//            return title;
+//        }
+//
+//        public void setTitle(String title) {
+//            this.title = title;
+//        }
+//
+//    }
+//
+//    class ex_CycleBaseAdapter extends BaseAdapter {
+//
+//        Context context;
+//        ArrayList<ex_CycleAdapter> list_ex_CycleAdapter;
+//
+//        public ex_CycleBaseAdapter(Context context, ArrayList<ex_CycleAdapter> list_ex_CycleAdapter) {
+//            this.context = context;
+//            this.list_ex_CycleAdapter = list_ex_CycleAdapter;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return this.list_ex_CycleAdapter.size();
+//        }
+//
+//        @Override
+//        public Object getItem(int i) {
+//            return list_ex_CycleAdapter.get(i);
+//        }
+//
+//        @Override
+//        public long getItemId(int i) {
+//            return i;
+//        }
+//
+//        ImageView profile_imageView;
+//        TextView title_textView;
+//
+//        @Override
+//        public View getView(int i, View view, ViewGroup viewGroup) {
+//            if (view == null) {
+//                view = LayoutInflater.from(context).inflate(R.layout.ex_cyclesaved_listview, null);
+//                profile_imageView = (ImageView) view.findViewById(R.id.ex_cycle_image_representimage);
+//                title_textView = (TextView) view.findViewById(R.id.ex_cycle_text_title);
+//            }
+//            profile_imageView.setImageResource(list_ex_CycleAdapter.get(i).getProfile_image());
+//            title_textView.setText(list_ex_CycleAdapter.get(i).getTitle());
+//            return view;
+//        }
+//    }
 
 
     class ex_ExerciseCycle {

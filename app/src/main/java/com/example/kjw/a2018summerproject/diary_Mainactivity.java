@@ -1,21 +1,12 @@
 package com.example.kjw.a2018summerproject;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,28 +18,22 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Locale;
-import java.util.zip.Inflater;
 
 import static com.example.kjw.a2018summerproject.activity.GVCalendarActivity.SUNDAY;
 
@@ -609,7 +594,7 @@ class diary_ListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup viewGroup) {
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.ex_cycle_listview, null);
+            convertView = inflater.inflate(R.layout.ex_cyclesaved_listview, null);
         }
         ImageView listViewImage = (ImageView) convertView.findViewById(R.id.ex_cycle_image_representimage);
         TextView listViewText = (TextView) convertView.findViewById(R.id.ex_cycle_text_title);
