@@ -56,6 +56,7 @@ public class sch_AddActivity extends AppCompatActivity {
 
     int fromWhere;
     Schedule schedule;
+    int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +104,23 @@ public class sch_AddActivity extends AppCompatActivity {
 
                 if(fromWhere == FROMMAIN){
                     sch_Mainactivity.schList.add(schedule);
+                }else{
+                    Schedule sch = sch_Mainactivity.schList.get(index);
+                    sch.title = title;
+                    sch.location = location;
+                    sch.memo = memo;
+
+                    sch.startYear = startDayInfo.getYear();
+                    sch.startMonth = startDayInfo.getMonth();
+                    sch.startDay = Integer.parseInt(startDayInfo.getDay());
+                    sch.startHour = startTimeInfo.getHourString();
+                    sch.startMinute = startTimeInfo.getMinuteString();
+
+                    sch.endYear = endDayInfo.getYear();
+                    sch.endMonth = endDayInfo.getMonth();
+                    sch.endDay = Integer.parseInt(endDayInfo.getDay());
+                    sch.endHour = endTimeInfo.getHourString();
+                    sch.endMinute = endTimeInfo.getMinuteString();
                 }
                 android.util.Log.d("minyoung", startTimeInfo.getHourString() + "" + startTimeInfo.getMinuteString());
 
@@ -148,6 +166,7 @@ public class sch_AddActivity extends AppCompatActivity {
     private void setData(){
         Intent getIntent = getIntent();
 
+        index = getIntent.getIntExtra("index", -1);
         fromWhere = getIntent.getIntExtra("activity", 0);
         if(fromWhere == FROMVERIFY) { //확인화면 - 편집버튼으로
             schedule = (Schedule)getIntent.getSerializableExtra("Schedule");
@@ -296,8 +315,8 @@ public class sch_AddActivity extends AppCompatActivity {
         long startSpot = 0;
         long endSpot = 0;
 
-        String start = startDayInfo.getYear() + "" + startDayInfo.getMonth() + startDayInfo.getDay() + startTimeInfo.getHourString() + startTimeInfo.getMinuteString();
-        String end = endDayInfo.getYear() + "" + endDayInfo.getMonth() + endDayInfo.getDay() + endTimeInfo.getHourString() + endTimeInfo.getMinuteString();
+        String start = startDayInfo.getYear() + "" + startDayInfo.getMonthString() + startDayInfo.getDayString() + startTimeInfo.getHourString() + startTimeInfo.getMinuteString();
+        String end = endDayInfo.getYear() + "" + endDayInfo.getMonthString() + endDayInfo.getDayString() + endTimeInfo.getHourString() + endTimeInfo.getMinuteString();
 
         android.util.Log.d("minyoung", start + "/" + end);
         startSpot = Long.parseLong(start);
