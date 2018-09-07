@@ -596,8 +596,8 @@ class diary_ListViewAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.ex_cyclesaved_listview, null);
         }
-        ImageView listViewImage = (ImageView) convertView.findViewById(R.id.ex_cycle_image_representimage);
-        TextView listViewText = (TextView) convertView.findViewById(R.id.ex_cycle_text_title);
+        ImageView listViewImage = (ImageView) convertView.findViewById(R.id.ex_cycle_image_representimage_upside);
+        TextView listViewText = (TextView) convertView.findViewById(R.id.ex_cycle_text_title_upside);
         listViewText.setText(listViewContent.get(position).getDiaryTitle());
 
         return convertView;
