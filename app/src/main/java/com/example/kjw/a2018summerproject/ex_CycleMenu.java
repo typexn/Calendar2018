@@ -69,7 +69,8 @@ public class ex_CycleMenu extends Dialog {
         if(getExerciseCycleTime == null)
         {
             getExerciseCycleTime = "0";
-        }
+
+            }
         if(getExerciseCycleBreakTime == null)
         {
             getExerciseCycleBreakTime = "0";
@@ -85,7 +86,7 @@ public class ex_CycleMenu extends Dialog {
 
         Button saveValueToCycle = (Button) findViewById(R.id.ex_cyclemenu_button_next);
         saveValueToCycle.setOnClickListener(new Button.OnClickListener()
-            {
+        {
             public void onClick(View v){
                 Intent goToCycle = new Intent();
                 goToCycle.putExtra("cycletitle",takeExerciseCycleTitle);
@@ -95,8 +96,8 @@ public class ex_CycleMenu extends Dialog {
                 goToCycle.putExtra("cycleTime",takeExerciseCycleTime);
                 goToCycle.putExtra("cyclebreaktime",takeExerciseCycleBreakTime);
                 ex_CycleMenu.this.dismiss();
-            }
-        });
+            });
+        }
     }
 }
 

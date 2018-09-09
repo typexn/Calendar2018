@@ -118,19 +118,13 @@ public class ex_Cycle extends AppCompatActivity {
         listView_Downside.setAdapter(savedAdapter);
         listView_Upside.setAdapter(startAdapter);
 
-//        startAdapter.addItem(ContextCompat.getDrawable(this,R.drawable.ic_launcher_background),"");
-//        savedAdapter.addItem(R.drawable.ic_launcher_background,"가",R.drawable.ic_launcher_background);
-//        savedAdapter.addItem(R.drawable.ic_launcher_background,"나",R.drawable.ic_launcher_background);
-//        savedAdapter.addItem(R.drawable.ic_launcher_background,"다",R.drawable.ic_launcher_background);
-//        startAdapter.addItem(R.drawable.ic_launcher_background,"바",R.drawable.ic_launcher_background);
-//        startAdapter.addItem(R.drawable.ic_launcher_background,"마",R.drawable.ic_launcher_background);
-//        startAdapter.addItem(R.drawable.ic_launcher_background,"라",R.drawable.ic_launcher_background);
         ArrayList<ex_ExerciseCycle> newCycleList = new ArrayList<ex_ExerciseCycle>();
         newCycleList.add(new ex_ExerciseCycle("가","나",3.5,1,1,1,1));
+        Log.d("Uk" , "Uk"+newCycleList.get(newCycleList.size()-1).exerciseTitle);
         ex_CycleAdapter newCycleAdapter = new ex_CycleAdapter(R.drawable.ic_launcher_foreground,newCycleList.get(newCycleList.size()-1).exerciseTitle,R.drawable.ic_launcher_background);
         ex_CycleBaseDownside.addItem(newCycleAdapter);
         ex_CycleBaseDownside.notifyDataSetChanged();
-        
+
 
 
         ImageButton btn_listUp = (ImageButton) findViewById(R.id.ex_cycle_image_listup);
@@ -362,10 +356,12 @@ class ex_CycleAdapter {
 
         Context context;
         ArrayList<ex_CycleAdapter> list_ex_CycleAdapter;
+        LayoutInflater mLiInflater;
 
         public ex_CycleStartBaseAdapter(Context context, ArrayList<ex_CycleAdapter> list_ex_CycleAdapter) {
             this.context = context;
             this.list_ex_CycleAdapter = list_ex_CycleAdapter;
+            this.mLiInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
@@ -409,10 +405,12 @@ class ex_CycleSavedBaseAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<ex_CycleAdapter> list_ex_CycleAdapter;
+    LayoutInflater mLiInflater;
 
     public ex_CycleSavedBaseAdapter(Context context, ArrayList<ex_CycleAdapter> list_ex_CycleAdapter) {
         this.context = context;
         this.list_ex_CycleAdapter = list_ex_CycleAdapter;
+        this.mLiInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -436,16 +434,28 @@ class ex_CycleSavedBaseAdapter extends BaseAdapter {
 
     ImageView profile_imageView;
     TextView title_textView;
+    ImageButton delete_ImageButton;
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.ex_cyclesaved_listview, null);
             profile_imageView = (ImageView) view.findViewById(R.id.ex_cycle_image_representimage_downside);
             title_textView = (TextView) view.findViewById(R.id.ex_cycle_text_title_downside);
+            delete_ImageButton = (ImageButton) view.findViewById(R.id.ex_cycle_text_title_downside);
         }
         profile_imageView.setImageResource(list_ex_CycleAdapter.get(i).getProfile_image());
         title_textView.setText(list_ex_CycleAdapter.get(i).getTitle());
+        delete_ImageButton.setImageResource(list_ex_CycleAdapter.get(i).getDelete_image());
+
+        view.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                /*
+                    Cycle을 새로 만들어서 Start쪽에 Add
+                 */
+            }
+        });
         return view;
     }
 }
