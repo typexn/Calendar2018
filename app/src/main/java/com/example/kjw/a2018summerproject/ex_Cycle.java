@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -44,9 +45,9 @@ public class ex_Cycle extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_cycle);
-        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
-        int width = dm.widthPixels; //디바이스 화면 너비
-        int height = dm.heightPixels; //디바이스 화면 높이
+//        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
+//        int width = dm.widthPixels; //디바이스 화면 너비
+//        int height = dm.heightPixels; //디바이스 화면 높이
 
         Intent getRoutine = getIntent();
         final int nth_Couting = getRoutine.getIntExtra("position",1);
@@ -72,19 +73,31 @@ public class ex_Cycle extends AppCompatActivity {
 //        ex_CycleBaseDownside = new ex_CycleBaseAdapter(this,list_ItemDownsideArrayList);
 
 
-        dial = (Button) findViewById(R.id.ex_cycle_image_plus);
-        cd = new ex_CycleMenu(this);
-        WindowManager.LayoutParams wm = cd.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
-        wm.copyFrom(cd.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
-        wm.width = width / 2;  //화면 너비의 절반
-        wm.height = height / 2;  //화면 높이의 절반
+
+        Button dial = (Button)findViewById(R.id.ex_cycle_image_plus);
         dial.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
-                ex_CycleCount++;
-                cd.show();  //다이얼로그
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "액티비티 전환", Toast.LENGTH_LONG).show();
+
+                // 액티비티 전환 코드
+                Intent intent = new Intent(getApplicationContext(), ex_CycleMenu.class);
+                startActivity(intent);
             }
         });
+//        cd = new ex_CycleMenu(this);
+//        WindowManager.LayoutParams wm = cd.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
+//        wm.copyFrom(cd.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
+//        wm.width = width / 2;  //화면 너비의 절반
+//        wm.height = height / 2;  //화면 높이의 절반
+//        dial.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ex_CycleCount++;
+//                cd.show();  //다이얼로그
+//            }
+//        });
 
 //        final ArrayList<ex_ExerciseRoutine> nth_Routine = (ArrayList<ex_ExerciseRoutine>) getRoutine.getSerializableExtra("Routine");
 

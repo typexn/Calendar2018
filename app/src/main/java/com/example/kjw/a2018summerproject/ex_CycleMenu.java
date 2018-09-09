@@ -40,63 +40,7 @@ public class ex_CycleMenu extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_cyclemenu);
 
-        final EditText exerciseCycleTitle = (EditText) findViewById(R.id.ex_cyclemenu_edittext_name);
-        String getExerciseCycleTitle = exerciseCycleTitle.getText().toString();
-        Spinner part_Spinner = (Spinner)findViewById(R.id.ex_cyclemenu_spinner_exercisepart);
-        part_Spinner.setSelection(0);
-        final EditText exerciseCycleWeight = (EditText) findViewById(R.id.ex_cyclemenu_edittext_weight);
-        String getExerciseCycleWeight = exerciseCycleWeight.getText().toString();
-        final EditText exerciseCycleNumber = (EditText) findViewById(R.id.ex_cyclemenu_edittext_number);
-        String getExerciseCycleNumber = exerciseCycleNumber.getText().toString();
-        final EditText exerciseCycleTime = (EditText) findViewById(R.id.ex_cyclemenu_edittext_time);
-        String getExerciseCycleTime = exerciseCycleTime.getText().toString();
-        final EditText exerciseCycleBreakTime = (EditText) findViewById(R.id.ex_cyclemenu_edittext_break);
-        String getExerciseCycleBreakTime = exerciseCycleBreakTime.getText().toString();
 
-        if(getExerciseCycleTitle == null)
-        {
-            getExerciseCycleTitle = "제목 없음";
-        }
-
-        if(getExerciseCycleWeight == null)
-        {
-            getExerciseCycleWeight = "0";
-        }
-        if(getExerciseCycleNumber == null)
-        {
-            getExerciseCycleNumber = "0";
-        }
-        if(getExerciseCycleTime == null)
-        {
-            getExerciseCycleTime = "0";
-        }
-        if(getExerciseCycleBreakTime == null)
-        {
-            getExerciseCycleBreakTime = "0";
-        }
-
-        final String getExerciseCyclePart = part_Spinner.getSelectedItem().toString();
-        final String takeExerciseCycleTitle = getExerciseCycleTitle;
-        final String takeExerciseCyclePart = getExerciseCyclePart;
-        final String takeExerciseCycleWeight = getExerciseCycleWeight;
-        final String takeExerciseCycleNumber = getExerciseCycleNumber;
-        final String takeExerciseCycleTime = getExerciseCycleTime;
-        final String takeExerciseCycleBreakTime = getExerciseCycleBreakTime;
-
-        Button saveValueToCycle = (Button) findViewById(R.id.ex_cyclemenu_button_next);
-        saveValueToCycle.setOnClickListener(new Button.OnClickListener()
-            {
-            public void onClick(View v){
-                Intent goToCycle = new Intent();
-                goToCycle.putExtra("cycletitle",takeExerciseCycleTitle);
-                goToCycle.putExtra("cyclepart",takeExerciseCyclePart);
-                goToCycle.putExtra("cycleweight",takeExerciseCycleWeight);
-                goToCycle.putExtra("cyclenumber",takeExerciseCycleNumber);
-                goToCycle.putExtra("cycleTime",takeExerciseCycleTime);
-                goToCycle.putExtra("cyclebreaktime",takeExerciseCycleBreakTime);
-                ex_CycleMenu.this.dismiss();
-            }
-        });
     }
 }
 
