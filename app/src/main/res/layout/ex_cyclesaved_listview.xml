@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:focusable="true"
         android:id="@+id/ex_cycle_linearlayout_cycle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,9 +23,9 @@
             android:layout_height="20sp"
             android:id="@+id/ex_cycle_text_title_downside"/>
 
-        <CheckBox
+        <ImageButton
             android:layout_weight="2"
-            android:id="@+id/ex_cycle_checkbox_downside"
+            android:id="@+id/ex_cycle_imagebutton_downside"
             android:layout_marginRight="20sp"
             android:layout_width="match_parent"
             android:layout_height="20sp" />

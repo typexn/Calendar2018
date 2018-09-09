@@ -26,13 +26,13 @@ public class ex_Routine extends Activity {
     ListView listView;
     ex_RoutineBaseAdapter ex_RoutineBase;
     ArrayList<ex_ExerciseRoutine> routinelist = new ArrayList<ex_ExerciseRoutine>();
+    boolean deleteMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_routine);
         listView = (ListView)findViewById(R.id.ex_routine_listview_routine);
-
 
         final ArrayList<ex_RoutineAdapter> list_ItemArrayList = new ArrayList<ex_RoutineAdapter>();
 
@@ -65,11 +65,10 @@ public class ex_Routine extends Activity {
 //                routineCount++;
             }
         });
-        Button tmpButton = (Button) findViewById(R.id.ex_routine_button_delactivate);
-        tmpButton.setOnClickListener(new Button.OnClickListener(){
+        Button deleteButton = (Button) findViewById(R.id.ex_routine_button_delactivate);
+        deleteButton.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
-                Intent tmpintent = new Intent(ex_Routine.this,ex_Cycle.class);
-                startActivity(tmpintent);
+                deleteMode = !deleteMode;
             }
         });
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
