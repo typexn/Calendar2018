@@ -159,8 +159,34 @@ public class diary_Write extends AppCompatActivity implements View.OnClickListen
         diaryWeatherSpinner = (Spinner) findViewById(R.id.diary_weather_spinner);
         diaryMoodSpinner = (Spinner) findViewById(R.id.diary_mood_spinner);
 
-        diaryWeatherSpinner.setOnItemSelectedListener(this);
-        diaryMoodSpinner.setOnItemSelectedListener(this);
+
+        diaryWeatherSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                diaryWeatherText.setText("" + "" + parent.getItemAtPosition(position));
+                Log.d("현준", "다이어리웨덜");
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        diaryMoodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                diaryMoodText.setText("" + "" + parent.getItemAtPosition(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
 
         //사진 하나 추가 버튼 이벤트   //사진 여라장 추가 버튼 이벤트
         buttonAddPhoto = (Button) findViewById(R.id.diary_write_button_add_photo);
