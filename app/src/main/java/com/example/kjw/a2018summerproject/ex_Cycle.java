@@ -79,9 +79,7 @@ public class ex_Cycle extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "액티비티 전환", Toast.LENGTH_LONG).show();
 
-                // 액티비티 전환 코드
                 Intent intent = new Intent(getApplicationContext(), ex_CycleMenu.class);
                 startActivity(intent);
             }

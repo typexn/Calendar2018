@@ -37,6 +37,18 @@ public class ex_CycleMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_cyclemenu);
+
+        Button save = (Button)findViewById(R.id.ex_cyclemenu_button_save);
+        save.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), ex_Cycle.class);
+                startActivity(intent);
+            }
+        });
+
         final EditText exerciseCycleTitle = (EditText) findViewById(R.id.ex_cyclemenu_edittext_name);
         String getExerciseCycleTitle = exerciseCycleTitle.getText().toString();
         Spinner part_Spinner = (Spinner)findViewById(R.id.ex_cyclemenu_spinner_exercisepart);
