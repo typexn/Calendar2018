@@ -27,11 +27,7 @@ import static android.R.layout.simple_spinner_item;
 
 public class ex_CycleMenu extends AppCompatActivity {
 
-
     private LinearLayout container;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +74,8 @@ public class ex_CycleMenu extends AppCompatActivity {
         if(getExerciseCycleTime == null)
         {
             getExerciseCycleTime = "0";
-        }
+
+            }
         if(getExerciseCycleBreakTime == null)
         {
             getExerciseCycleBreakTime = "0";
@@ -101,12 +98,13 @@ public class ex_CycleMenu extends AppCompatActivity {
                 goToCycle.putExtra("cyclepart",takeExerciseCyclePart);
                 goToCycle.putExtra("cycleweight",takeExerciseCycleWeight);
                 goToCycle.putExtra("cyclenumber",takeExerciseCycleNumber);
-                goToCycle.putExtra("cycleTime",takeExerciseCycleTime);
+                goToCycle.putExtra("cycletime",takeExerciseCycleTime);
                 goToCycle.putExtra("cyclebreaktime",takeExerciseCycleBreakTime);
-                startActivity(goToCycle);
+                setResult(RESULT_OK,goToCycle);
+                finish();
             }
         });
     }
-    }
+}
 
 
