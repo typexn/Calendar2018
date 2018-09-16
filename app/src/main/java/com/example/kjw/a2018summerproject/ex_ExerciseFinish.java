@@ -1,5 +1,6 @@
 package com.example.kjw.a2018summerproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,6 +22,9 @@ public class ex_ExerciseFinish extends AppCompatActivity {
     private Button btnSubmit;
     EditText finishmemo;
     String resultsummary;
+    Button btn;
+    String memo;
+    Schedule exercise;
 
     float rate = Float.valueOf(getIntent().getExtras().get("edtRating").toString());
 
@@ -35,9 +39,23 @@ public class ex_ExerciseFinish extends AppCompatActivity {
 
         TextView text = (TextView)findViewById(R.id.ex_exercisefinish_text_result);
         text .setText(resultsummary);
+        setData();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ListViewItem finishmemo = new ListViewItem();
+                String memo = finishmemo.getText().toString();
+            }
+        });
 
 
 
+    }
+
+    private void setData() {
+        Intent getIntent = getIntent();
+        memo = exercise.memo;
+        finishmemo.setText(memo);
     }
 
     public void addListenerOnRatingBar() {

@@ -54,16 +54,13 @@ public class ex_Cycle extends AppCompatActivity {
 //        int height = dm.heightPixels; //디바이스 화면 높이
 
         Intent getRoutine = getIntent();
-        final int nth_Couting = getRoutine.getIntExtra("position",1);
+        final int nth_Couting = getRoutine.getIntExtra("position", 1);
         ArrayList<Integer> intentCount = new ArrayList<Integer>();
         final String nth_Title = getRoutine.getStringExtra("title");
         int nowRoutine;
-        if(intentCount.contains(nth_Couting))
-        {
+        if (intentCount.contains(nth_Couting)) {
             nowRoutine = intentCount.indexOf(nth_Couting);
-        }
-        else
-        {
+        } else {
             intentCount.add(nth_Couting);
             nowRoutine = routineList.size();
             ex_ExerciseRoutine newRoutine = new ex_ExerciseRoutine(nth_Title);
@@ -76,6 +73,7 @@ public class ex_Cycle extends AppCompatActivity {
 //        ex_CycleBaseUpside = new ex_CycleBaseAdapter(this,list_ItemUpsideArrayList);
 //        ex_CycleBaseDownside = new ex_CycleBaseAdapter(this,list_ItemDownsideArrayList);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 
@@ -83,11 +81,14 @@ public class ex_Cycle extends AppCompatActivity {
 =======
 >>>>>>> e2240f60c5bd9b71843ddc16ae6dddc27b9560a7
         Button dial = (Button)findViewById(R.id.ex_cycle_image_plus);
+=======
+        Button dial = (Button) findViewById(R.id.ex_cycle_image_plus);
+>>>>>>> 14488a4614dcf20791ab324c9f877af8809b44d8
         dial.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 Intent goToCycleMenu = new Intent(ex_Cycle.this, ex_CycleMenu.class);
-                startActivityForResult(goToCycleMenu,3000);
+                startActivityForResult(goToCycleMenu, 3000);
             }
         });
 //        cd = new ex_CycleMenu(this);
@@ -108,8 +109,8 @@ public class ex_Cycle extends AppCompatActivity {
                 new Button.OnClickListener() {
                     public void onClick(View v) {
                         Intent goToStart = new Intent(getApplicationContext(), ex_ExerciseStart.class);
-                        goToStart.putExtra("cycle",newCycleList);
-                        goToStart.putExtra("count",nth_Couting);
+                        goToStart.putExtra("cycle", newCycleList);
+                        goToStart.putExtra("count", nth_Couting);
                         startActivity(goToStart);
                     }
                 }
@@ -122,8 +123,8 @@ public class ex_Cycle extends AppCompatActivity {
         final ArrayList<ex_CycleSaveAdapter> cycleSaveAdapters = new ArrayList<ex_CycleSaveAdapter>();
         final ArrayList<ex_CycleStartAdapter> cycleStartAdapters = new ArrayList<ex_CycleStartAdapter>();
 
-        ex_CycleSavedBaseAdapter savedAdapter = new ex_CycleSavedBaseAdapter(this,cycleSaveAdapters);
-        ex_CycleStartBaseAdapter startAdapter = new ex_CycleStartBaseAdapter(this,cycleStartAdapters);
+        ex_CycleSavedBaseAdapter savedAdapter = new ex_CycleSavedBaseAdapter(this, cycleSaveAdapters);
+        ex_CycleStartBaseAdapter startAdapter = new ex_CycleStartBaseAdapter(this, cycleStartAdapters);
 
         listView_Upside = (ListView) findViewById(R.id.ex_cycle_listview_launch);
         listView_Downside = (ListView) findViewById(R.id.ex_cycle_listview_savedlist);
@@ -134,13 +135,11 @@ public class ex_Cycle extends AppCompatActivity {
         listView_Downside.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ex_CycleStartAdapter newCycleAdapter = new ex_CycleStartAdapter(R.drawable.ic_launcher_foreground,newCycleList.get(newCycleList.size()-1).exerciseTitle,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background);
+                ex_CycleStartAdapter newCycleAdapter = new ex_CycleStartAdapter(R.drawable.ic_launcher_foreground, newCycleList.get(newCycleList.size() - 1).exerciseTitle, R.drawable.ic_launcher_background, R.drawable.ic_launcher_background);
                 ex_CycleBaseUpside.addItem(newCycleAdapter);
                 ex_CycleBaseUpside.notifyDataSetChanged();
             }
         });
-
-        Log.d("Uk" , "Uk"+newCycleList.get(newCycleList.size()-1).exerciseTitle);
 //        ex_CycleAdapter newCycleAdapter = new ex_CycleAdapter(R.drawable.ic_launcher_foreground,newCycleList.get(newCycleList.size()-1).exerciseTitle,R.drawable.ic_launcher_background);
 //        ex_CycleBaseDownside.addItem(newCycleAdapter);
 //        ex_CycleBaseDownside.notifyDataSetChanged();
@@ -158,29 +157,34 @@ public class ex_Cycle extends AppCompatActivity {
                 }
         );
     }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(resultCode == RESULT_OK){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
             Intent getFromCycleMenu = data;
             final String getTitle = getFromCycleMenu.getStringExtra("cycletitle");
-            Log.d("Uk" , "Uk Title"+getTitle);
+            Log.d("Uk", "Uk Title" + getTitle);
             final String getPart = getFromCycleMenu.getStringExtra("cyclepart");
-            final String getWeight = getFromCycleMenu.getStringExtra("cycleweight");
-            Log.d("Uk" , "Uk"+getWeight);
+//            final String getWeight = getFromCycleMenu.getStringExtra("cycleweight");
+            String getWeight = "1.5";
             double changedWeight = Double.parseDouble(getWeight);
-            final String getCount = getFromCycleMenu.getStringExtra("cyclenumber");
+//            final String getCount = getFromCycleMenu.getStringExtra("cyclenumber");
+            String getCount = "1";
             int changedCount = Integer.parseInt(getCount);
-            final String getTime = getFromCycleMenu.getStringExtra("cycletime");
+//            final String getTime = getFromCycleMenu.getStringExtra("cycletime");
+            String getTime = "1";
             int changedTime = Integer.parseInt(getTime);
-            final String getBreaktime = getFromCycleMenu.getStringExtra("cyclebreaktime");
+//            final String getBreaktime = getFromCycleMenu.getStringExtra("cyclebreaktime");
+            String getBreaktime = "1";
             int changedBreakTime = Integer.parseInt(getBreaktime);
-            newCycleList.add(new ex_ExerciseCycle(getTitle,getPart,changedWeight,changedCount,changedTime,changedBreakTime,newCycleList.size()));
-            ex_CycleSaveAdapter newCycleAdapter = new ex_CycleSaveAdapter(R.drawable.ic_launcher_foreground,newCycleList.get(newCycleList.size()-1).exerciseTitle,R.drawable.ic_launcher_background,R.drawable.ic_launcher_background);
+            newCycleList.add(new ex_ExerciseCycle(getTitle, getPart, changedWeight, changedCount, changedTime, changedBreakTime, newCycleList.size()));
+            ex_CycleSaveAdapter newCycleAdapter = new ex_CycleSaveAdapter(R.drawable.ic_launcher_foreground, newCycleList.get(newCycleList.size() - 1).exerciseTitle, R.drawable.ic_launcher_background, R.drawable.ic_launcher_background);
             ex_CycleBaseDownside.addItem(newCycleAdapter);
             ex_CycleBaseDownside.notifyDataSetChanged();
         }
+    }
 }
-}
+
 //class CheckableLinearLayout extends LinearLayout implements Checkable {
 //    public CheckableLinearLayout(Context context, AttributeSet attrs) {
 //        super(context,attrs);
@@ -209,24 +213,24 @@ public class ex_Cycle extends AppCompatActivity {
 //        setChecked(checkbox.isChecked() ? false : true);
 //    }
 //}
-class ListViewItem {
-    private Drawable icon ;
-    private String text ;
-
-    public void setIcon(Drawable icon) {
-        this.icon = icon ;
-    }
-    public void setText(String text) {
-        this.text = text ;
-    }
-
-    public Drawable getIcon() {
-        return this.icon ;
-    }
-    public String getText() {
-        return this.text ;
-    }
-}
+//class ListViewItem {
+//    private Drawable icon ;
+//    private String text ;
+//
+//    public void setIcon(Drawable icon) {
+//        this.icon = icon ;
+//    }
+//    public void setText(String text) {
+//        this.text = text ;
+//    }
+//
+//    public Drawable getIcon() {
+//        return this.icon ;
+//    }
+//    public String getText() {
+//        return this.text ;
+//    }
+//}
 //Checkbox어댑터
 //class CustomChoiceSavedListViewAdapter extends BaseAdapter {
 //    // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
@@ -356,61 +360,18 @@ class ListViewItem {
 //    }
 //}
 class ex_CycleStartAdapter {
-        private int profile_image;
-        private String title;
-        private int plus_image;
-        private int delete_image;
-
-        public ex_CycleStartAdapter(int profile_image, String title, int plus_image, int delete_image) {
-            this.profile_image = profile_image;
-            this.title = title;
-            this.plus_image = plus_image;
-            this.delete_image = delete_image;
-        }
-        public int getProfile_image() {
-
-            return profile_image;
-        }
-
-        public void setProfile_image(int profile_image) {
-            this.profile_image = profile_image;
-        }
-        public String getTitle() {
-            return title;
-        }public int getPlus_image() {
-
-        return plus_image;
-    }
-
-    public void setPlus_image(int profile_image) {
-        this.profile_image = profile_image;
-    }
-    public void setDelete_image(int delete_image) {
-        this.delete_image = delete_image;
-    }
-
-    public int getDelete_image() {
-        return delete_image;
-    }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-    }
-
-class ex_CycleSaveAdapter {
     private int profile_image;
     private String title;
     private int plus_image;
     private int delete_image;
 
-    public ex_CycleSaveAdapter(int profile_image, String title, int plus_image, int delete_image) {
+    public ex_CycleStartAdapter(int profile_image, String title, int plus_image, int delete_image) {
         this.profile_image = profile_image;
         this.title = title;
         this.plus_image = plus_image;
         this.delete_image = delete_image;
     }
+
     public int getProfile_image() {
 
         return profile_image;
@@ -419,9 +380,12 @@ class ex_CycleSaveAdapter {
     public void setProfile_image(int profile_image) {
         this.profile_image = profile_image;
     }
+
     public String getTitle() {
         return title;
-    }public int getPlus_image() {
+    }
+
+    public int getPlus_image() {
 
         return plus_image;
     }
@@ -429,6 +393,7 @@ class ex_CycleSaveAdapter {
     public void setPlus_image(int profile_image) {
         this.profile_image = profile_image;
     }
+
     public void setDelete_image(int delete_image) {
         this.delete_image = delete_image;
     }
@@ -443,58 +408,108 @@ class ex_CycleSaveAdapter {
 
 }
 
-    class ex_CycleStartBaseAdapter extends BaseAdapter {
+class ex_CycleSaveAdapter {
+    private int profile_image;
+    private String title;
+    private int plus_image;
+    private int delete_image;
 
-        Context context;
-        ArrayList<ex_CycleStartAdapter> list_ex_CycleAdapter;
-        LayoutInflater mLiInflater;
-
-        public ex_CycleStartBaseAdapter(Context context, ArrayList<ex_CycleStartAdapter> list_ex_CycleAdapter) {
-            this.context = context;
-            this.list_ex_CycleAdapter = list_ex_CycleAdapter;
-            this.mLiInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        @Override
-        public int getCount() {
-            return this.list_ex_CycleAdapter.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return list_ex_CycleAdapter.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        public void addItem(ex_CycleStartAdapter item) {
-            list_ex_CycleAdapter.add(item);
-        }
-
-        ImageView profile_imageView;
-        TextView title_textView;
-        ImageButton plus_imagebutton;
-        ImageButton delete_imagebutton;
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.ex_cyclesaved_listview, null);
-                profile_imageView = (ImageView) view.findViewById(R.id.ex_cycle_image_representimage_upside);
-                title_textView = (TextView) view.findViewById(R.id.ex_cycle_text_title_upside);
-                plus_imagebutton = (ImageButton) view.findViewById(R.id.ex_cycle_imagebutton_upside_plus);
-                delete_imagebutton = (ImageButton) view.findViewById(R.id.ex_cycle_imagebutton_upside_delete);
-            }
-            profile_imageView.setImageResource(list_ex_CycleAdapter.get(i).getProfile_image());
-            title_textView.setText(list_ex_CycleAdapter.get(i).getTitle());
-            plus_imagebutton.setImageResource(list_ex_CycleAdapter.get(i).getPlus_image());
-            delete_imagebutton.setImageResource(list_ex_CycleAdapter.get(i).getDelete_image());
-            return view;
-        }
+    public ex_CycleSaveAdapter(int profile_image, String title, int plus_image, int delete_image) {
+        this.profile_image = profile_image;
+        this.title = title;
+        this.plus_image = plus_image;
+        this.delete_image = delete_image;
     }
+
+    public int getProfile_image() {
+
+        return profile_image;
+    }
+
+    public void setProfile_image(int profile_image) {
+        this.profile_image = profile_image;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getPlus_image() {
+
+        return plus_image;
+    }
+
+    public void setPlus_image(int profile_image) {
+        this.profile_image = profile_image;
+    }
+
+    public void setDelete_image(int delete_image) {
+        this.delete_image = delete_image;
+    }
+
+    public int getDelete_image() {
+        return delete_image;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+}
+
+class ex_CycleStartBaseAdapter extends BaseAdapter {
+
+    Context context;
+    ArrayList<ex_CycleStartAdapter> list_ex_CycleAdapter;
+    LayoutInflater mLiInflater;
+
+    public ex_CycleStartBaseAdapter(Context context, ArrayList<ex_CycleStartAdapter> list_ex_CycleAdapter) {
+        this.context = context;
+        this.list_ex_CycleAdapter = list_ex_CycleAdapter;
+        this.mLiInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    @Override
+    public int getCount() {
+        return this.list_ex_CycleAdapter.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return list_ex_CycleAdapter.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
+
+    public void addItem(ex_CycleStartAdapter item) {
+        list_ex_CycleAdapter.add(item);
+    }
+
+    ImageView profile_imageView;
+    TextView title_textView;
+    ImageButton plus_imagebutton;
+    ImageButton delete_imagebutton;
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.ex_cyclesaved_listview, null);
+            profile_imageView = (ImageView) view.findViewById(R.id.ex_cycle_image_representimage_upside);
+            title_textView = (TextView) view.findViewById(R.id.ex_cycle_text_title_upside);
+            plus_imagebutton = (ImageButton) view.findViewById(R.id.ex_cycle_imagebutton_upside_plus);
+            delete_imagebutton = (ImageButton) view.findViewById(R.id.ex_cycle_imagebutton_upside_delete);
+        }
+        profile_imageView.setImageResource(list_ex_CycleAdapter.get(i).getProfile_image());
+        title_textView.setText(list_ex_CycleAdapter.get(i).getTitle());
+        plus_imagebutton.setImageResource(list_ex_CycleAdapter.get(i).getPlus_image());
+        delete_imagebutton.setImageResource(list_ex_CycleAdapter.get(i).getDelete_image());
+        return view;
+    }
+}
+
 class ex_CycleSavedBaseAdapter extends BaseAdapter {
 
     Context context;
@@ -550,14 +565,14 @@ class ex_CycleSavedBaseAdapter extends BaseAdapter {
 }
 
 
-    class ex_ExerciseCycle implements Serializable{
-        String exerciseTitle;
-        String exercisePart;
-        double exerciseWeight;
-        int exerciseCount;
-        int exerciseTimeSecond;
-        int exerciseBreakTime;
-        int exerciseSequence;
+class ex_ExerciseCycle implements Serializable {
+    String exerciseTitle;
+    String exercisePart;
+    double exerciseWeight;
+    int exerciseCount;
+    int exerciseTimeSecond;
+    int exerciseBreakTime;
+    int exerciseSequence;
             /*
                 exerciseTitle : 운동 제목
                 exercisePart : 운동 부위
@@ -568,13 +583,13 @@ class ex_CycleSavedBaseAdapter extends BaseAdapter {
                 exerciseSequence : n번째 운동
              */
 
-        ex_ExerciseCycle(String exerciseTitle, String exercisePart, double exerciseWeight, int exerciseCount, int exerciseTimeSecond, int exerciseBreakTime, int cycleCount) {
-            this.exerciseTitle = exerciseTitle;
-            this.exercisePart = exercisePart;
-            this.exerciseWeight = exerciseWeight;
-            this.exerciseCount = exerciseCount;
-            this.exerciseTimeSecond = exerciseTimeSecond;
-            this.exerciseBreakTime = exerciseBreakTime;
-            this.exerciseSequence = cycleCount;
-        }
+    ex_ExerciseCycle(String exerciseTitle, String exercisePart, double exerciseWeight, int exerciseCount, int exerciseTimeSecond, int exerciseBreakTime, int cycleCount) {
+        this.exerciseTitle = exerciseTitle;
+        this.exercisePart = exercisePart;
+        this.exerciseWeight = exerciseWeight;
+        this.exerciseCount = exerciseCount;
+        this.exerciseTimeSecond = exerciseTimeSecond;
+        this.exerciseBreakTime = exerciseBreakTime;
+        this.exerciseSequence = cycleCount;
     }
+}
