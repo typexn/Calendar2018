@@ -566,6 +566,7 @@ class diary_Content implements Serializable, Comparable<diary_Content> {
 
 
 }
+/*
 
 class diary_ListViewAdapter extends BaseAdapter {
     private ArrayList<diary_Content> listViewContent;
@@ -603,3 +604,5 @@ class diary_ListViewAdapter extends BaseAdapter {
         return convertView;
     }
 }
+
+*/

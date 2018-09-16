@@ -6,6 +6,7 @@
     <LinearLayout
         android:focusable="true"
         android:id="@+id/ex_cycle_linearlayout_cycle"
+        android:descendantFocusability="blocksDescendants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -25,7 +26,14 @@
 
         <ImageButton
             android:layout_weight="2"
-            android:id="@+id/ex_cycle_imagebutton_upside"
+            android:id="@+id/ex_cycle_imagebutton_upside_plus"
+            android:layout_marginRight="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="20sp" />
+
+        <ImageButton
+            android:layout_weight="2"
+            android:id="@+id/ex_cycle_imagebutton_upside_delete"
             android:layout_marginRight="20sp"
             android:layout_width="match_parent"
             android:layout_height="20sp" />
