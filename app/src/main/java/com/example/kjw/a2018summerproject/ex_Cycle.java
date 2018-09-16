@@ -74,6 +74,7 @@ public class ex_Cycle extends AppCompatActivity {
 
 
 
+
         Button dial = (Button)findViewById(R.id.ex_cycle_image_plus);
         dial.setOnClickListener(new View.OnClickListener() {
 
