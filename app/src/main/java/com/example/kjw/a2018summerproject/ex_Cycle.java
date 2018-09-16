@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class ex_Cycle extends AppCompatActivity {
     ex_CycleStartBaseAdapter ex_CycleBaseUpside;
     ex_CycleSavedBaseAdapter ex_CycleBaseDownside;
     ArrayList<ex_ExerciseRoutine> routineList = new ArrayList<ex_ExerciseRoutine>();
+    ArrayList<ex_ExerciseCycle> newCycleList = new ArrayList<ex_ExerciseCycle>();
 
     private LinearLayout container;
 
@@ -44,9 +46,9 @@ public class ex_Cycle extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_cycle);
-        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
-        int width = dm.widthPixels; //디바이스 화면 너비
-        int height = dm.heightPixels; //디바이스 화면 높이
+//        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
+//        int width = dm.widthPixels; //디바이스 화면 너비
+//        int height = dm.heightPixels; //디바이스 화면 높이
 
         Intent getRoutine = getIntent();
         final int nth_Couting = getRoutine.getIntExtra("position",1);
@@ -72,19 +74,27 @@ public class ex_Cycle extends AppCompatActivity {
 //        ex_CycleBaseDownside = new ex_CycleBaseAdapter(this,list_ItemDownsideArrayList);
 
 
-        dial = (Button) findViewById(R.id.ex_cycle_image_plus);
-        cd = new ex_CycleMenu(this);
-        WindowManager.LayoutParams wm = cd.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
-        wm.copyFrom(cd.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
-        wm.width = width / 2;  //화면 너비의 절반
-        wm.height = height / 2;  //화면 높이의 절반
+
+        Button dial = (Button)findViewById(R.id.ex_cycle_image_plus);
         dial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ex_CycleCount++;
-                cd.show();  //다이얼로그
+                @Override
+                public void onClick(View v) {
+                Intent goToCycleMenu = new Intent(ex_Cycle.this, ex_CycleMenu.class);
+                startActivityForResult(goToCycleMenu,3000);
             }
         });
+//        cd = new ex_CycleMenu(this);
+//        WindowManager.LayoutParams wm = cd.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
+//        wm.copyFrom(cd.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
+//        wm.width = width / 2;  //화면 너비의 절반
+//        wm.height = height / 2;  //화면 높이의 절반
+//        dial.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ex_CycleCount++;
+//                cd.show();  //다이얼로그
+//            }
+//        });
 
 //        final ArrayList<ex_ExerciseRoutine> nth_Routine = (ArrayList<ex_ExerciseRoutine>) getRoutine.getSerializableExtra("Routine");
 
@@ -118,12 +128,12 @@ public class ex_Cycle extends AppCompatActivity {
         listView_Downside.setAdapter(savedAdapter);
         listView_Upside.setAdapter(startAdapter);
 
-        ArrayList<ex_ExerciseCycle> newCycleList = new ArrayList<ex_ExerciseCycle>();
+
         newCycleList.add(new ex_ExerciseCycle("가","나",3.5,1,1,1,1));
         Log.d("Uk" , "Uk"+newCycleList.get(newCycleList.size()-1).exerciseTitle);
         ex_CycleAdapter newCycleAdapter = new ex_CycleAdapter(R.drawable.ic_launcher_foreground,newCycleList.get(newCycleList.size()-1).exerciseTitle,R.drawable.ic_launcher_background);
-        ex_CycleBaseDownside.addItem(newCycleAdapter);
-        ex_CycleBaseDownside.notifyDataSetChanged();
+//        ex_CycleBaseDownside.addItem(newCycleAdapter);
+//        ex_CycleBaseDownside.notifyDataSetChanged();
 
 
 
@@ -139,6 +149,23 @@ public class ex_Cycle extends AppCompatActivity {
                 }
         );
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == RESULT_OK){
+            Intent getFromCycleMenu = getIntent();
+            final String getTitle = getFromCycleMenu.getStringExtra("cycletitle");
+            final String getPart = getFromCycleMenu.getStringExtra("cyclepart");
+            final String getWeight = getFromCycleMenu.getStringExtra("cycleweight");
+            double changedWeight = Double.parseDouble(getWeight);
+            final String getCount = getFromCycleMenu.getStringExtra("cyclenumber");
+            int changedCount = Integer.parseInt(getCount);
+            final String getTime = getFromCycleMenu.getStringExtra("cycletime");
+            int changedTime = Integer.parseInt(getTime);
+            final String getBreaktime = getFromCycleMenu.getStringExtra("cyclebreaktime");
+            int changedBreakTime = Integer.parseInt(getBreaktime);
+            newCycleList.add(new ex_ExerciseCycle(getTitle,getPart,changedWeight,changedCount,changedTime,changedBreakTime,newCycleList.size()));
+        }
+}
 }
 //class CheckableLinearLayout extends LinearLayout implements Checkable {
 //    public CheckableLinearLayout(Context context, AttributeSet attrs) {

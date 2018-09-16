@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -24,22 +25,14 @@ import java.util.ArrayList;
 import static android.R.color.transparent;
 import static android.R.layout.simple_spinner_item;
 
-public class ex_CycleMenu extends Dialog {
-
+public class ex_CycleMenu extends AppCompatActivity {
 
     private LinearLayout container;
-
-    public ex_CycleMenu(@NonNull Context context) {
-        super(context);
-        setContentView(R.layout.activity_ex_cyclemenu);
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_cyclemenu);
-
         final EditText exerciseCycleTitle = (EditText) findViewById(R.id.ex_cyclemenu_edittext_name);
         String getExerciseCycleTitle = exerciseCycleTitle.getText().toString();
         Spinner part_Spinner = (Spinner)findViewById(R.id.ex_cyclemenu_spinner_exercisepart);
@@ -93,11 +86,13 @@ public class ex_CycleMenu extends Dialog {
                 goToCycle.putExtra("cyclepart",takeExerciseCyclePart);
                 goToCycle.putExtra("cycleweight",takeExerciseCycleWeight);
                 goToCycle.putExtra("cyclenumber",takeExerciseCycleNumber);
-                goToCycle.putExtra("cycleTime",takeExerciseCycleTime);
+                goToCycle.putExtra("cycletime",takeExerciseCycleTime);
                 goToCycle.putExtra("cyclebreaktime",takeExerciseCycleBreakTime);
-                ex_CycleMenu.this.dismiss();
-            });
-        }
+                setResult(RESULT_OK,goToCycle);
+                finish();
+            }
+        });
     }
 }
+
 
