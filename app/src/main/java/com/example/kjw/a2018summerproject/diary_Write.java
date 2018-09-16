@@ -499,15 +499,11 @@ public class diary_Write extends AppCompatActivity implements View.OnClickListen
                 editTextDiaryContent.setHint("내용을 입력하세요");
                 editTextDiaryTitle.setHint("제목을 입력하세요");
 
-                SimpleDateFormat dateFormatYear = new SimpleDateFormat("yyyy");
-                SimpleDateFormat dateFormatMonth = new SimpleDateFormat("-mm");
-                SimpleDateFormat dateFormatDay = new SimpleDateFormat("-dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date now = new Date();
-                String dateFormatYearString = dateFormatYear.format(now);
-                String dateFormatMonthString = dateFormatMonth.format(now);
-                String dateFormatDayString = dateFormatDay.format(now);
+                String dateFormatString = dateFormat.format(now);
                 Log.d("현준", "궁금");
-                diaryDatePickerTextView.setText(dateFormatYearString + dateFormatMonthString + dateFormatDayString);
+                diaryDatePickerTextView.setText(dateFormatString);
                 diaryMoodSpinner.setSelection(0);
                 diaryWeatherSpinner.setSelection(0);
 
