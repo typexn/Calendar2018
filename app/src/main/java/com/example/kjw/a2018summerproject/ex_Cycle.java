@@ -81,6 +81,7 @@ public class ex_Cycle extends AppCompatActivity {
                 public void onClick(View v) {
                 Intent goToCycleMenu = new Intent(ex_Cycle.this, ex_CycleMenu.class);
                 startActivityForResult(goToCycleMenu,3000);
+
             }
         });
 //        cd = new ex_CycleMenu(this);
