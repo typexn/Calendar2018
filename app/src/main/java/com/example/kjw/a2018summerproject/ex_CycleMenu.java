@@ -8,6 +8,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -34,23 +37,26 @@ public class ex_CycleMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_cyclemenu);
 
-        Button save = (Button)findViewById(R.id.ex_cyclemenu_button_save);
-        save.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getApplicationContext(), ex_Cycle.class);
-                startActivity(intent);
-            }
-        });
-
         final EditText exerciseCycleTitle = (EditText) findViewById(R.id.ex_cyclemenu_edittext_name);
         String getExerciseCycleTitle = exerciseCycleTitle.getText().toString();
         Spinner part_Spinner = (Spinner)findViewById(R.id.ex_cyclemenu_spinner_exercisepart);
         part_Spinner.setSelection(0);
         final EditText exerciseCycleWeight = (EditText) findViewById(R.id.ex_cyclemenu_edittext_weight);
         String getExerciseCycleWeight = exerciseCycleWeight.getText().toString();
+        exerciseCycleWeight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // 입력되는 텍스트에 변화가 있을 때
+            }
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                String getExerciseCycleWeight = exerciseCycleWeight.getText().toString();
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // 입력하기 전에
+            }
+        });
         final EditText exerciseCycleNumber = (EditText) findViewById(R.id.ex_cyclemenu_edittext_number);
         String getExerciseCycleNumber = exerciseCycleNumber.getText().toString();
         final EditText exerciseCycleTime = (EditText) findViewById(R.id.ex_cyclemenu_edittext_time);
@@ -65,7 +71,7 @@ public class ex_CycleMenu extends AppCompatActivity {
 
         if(getExerciseCycleWeight == null)
         {
-            getExerciseCycleWeight = "0";
+            getExerciseCycleWeight = "0.0";
         }
         if(getExerciseCycleNumber == null)
         {
@@ -89,7 +95,7 @@ public class ex_CycleMenu extends AppCompatActivity {
         final String takeExerciseCycleTime = getExerciseCycleTime;
         final String takeExerciseCycleBreakTime = getExerciseCycleBreakTime;
 
-        Button saveValueToCycle = (Button) findViewById(R.id.ex_cyclemenu_button_next);
+        Button saveValueToCycle = (Button) findViewById(R.id.ex_cyclemenu_button_save);
         saveValueToCycle.setOnClickListener(new Button.OnClickListener()
         {
             public void onClick(View v){
