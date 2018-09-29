@@ -72,18 +72,8 @@ public class ex_Cycle extends AppCompatActivity {
 
 //        ex_CycleBaseUpside = new ex_CycleBaseAdapter(this,list_ItemUpsideArrayList);
 //        ex_CycleBaseDownside = new ex_CycleBaseAdapter(this,list_ItemDownsideArrayList);
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-
-
-
-=======
->>>>>>> e2240f60c5bd9b71843ddc16ae6dddc27b9560a7
-        Button dial = (Button)findViewById(R.id.ex_cycle_image_plus);
-=======
         Button dial = (Button) findViewById(R.id.ex_cycle_image_plus);
->>>>>>> 14488a4614dcf20791ab324c9f877af8809b44d8
         dial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

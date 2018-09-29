@@ -23,8 +23,6 @@ public class ex_ExerciseFinish extends AppCompatActivity {
     EditText finishmemo;
     String resultsummary;
     Button btn;
-    String memo;
-    Schedule exercise;
 
     float rate = Float.valueOf(getIntent().getExtras().get("edtRating").toString());
 
@@ -36,27 +34,15 @@ public class ex_ExerciseFinish extends AppCompatActivity {
         addListenerOnRatingBar();
         addListenerOnButton();
         finishmemo = (EditText) findViewById(R.id.ex_exercisefinish_text_memo);
-
+        resultsummary = finishmemo.getText().toString();  // edittext에 입력된 값을 변수로 저장
         TextView text = (TextView)findViewById(R.id.ex_exercisefinish_text_result);
         text .setText(resultsummary);
-        setData();
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ListViewItem finishmemo = new ListViewItem();
-                String memo = finishmemo.getText().toString();
-            }
-        });
+
 
 
 
     }
 
-    private void setData() {
-        Intent getIntent = getIntent();
-        memo = exercise.memo;
-        finishmemo.setText(memo);
-    }
 
     public void addListenerOnRatingBar() {
 
