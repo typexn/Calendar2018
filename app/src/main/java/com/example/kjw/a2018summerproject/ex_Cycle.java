@@ -72,6 +72,7 @@ public class ex_Cycle extends AppCompatActivity {
 
 //        ex_CycleBaseUpside = new ex_CycleBaseAdapter(this,list_ItemUpsideArrayList);
 //        ex_CycleBaseDownside = new ex_CycleBaseAdapter(this,list_ItemDownsideArrayList);
+
         Button dial = (Button) findViewById(R.id.ex_cycle_image_plus);
         dial.setOnClickListener(new View.OnClickListener() {
             @Override

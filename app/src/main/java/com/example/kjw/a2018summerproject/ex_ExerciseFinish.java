@@ -1,9 +1,11 @@
 package com.example.kjw.a2018summerproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -18,6 +20,9 @@ public class ex_ExerciseFinish extends AppCompatActivity {
     RatingBar ratingBar;
     private TextView txtRatingValue;
     private Button btnSubmit;
+    EditText finishmemo;
+    String resultsummary;
+    Button btn;
 
     float rate = Float.valueOf(getIntent().getExtras().get("edtRating").toString());
 
@@ -28,10 +33,16 @@ public class ex_ExerciseFinish extends AppCompatActivity {
 
         addListenerOnRatingBar();
         addListenerOnButton();
-TextView text = (TextView)findViewById(R.id.ex_exercisefinish_text_result);
-text .setText("SSANG");
+        finishmemo = (EditText) findViewById(R.id.ex_exercisefinish_text_memo);
+        resultsummary = finishmemo.getText().toString();  // edittext에 입력된 값을 변수로 저장
+        TextView text = (TextView)findViewById(R.id.ex_exercisefinish_text_result);
+        text .setText(resultsummary);
+
+
+
 
     }
+
 
     public void addListenerOnRatingBar() {
 
