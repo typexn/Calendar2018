@@ -129,9 +129,6 @@ public class ex_Cycle extends AppCompatActivity {
                 ex_CycleBaseUpside.notifyDataSetChanged();
             }
         });
-//        ex_CycleAdapter newCycleAdapter = new ex_CycleAdapter(R.drawable.ic_launcher_foreground,newCycleList.get(newCycleList.size()-1).exerciseTitle,R.drawable.ic_launcher_background);
-//        ex_CycleBaseDownside.addItem(newCycleAdapter);
-//        ex_CycleBaseDownside.notifyDataSetChanged();
 
         // 리스트 올려보내기
         ImageButton btn_listUp = (ImageButton) findViewById(R.id.ex_cycle_image_listup);
